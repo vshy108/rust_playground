@@ -21,6 +21,30 @@
 
 use rand::Rng;
 
+fn parse_args(args: &[String]) -> Option<usize> {
+    // read args and find the length
+    // get the 2nd element and wrap out from Some
+    if let Some(first_option) = args.get(1) {
+        if first_option == "--length" {
+            if let Some(second_option) = args.get(2) {
+                // try parse to ~i32~ usize because fuction argument type is usize
+                match second_option.parse::<usize>() {
+                    Ok(length) => {
+                        return Some(length);
+                    }
+                    Err(error) => {
+                        println!("not a valid i32: {error}");
+                        return None;
+                    }
+                }
+            }
+        }
+    }
+
+    // need to return valid value for all possible statements
+    None
+}
+
 // function order no matter before or after main, but before is better
 fn generate_password(length: usize) -> String {
     // logic
@@ -59,20 +83,10 @@ fn main() {
     // Args { inner: ["genpass", "--length", "20"] }
     // after collect then Vec but the Vec need explicitly mention type
     println!("{:?}", args);
-    // get the 2nd element and wrap out from Some
-    if let Some(first_option) = args.get(1) {
-        if first_option == "--length" {
-            if let Some(second_option) = args.get(2) {
-                // try parse to ~i32~ usize because fuction argument type is usize
-                match second_option.parse::<usize>() {
-                    Ok(length) => {
-                        // NOTE: do not allow calling a function inside the {...}
-                        println!("{}", generate_password(length))
-                    }
-                    Err(error) => println!("not a valid i32: {error}"),
-                }
-            }
-        }
+    // pass by reference
+    if let Some(length) = parse_args(&args) {
+        // NOTE: do not allow calling a function inside the {...}
+        println!("{}", generate_password(length))
     }
 }
 
@@ -94,5 +108,23 @@ mod tests {
 
         // check all fulfill condition
         assert!(password.chars().all(|ch| ch >= '!' && ch <= '~'));
+    }
+
+    #[test]
+    fn parses_length_argument() {
+        let args = vec![
+            "genpass".to_string(),
+            "--length".to_string(),
+            "20".to_string(),
+        ];
+
+        assert_eq!(parse_args(&args), Some(20));
+    }
+
+    #[test]
+    fn returns_none_when_length_value_is_missing() {
+        let args = vec!["genpass".to_string(), "--length".to_string()];
+
+        assert_eq!(parse_args(&args), None);
     }
 }
