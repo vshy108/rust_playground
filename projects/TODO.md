@@ -18,7 +18,7 @@ cargo test
 
 - Refactor the CLI into smaller functions:
   - [x] `parse_args`
-  - [ ] `build_charset`
+  - [x] `build_charset`
   - [x] `generate_password`
 - [x] Use `usize` for password length instead of `i32`.
 - [ ] Add helpful error messages for missing length, invalid length, zero length, and unknown flags.

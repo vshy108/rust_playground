@@ -45,16 +45,19 @@ fn parse_args(args: &[String]) -> Option<usize> {
     None
 }
 
-// function order no matter before or after main, but before is better
-fn generate_password(length: usize) -> String {
-    // logic
+fn build_charset() -> Vec<char> {
     // Printable ASCII characters are from byte 33 to 126.
     // !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
     // letters
     // numbers
     // punctuation
     // symbols
-    let chars: Vec<char> = (33u8..=126u8).map(char::from).collect();
+    (33u8..=126u8).map(char::from).collect()
+}
+
+// function order no matter before or after main, but before is better
+fn generate_password(length: usize) -> String {
+    let chars = build_charset();
     // random_range needs to mutate rng internally so the next random
     // number is different from the previous one.
     // current random state -> generate number -> update state -> next state
@@ -126,5 +129,15 @@ mod tests {
         let args = vec!["genpass".to_string(), "--length".to_string()];
 
         assert_eq!(parse_args(&args), None);
+    }
+
+    #[test]
+    fn builds_printable_ascii_charset_without_space() {
+        let chars = build_charset();
+
+        assert_eq!(chars.first(), Some(&'!'));
+        assert_eq!(chars.last(), Some(&'~'));
+        assert_eq!(chars.len(), 94);
+        assert!(!chars.contains(&' '));
     }
 }
