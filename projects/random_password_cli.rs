@@ -21,7 +21,8 @@
 
 use rand::Rng;
 
-fn parse_args(args: &[String]) -> Option<usize> {
+// Ok with usize, Err with String, not &str because it from runtime input
+fn parse_args(args: &[String]) -> Result<usize, String> {
     // read args and find the length
     // get the 2nd element and wrap out from Some
     if let Some(first_option) = args.get(1) {
@@ -30,19 +31,27 @@ fn parse_args(args: &[String]) -> Option<usize> {
                 // try parse to ~i32~ usize because fuction argument type is usize
                 match second_option.parse::<usize>() {
                     Ok(length) => {
-                        return Some(length);
+                        if length >= 1 {
+                            Ok(length)
+                        } else {
+                            Err("not a valid usize".to_string())
+                        }
                     }
+                    // cannot Err(error: ParseIntError) but let error: ParseIntError = error;
                     Err(error) => {
-                        println!("not a valid i32: {error}");
-                        return None;
+                        // invalid digit found in string
+                        Err(format!("not a valid usize: {error}"))
                     }
                 }
+            } else {
+                Err("missing flag value".to_string())
             }
+        } else {
+            Err(format!("invalid flag: {first_option}"))
         }
+    } else {
+        Ok(10)
     }
-
-    // need to return valid value for all possible statements
-    None
 }
 
 fn build_charset() -> Vec<char> {
@@ -74,7 +83,7 @@ fn generate_password(length: usize) -> String {
         password.push(chars[index]);
     }
 
-    return password;
+    password
 }
 
 // cargo run --bin genpass -- --length 20
@@ -85,12 +94,12 @@ fn main() {
     // Args { inner: ["target/debug/genpass", "--length", "20"] }
     // Args { inner: ["genpass", "--length", "20"] }
     // after collect then Vec but the Vec need explicitly mention type
-    println!("{:?}", args);
     // pass by reference
-    if let Some(length) = parse_args(&args) {
-        // NOTE: do not allow calling a function inside the {...}
-        println!("{}", generate_password(length))
-    }
+    let length = parse_args(&args).unwrap_or_else(|err| {
+        eprintln!("parse_args error: {err}");
+        std::process::exit(1);
+    });
+    println!("{}", generate_password(length))
 }
 
 #[cfg(test)]
@@ -110,7 +119,8 @@ mod tests {
         let password = generate_password(100);
 
         // check all fulfill condition
-        assert!(password.chars().all(|ch| ch >= '!' && ch <= '~'));
+        // char can use range also
+        assert!(password.chars().all(|ch| ('!'..='~').contains(&ch)));
     }
 
     #[test]
@@ -121,14 +131,81 @@ mod tests {
             "20".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Some(20));
+        assert_eq!(parse_args(&args), Ok(20));
     }
 
     #[test]
-    fn returns_none_when_length_value_is_missing() {
+    fn returns_missing_flag_value_when_length_value_is_missing() {
         let args = vec!["genpass".to_string(), "--length".to_string()];
 
-        assert_eq!(parse_args(&args), None);
+        assert_eq!(parse_args(&args), Err("missing flag value".to_string()));
+    }
+
+    #[test]
+    fn returns_invalid_usize_when_length_value_is_invalid() {
+        let args = vec![
+            "genpass".to_string(),
+            "--length".to_string(),
+            "ko".to_string(),
+        ];
+
+        assert_eq!(
+            parse_args(&args),
+            Err("not a valid usize: invalid digit found in string".to_string())
+        );
+    }
+
+    #[test]
+    fn returns_invalid_usize_when_length_value_is_zero() {
+        let args = vec![
+            "genpass".to_string(),
+            "--length".to_string(),
+            "0".to_string(),
+        ];
+
+        assert_eq!(parse_args(&args), Err("not a valid usize".to_string()));
+    }
+
+    #[test]
+    fn returns_invalid_usize_when_length_value_is_float_number() {
+        let args = vec![
+            "genpass".to_string(),
+            "--length".to_string(),
+            "1.2".to_string(),
+        ];
+
+        assert_eq!(
+            parse_args(&args),
+            Err("not a valid usize: invalid digit found in string".to_string())
+        );
+    }
+
+    #[test]
+    fn returns_invalid_usize_when_length_value_is_negative_integer() {
+        let args = vec![
+            "genpass".to_string(),
+            "--length".to_string(),
+            "-1".to_string(),
+        ];
+
+        assert_eq!(
+            parse_args(&args),
+            Err("not a valid usize: invalid digit found in string".to_string())
+        );
+    }
+
+    #[test]
+    fn returns_default_value_ten_when_no_flag() {
+        let args = vec!["genpass".to_string()];
+
+        assert_eq!(parse_args(&args), Ok(10));
+    }
+
+    #[test]
+    fn returns_invalid_flag_with_flag_when_flag_is_invalid() {
+        let args = vec!["genpass".to_string(), "--ko".to_string(), "1".to_string()];
+
+        assert_eq!(parse_args(&args), Err("invalid flag: --ko".to_string()));
     }
 
     #[test]
