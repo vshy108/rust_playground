@@ -22,7 +22,7 @@
 use rand::Rng;
 
 // Ok with usize, Err with String, not &str because it from runtime input
-fn parse_args(args: &[String]) -> Result<usize, String> {
+fn parse_args(args: &[String]) -> Result<(usize, bool), String> {
     // read args and find the length
     // get the 2nd element and wrap out from Some
     if let Some(first_option) = args.get(1) {
@@ -32,7 +32,7 @@ fn parse_args(args: &[String]) -> Result<usize, String> {
                 match second_option.parse::<usize>() {
                     Ok(length) => {
                         if length >= 1 {
-                            Ok(length)
+                            Ok((length, false))
                         } else {
                             Err("not a valid usize".to_string())
                         }
@@ -50,7 +50,7 @@ fn parse_args(args: &[String]) -> Result<usize, String> {
             Err(format!("invalid flag: {first_option}"))
         }
     } else {
-        Ok(10)
+        Ok((10, false))
     }
 }
 
@@ -95,11 +95,11 @@ fn main() {
     // Args { inner: ["genpass", "--length", "20"] }
     // after collect then Vec but the Vec need explicitly mention type
     // pass by reference
-    let length = parse_args(&args).unwrap_or_else(|err| {
+    let (length, has_symbol) = parse_args(&args).unwrap_or_else(|err| {
         eprintln!("parse_args error: {err}");
         std::process::exit(1);
     });
-    println!("{}", generate_password(length))
+    println!("{:?}, {}", generate_password(length), has_symbol);
 }
 
 #[cfg(test)]
@@ -131,7 +131,7 @@ mod tests {
             "20".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok(20));
+        assert_eq!(parse_args(&args), Ok((20, false)));
     }
 
     #[test]
@@ -198,7 +198,7 @@ mod tests {
     fn returns_default_value_ten_when_no_flag() {
         let args = vec!["genpass".to_string()];
 
-        assert_eq!(parse_args(&args), Ok(10));
+        assert_eq!(parse_args(&args), Ok((10, false)));
     }
 
     #[test]
