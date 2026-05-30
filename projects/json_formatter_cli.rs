@@ -30,7 +30,13 @@
 //    - Requires the function return type to be Result (or Option).
 //    - Replaces verbose match { Ok(v) => v, Err(e) => return Err(e) } boilerplate.
 //
-// 3. if let vs match on Option
+// 3. raw string literals r#"..."#
+//    - Lets you write " inside a string without escaping (no backslashes needed).
+//    - Syntax: r#"content"# — the number of # must match on both ends.
+//    - Useful for JSON test strings: r#"{"a":1}"# vs "{\"a\":1}"
+//    - r means raw (escape sequences like \n are NOT processed inside).
+//
+// 4. if let vs match on Option
 //    - iter.next() returns Option<T>: Some(T) if a value exists, None if exhausted.
 //    - `if let Some(x) = expr { ... }` — use when you only care about the Some branch.
 //    - `match expr { Some(x) => ..., None => ... }` — use when both branches need handling.
@@ -44,6 +50,11 @@
 use serde_json::{from_str, to_string_pretty};
 use std::fs::read_to_string;
 
+// Step
+// 0. parse CLI args
+// std::env::args() returns an iterator of the process arguments; collect() turns it into Vec<String>.
+// args[0] is the program name, so iter().skip(1) starts at the first user-supplied argument.
+// Returns Ok(path) if a path argument is present, Err("missing path") otherwise.
 fn parse_args(args: &[String]) -> Result<String, String> {
     let mut iter = args.iter().skip(1);
     match iter.next() {
@@ -52,7 +63,6 @@ fn parse_args(args: &[String]) -> Result<String, String> {
     }
 }
 
-// Step
 // 1. read from file path
 // fs::read_to_string opens the file, reads all bytes, and returns them as a String.
 // On any IO error (file not found, permission denied, etc.) it returns Err(io::Error).
@@ -102,6 +112,12 @@ mod tests {
     }
 
     #[test]
+    fn parsing_inalid_json_object_returns_error() {
+        let result = parse_json(r#"{a":1}"#);
+        assert!(result.is_err());
+    }
+
+    #[test]
     fn extract_string_from_second_argument() {
         let args = vec![PROGRAM.to_string(), "/tmp/test.json".to_string()];
 
@@ -113,5 +129,13 @@ mod tests {
         let args = vec![PROGRAM.to_string()];
 
         assert_eq!(parse_args(&args), Err("missing path".to_string()));
+    }
+
+     #[test]
+    fn pretty_printed_output_contains_newlines_and_indentation() {
+        let json_string = parse_json(r#"{"a":1}"#).unwrap();
+        let pretty_json_string = format_json(&json_string).unwrap();
+        // empty object is valid json, but it will fail this
+        assert!(pretty_json_string.contains("\n  "));
     }
 }

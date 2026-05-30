@@ -23,8 +23,8 @@ cargo run --bin jsonfmt -- /tmp/bad.json
 ## 2. Tests
 
 - [x] Parsing valid JSON object returns `Ok`.
-- [ ] Parsing invalid JSON returns `Err`.
-- [ ] Pretty-printed output contains newlines and indentation.
+- [x] Parsing invalid JSON returns `Err`.
+- [x] Pretty-printed output contains newlines and indentation.
 
 Acceptance check:
 
