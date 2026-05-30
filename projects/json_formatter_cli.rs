@@ -50,16 +50,43 @@
 use serde_json::{from_str, to_string_pretty};
 use std::fs::read_to_string;
 
+#[derive(Debug, PartialEq)]
+struct Config {
+    file_path: String,
+    is_check: bool,
+}
+
 // Step
 // 0. parse CLI args
 // std::env::args() returns an iterator of the process arguments; collect() turns it into Vec<String>.
 // args[0] is the program name, so iter().skip(1) starts at the first user-supplied argument.
 // Returns Ok(path) if a path argument is present, Err("missing path") otherwise.
-fn parse_args(args: &[String]) -> Result<String, String> {
+fn parse_args(args: &[String]) -> Result<Config, String> {
     let mut iter = args.iter().skip(1);
-    match iter.next() {
-        Some(arg) => return Ok(arg.to_string()),
-        None => return Err("missing path".to_string()),
+    let mut file_path = "";
+    let mut is_check = false;
+    while let Some(arg) = iter.next() {
+        // FIX: arg is &String; matching on arg.as_str() gives &str so string
+        // literal patterns like "--check" (also &str) can match.
+        match arg.as_str() {
+            "--check" => is_check = true,
+            // `other` captures the &str value produced by arg.as_str() —
+            // same content as arg but already the right type for file_path.
+            other => {
+                file_path = other;
+            }
+        }
+    }
+
+    // If file_path was set during the loop, return a Config; otherwise the
+    // user gave no path argument.
+    if file_path != "" {
+        Ok(Config {
+            file_path: file_path.to_string(),
+            is_check,
+        })
+    } else {
+        Err("missing path".to_string())
     }
 }
 
@@ -88,12 +115,40 @@ fn format_json(value: &serde_json::Value) -> Result<String, serde_json::Error> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
-    let arg = parse_args(&args).unwrap_or_else(|err| {
+    let Config {
+        file_path,
+        is_check,
+    } = parse_args(&args).unwrap_or_else(|err| {
         eprintln!("parse_args error: {err}");
         std::process::exit(1);
     });
-    let raw_string = read_file_from_path(arg.as_str())?;
-    let json_string = parse_json(raw_string.as_str())?;
+    let raw_string = read_file_from_path(file_path.as_str())?;
+    // match instead of ? so --check mode can exit with the right code before pretty-printing.
+    let json_string = match parse_json(raw_string.as_str()) {
+        Ok(value) => {
+            if is_check {
+                // Valid JSON in check mode: exit 0 (success) without printing.
+                std::process::exit(0)
+            } else {
+                // FIX: `return value` would exit main, not bind json_string.
+                // A match arm in `let x = match` must evaluate to the value to bind.
+                // `return` exits the whole function; bare `value` is the arm's result.
+                value
+            }
+        }
+        Err(error) => {
+            if is_check {
+                // Invalid JSON in check mode: exit 1 (failure) without printing.
+                std::process::exit(1);
+            }
+            // FIX: `throw` does not exist in Rust.
+            // `return Err(e.into())` propagates the error out of main.
+            // `.into()` converts serde_json::Error into Box<dyn Error>,
+            // which is what main's return type requires.
+            return Err(error.into());
+        }
+    };
+
     let pretty_json_string = format_json(&json_string)?;
     println!("{}", pretty_json_string);
     return Ok(());
@@ -121,7 +176,13 @@ mod tests {
     fn extract_string_from_second_argument() {
         let args = vec![PROGRAM.to_string(), "/tmp/test.json".to_string()];
 
-        assert_eq!(parse_args(&args), Ok("/tmp/test.json".to_string()));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                file_path: "/tmp/test.json".to_string(),
+                is_check: false
+            })
+        );
     }
 
     #[test]
@@ -131,7 +192,37 @@ mod tests {
         assert_eq!(parse_args(&args), Err("missing path".to_string()));
     }
 
-     #[test]
+    #[test]
+    fn check_flag_sets_is_check_true() {
+        let args = vec![
+            PROGRAM.to_string(),
+            "--check".to_string(),
+            "/tmp/test.json".to_string(),
+        ];
+
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                file_path: "/tmp/test.json".to_string(),
+                is_check: true,
+            })
+        );
+    }
+
+    #[test]
+    fn no_check_flag_sets_is_check_false() {
+        let args = vec![PROGRAM.to_string(), "/tmp/test.json".to_string()];
+
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                file_path: "/tmp/test.json".to_string(),
+                is_check: false,
+            })
+        );
+    }
+
+    #[test]
     fn pretty_printed_output_contains_newlines_and_indentation() {
         let json_string = parse_json(r#"{"a":1}"#).unwrap();
         let pretty_json_string = format_json(&json_string).unwrap();
