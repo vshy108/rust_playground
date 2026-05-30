@@ -35,10 +35,14 @@
 // 14. `while let Some(x) = iter.next()` — loop until iterator exhausted; same as `if let` but repeats
 // 15. Manual iterator advance — calling `iter.next()` inside the loop body consumes the next token,
 //     enabling flag+value pairs (`--length 20`) without positional indexing
+// 16. Pre-parse escape hatch — if a flag changes whether *other* flags are even validated
+//     (e.g. `--help`), handle it before the parser runs, not inside the parser.
+//     This ensures it always wins, even when other flags have invalid values.
 
 // Extra:
 
 // - [x] support symbols toggle
+// - [x] --help flag (pre-parse escape hatch in main)
 
 use rand::Rng;
 
@@ -47,7 +51,8 @@ use rand::Rng;
 // Err holds a String (not &str): some messages are built at runtime with format!.
 fn parse_args(args: &[String]) -> Result<(usize, bool), String> {
     let mut length = 10;         // default: 10 characters
-    let mut has_symbols = false; // default: alphanumeric only
+    let mut has_symbols = false;   // default: alphanumeric only
+    let mut length_seen = false;   // tracks whether --length was already parsed
 
     // skip(1) drops args[0] (binary name); flags start at index 1.
     let mut iter = args.iter().skip(1);
@@ -56,17 +61,27 @@ fn parse_args(args: &[String]) -> Result<(usize, bool), String> {
     while let Some(arg) = iter.next() {
         // as_str() coerces &String -> &str so match arms can use string literals.
         match arg.as_str() {
-            "--length" => match iter.next() {
-                // iter.next() here consumes the token after --length.
-                // This is what allows flag+value pairs without positional indexing.
-                None => return Err("missing flag value".to_string()),
-                Some(val) => match val.parse::<usize>() {
-                    // parse::<usize>() rejects floats, negatives, letters — all give "invalid digit"
-                    Err(e) => return Err(format!("not a valid usize: {e}")),
-                    Ok(0) => return Err("not a valid usize".to_string()),
-                    Ok(n) => length = n,
-                },
-            },
+            "--length" => {
+                // Guard clause: return early on duplicate before consuming the value token.
+                if length_seen {
+                    return Err("duplicate flag: --length".to_string());
+                }
+                // no else needed — the guard above always returns early.
+                match iter.next() {
+                    // iter.next() here consumes the token after --length.
+                    // This is what allows flag+value pairs without positional indexing.
+                    None => return Err("missing flag value".to_string()),
+                    Some(val) => match val.parse::<usize>() {
+                        // parse::<usize>() rejects floats, negatives, letters — all give "invalid digit"
+                        Err(e) => return Err(format!("not a valid usize: {e}")),
+                        Ok(0) => return Err("not a valid usize".to_string()),
+                        Ok(n) => {
+                            length_seen = true;
+                            length = n;
+                        }
+                    },
+                }
+            }
             "--symbols" => has_symbols = true,
             other => return Err(format!("invalid flag: {other}")),
         }
@@ -123,6 +138,14 @@ fn main() {
     // Type must be explicit: the compiler can't infer Vec<String> from collect() alone.
     // args[0] is the binary name; actual flags start at index 1.
     let args: Vec<String> = std::env::args().collect();
+
+    // --help is a pre-parse escape hatch: check it before parse_args runs so it
+    // always wins, even when other flags have invalid values.
+    if args.iter().any(|arg| arg == "--help") {
+        println!("Usage: genpass [--length <n>] [--symbols] [--help]");
+        std::process::exit(0);
+    }
+
     // Pass by reference so parse_args borrows the slice without taking ownership.
     let (length, with_symbols) = parse_args(&args).unwrap_or_else(|err| {
         eprintln!("parse_args error: {err}");
@@ -162,7 +185,6 @@ mod tests {
         assert!(
             password
                 .chars()
-                // is_ascii_alphanumeric nice
                 .all(|ch| ch.is_ascii_alphanumeric())
         );
     }
@@ -275,11 +297,7 @@ mod tests {
 
     #[test]
     fn returns_invalid_usize_when_length_value_is_zero() {
-        let args = vec![
-            PROGRAM.to_string(),
-            "--length".to_string(),
-            "0".to_string(),
-        ];
+        let args = vec![PROGRAM.to_string(), "--length".to_string(), "0".to_string()];
 
         assert_eq!(parse_args(&args), Err("not a valid usize".to_string()));
     }
@@ -319,21 +337,19 @@ mod tests {
         assert_eq!(parse_args(&args), Err("invalid flag: --ko".to_string()));
     }
 
-    // --- Next Learning Topics (TDD: these tests are red until each feature is implemented) ---
+    // --- Next Learning Topics ---
 
-    // Topic: --help flag
-    // parse_args signals help via Err("help") so main can print usage and exit 0.
-    // Currently returns Err("invalid flag: --help") — make it return Err("help") instead.
+    // Topic: --help flag (implemented — Option A: pre-parse escape hatch in main)
+    // main checks for --help before calling parse_args, so parse_args never sees it in normal use.
+    // parse_args still treats --help as an invalid flag if called directly — this is by design.
     #[test]
-    fn returns_help_signal_for_help_flag() {
+    fn parse_args_treats_help_flag_as_invalid_when_not_pre_handled() {
         let args = vec![PROGRAM.to_string(), "--help".to_string()];
 
-        assert_eq!(parse_args(&args), Err("help".to_string()));
+        assert_eq!(parse_args(&args), Err("invalid flag: --help".to_string()));
     }
 
-    // Topic: duplicate flag detection
-    // Currently the second --length silently overwrites the first.
-    // Should return Err("duplicate flag: --length") instead.
+    // Topic: duplicate flag detection (implemented — length_seen bool in parse_args)
     #[test]
     fn returns_error_when_length_flag_is_duplicated() {
         let args = vec![
