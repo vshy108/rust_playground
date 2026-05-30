@@ -21,9 +21,9 @@ cargo test
   - [x] `build_charset`
   - [x] `generate_password`
 - [x] Use `usize` for password length instead of `i32`.
-- [ ] Add helpful error messages for missing length, invalid length, zero length, and unknown flags.
-- [ ] Add a `--symbols` or `--no-symbols` toggle.
-- [ ] Remove debug argument printing once parsing is working.
+- [x] Add helpful error messages for missing length, invalid length, zero length, and unknown flags.
+- [x] Add a `--symbols` toggle (alphanumeric by default; full printable ASCII with `--symbols`).
+- [x] Remove debug argument printing once parsing is working.
 
 Acceptance checks:
 
