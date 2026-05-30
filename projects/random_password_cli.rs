@@ -133,8 +133,11 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    // super::generate_password
     use super::*;
+
+    // &str can be const; String cannot (heap-allocated).
+    // .to_string() converts to String at the call site.
+    const PROGRAM: &str = "genpass";
 
     // --- generate_password ---
 
@@ -196,7 +199,7 @@ mod tests {
     #[test]
     fn parses_length_argument() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--length".to_string(),
             "20".to_string(),
         ];
@@ -206,7 +209,7 @@ mod tests {
 
     #[test]
     fn parses_symbols_flag_alone() {
-        let args = vec!["genpass".to_string(), "--symbols".to_string()];
+        let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
 
         assert_eq!(parse_args(&args), Ok((10, true)));
     }
@@ -214,7 +217,7 @@ mod tests {
     #[test]
     fn parses_length_then_symbols() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--length".to_string(),
             "20".to_string(),
             "--symbols".to_string(),
@@ -226,7 +229,7 @@ mod tests {
     #[test]
     fn parses_symbols_then_length() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--symbols".to_string(),
             "--length".to_string(),
             "20".to_string(),
@@ -237,21 +240,21 @@ mod tests {
 
     #[test]
     fn returns_default_length_with_symbols_flag() {
-        let args = vec!["genpass".to_string(), "--symbols".to_string()];
+        let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
 
         assert_eq!(parse_args(&args), Ok((10, true)));
     }
 
     #[test]
     fn returns_default_value_ten_when_no_flag() {
-        let args = vec!["genpass".to_string()];
+        let args = vec![PROGRAM.to_string()];
 
         assert_eq!(parse_args(&args), Ok((10, false)));
     }
 
     #[test]
     fn returns_missing_flag_value_when_length_value_is_missing() {
-        let args = vec!["genpass".to_string(), "--length".to_string()];
+        let args = vec![PROGRAM.to_string(), "--length".to_string()];
 
         assert_eq!(parse_args(&args), Err("missing flag value".to_string()));
     }
@@ -259,7 +262,7 @@ mod tests {
     #[test]
     fn returns_invalid_usize_when_length_value_is_invalid() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--length".to_string(),
             "ko".to_string(),
         ];
@@ -273,7 +276,7 @@ mod tests {
     #[test]
     fn returns_invalid_usize_when_length_value_is_zero() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--length".to_string(),
             "0".to_string(),
         ];
@@ -284,7 +287,7 @@ mod tests {
     #[test]
     fn returns_invalid_usize_when_length_value_is_float_number() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--length".to_string(),
             "1.2".to_string(),
         ];
@@ -298,7 +301,7 @@ mod tests {
     #[test]
     fn returns_invalid_usize_when_length_value_is_negative_integer() {
         let args = vec![
-            "genpass".to_string(),
+            PROGRAM.to_string(),
             "--length".to_string(),
             "-1".to_string(),
         ];
@@ -311,8 +314,55 @@ mod tests {
 
     #[test]
     fn returns_invalid_flag_with_flag_when_flag_is_invalid() {
-        let args = vec!["genpass".to_string(), "--ko".to_string(), "1".to_string()];
+        let args = vec![PROGRAM.to_string(), "--ko".to_string(), "1".to_string()];
 
         assert_eq!(parse_args(&args), Err("invalid flag: --ko".to_string()));
     }
+
+    // --- Next Learning Topics (TDD: these tests are red until each feature is implemented) ---
+
+    // Topic: --help flag
+    // parse_args signals help via Err("help") so main can print usage and exit 0.
+    // Currently returns Err("invalid flag: --help") — make it return Err("help") instead.
+    #[test]
+    fn returns_help_signal_for_help_flag() {
+        let args = vec![PROGRAM.to_string(), "--help".to_string()];
+
+        assert_eq!(parse_args(&args), Err("help".to_string()));
+    }
+
+    // Topic: duplicate flag detection
+    // Currently the second --length silently overwrites the first.
+    // Should return Err("duplicate flag: --length") instead.
+    #[test]
+    fn returns_error_when_length_flag_is_duplicated() {
+        let args = vec![
+            PROGRAM.to_string(),
+            "--length".to_string(),
+            "5".to_string(),
+            "--length".to_string(),
+            "20".to_string(),
+        ];
+
+        assert_eq!(
+            parse_args(&args),
+            Err("duplicate flag: --length".to_string())
+        );
+    }
+
+    // Topic: Config struct
+    // These tests require `struct Config { length: usize, symbols: bool }` to exist.
+    // Uncomment once you define Config and change parse_args to return Result<Config, String>.
+    //
+    // #[test]
+    // fn parses_length_argument_into_config() {
+    //     let args = vec![PROGRAM.to_string(), "--length".to_string(), "20".to_string()];
+    //     assert_eq!(parse_args(&args), Ok(Config { length: 20, symbols: false }));
+    // }
+    //
+    // #[test]
+    // fn parses_symbols_flag_into_config() {
+    //     let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
+    //     assert_eq!(parse_args(&args), Ok(Config { length: 10, symbols: true }));
+    // }
 }
