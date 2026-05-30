@@ -25,8 +25,9 @@
 // 6. `Result<T, E>` — use `Ok(val)` / `Err(msg)`; `unwrap_or_else` handles errors without panicking
 // 7. Pattern matching type annotation — `Err(e: ParseIntError)` is invalid in match arms;
 //    use `let e: ParseIntError = e;` inside the arm body to assert the type instead
-// 8. Tuple in `Result` — `Result<(usize, bool), String>` packs multiple success values;
-//    destructure with `let (length, symbols) = ...`
+// 8. Named struct — `struct Config { length, has_symbols }` replaces `(usize, bool)` tuple;
+//    `#[derive(Debug, PartialEq)]` generates formatting and `==` without writing them by hand;
+//    field shorthand `Config { length, has_symbols }` works when variable names match field names
 // 9. `Vec::len()` is O(1) — reads a stored count, does not iterate
 // 10. `usize` parse — rejects floats (`3.14`), negatives (`-1`), letters; all give "invalid digit"
 // 11. `if` is an expression — both branches must return the same type; no `else` means the implicit type is `()`
@@ -48,10 +49,16 @@
 
 use rand::Rng;
 
-// Returns Ok((length, with_symbols)) or Err(message).
+#[derive(Debug, PartialEq)]
+struct Config {
+    length: usize,
+    has_symbols: bool,
+}
+
+// Returns Ok(Config { length, has_symbols }) or Err(message).
 // Uses a mut iterator so flags can appear in any order.
 // Err holds a String (not &str): some messages are built at runtime with format!.
-fn parse_args(args: &[String]) -> Result<(usize, bool), String> {
+fn parse_args(args: &[String]) -> Result<Config, String> {
     let mut length = 10;         // default: 10 characters
     let mut has_symbols = false;   // default: alphanumeric only
     let mut length_seen = false;   // tracks whether --length was already parsed
@@ -89,7 +96,8 @@ fn parse_args(args: &[String]) -> Result<(usize, bool), String> {
         }
     }
 
-    Ok((length, has_symbols))
+    // new struct with field shorthand: field name matches variable name, no need to write length: length
+    Ok(Config { length, has_symbols })
 }
 
 fn build_charset(with_symbols: bool) -> Vec<char> {
@@ -148,11 +156,11 @@ fn main() {
     //
     //   enum ParseResult {
     //       Help,
-    //       Ok(usize, bool),
+    //       Ok(Config),
     //       Err(String),
     //   }
     //
-    //   parse_args would return ParseResult instead of Result<(usize, bool), String>.
+    //   parse_args would return ParseResult instead of Result<Config, String>.
     //   main would match on all three variants.
     //
     // Why Option B was rejected:
@@ -170,12 +178,13 @@ fn main() {
         std::process::exit(0);
     }
 
-    // Pass by reference so parse_args borrows the slice without taking ownership.
-    let (length, with_symbols) = parse_args(&args).unwrap_or_else(|err| {
+    // Destructure the Config fields directly — no need for a named binding.
+    // Config { length, has_symbols } unpacks both fields into local variables.
+    let Config { length, has_symbols } = parse_args(&args).unwrap_or_else(|err| {
         eprintln!("parse_args error: {err}");
         std::process::exit(1);
     });
-    println!("{}", generate_password(length, with_symbols));
+    println!("{}", generate_password(length, has_symbols));
 }
 
 #[cfg(test)]
@@ -250,14 +259,14 @@ mod tests {
             "20".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok((20, false)));
+        assert_eq!(parse_args(&args), Ok(Config{length: 20, has_symbols: false}));
     }
 
     #[test]
     fn parses_symbols_flag_alone() {
         let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
 
-        assert_eq!(parse_args(&args), Ok((10, true)));
+        assert_eq!(parse_args(&args), Ok(Config { length: 10, has_symbols: true }));
     }
 
     #[test]
@@ -269,7 +278,7 @@ mod tests {
             "--symbols".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok((20, true)));
+        assert_eq!(parse_args(&args), Ok(Config { length: 20, has_symbols: true }));
     }
 
     #[test]
@@ -281,21 +290,21 @@ mod tests {
             "20".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok((20, true)));
+        assert_eq!(parse_args(&args), Ok(Config { length: 20, has_symbols: true }));
     }
 
     #[test]
     fn returns_default_length_with_symbols_flag() {
         let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
 
-        assert_eq!(parse_args(&args), Ok((10, true)));
+        assert_eq!(parse_args(&args), Ok(Config { length: 10, has_symbols: true }));
     }
 
     #[test]
     fn returns_default_value_ten_when_no_flag() {
         let args = vec![PROGRAM.to_string()];
 
-        assert_eq!(parse_args(&args), Ok((10, false)));
+        assert_eq!(parse_args(&args), Ok(Config { length: 10, has_symbols: false }));
     }
 
     #[test]
@@ -390,19 +399,4 @@ mod tests {
         );
     }
 
-    // Topic: Config struct
-    // These tests require `struct Config { length: usize, symbols: bool }` to exist.
-    // Uncomment once you define Config and change parse_args to return Result<Config, String>.
-    //
-    // #[test]
-    // fn parses_length_argument_into_config() {
-    //     let args = vec![PROGRAM.to_string(), "--length".to_string(), "20".to_string()];
-    //     assert_eq!(parse_args(&args), Ok(Config { length: 20, symbols: false }));
-    // }
-    //
-    // #[test]
-    // fn parses_symbols_flag_into_config() {
-    //     let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
-    //     assert_eq!(parse_args(&args), Ok(Config { length: 10, symbols: true }));
-    // }
 }
