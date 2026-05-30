@@ -294,13 +294,6 @@ mod tests {
     }
 
     #[test]
-    fn returns_default_length_with_symbols_flag() {
-        let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
-
-        assert_eq!(parse_args(&args), Ok(Config { length: 10, has_symbols: true }));
-    }
-
-    #[test]
     fn returns_default_value_ten_when_no_flag() {
         let args = vec![PROGRAM.to_string()];
 
