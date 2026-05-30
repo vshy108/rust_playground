@@ -52,6 +52,15 @@
 //    - std::io::Cursor<T>: wraps an in-memory buffer and adds a position pointer so it
 //      satisfies the Read trait. Cursor::new(b"...") lets tests inject fake stdin without
 //      touching the real process IO.
+//
+// 6. Exit codes and $?
+//    - Every process exits with a numeric code: 0 = success, non-zero = failure (convention).
+//    - std::process::exit(code) terminates immediately with that code.
+//    - The shell stores the last command's exit code in $?: `echo $?` prints it.
+//    - `cargo run` forwards the binary's exit code, so $? reflects what your Rust code exits with.
+//    - CI and shell scripts use exit codes, not stdout, to decide whether a command succeeded.
+//    - On macOS/Linux, press Ctrl+D to send EOF to stdin, signalling end of input.
+//      The Read trait sees EOF and read_to_string returns with whatever was typed.
 
 // Extra:
 
@@ -141,6 +150,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // File::open returns Result<File, io::Error>; ? unwraps to File, which impl Read.
         Some(path) => read_input(File::open(&path)?)?,
         // read_input accepts any impl Read; io::stdin() satisfies that in production.
+        // On macOS/Linux: type/paste JSON then press Ctrl+D to send EOF and end input.
         None => read_input(io::stdin())?,
     };
 
