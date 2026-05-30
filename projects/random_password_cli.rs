@@ -59,9 +59,9 @@ struct Config {
 // Uses a mut iterator so flags can appear in any order.
 // Err holds a String (not &str): some messages are built at runtime with format!.
 fn parse_args(args: &[String]) -> Result<Config, String> {
-    let mut length = 10;         // default: 10 characters
-    let mut has_symbols = false;   // default: alphanumeric only
-    let mut length_seen = false;   // tracks whether --length was already parsed
+    let mut length = 10; // default: 10 characters
+    let mut has_symbols = false; // default: alphanumeric only
+    let mut length_seen = false; // tracks whether --length was already parsed
 
     // skip(1) drops args[0] (binary name); flags start at index 1.
     let mut iter = args.iter().skip(1);
@@ -97,7 +97,10 @@ fn parse_args(args: &[String]) -> Result<Config, String> {
     }
 
     // new struct with field shorthand: field name matches variable name, no need to write length: length
-    Ok(Config { length, has_symbols })
+    Ok(Config {
+        length,
+        has_symbols,
+    })
 }
 
 fn build_charset(with_symbols: bool) -> Vec<char> {
@@ -180,7 +183,10 @@ fn main() {
 
     // Destructure the Config fields directly — no need for a named binding.
     // Config { length, has_symbols } unpacks both fields into local variables.
-    let Config { length, has_symbols } = parse_args(&args).unwrap_or_else(|err| {
+    let Config {
+        length,
+        has_symbols,
+    } = parse_args(&args).unwrap_or_else(|err| {
         eprintln!("parse_args error: {err}");
         std::process::exit(1);
     });
@@ -215,11 +221,7 @@ mod tests {
     fn generated_password_without_symbols_uses_only_alphanumeric() {
         let password = generate_password(200, false);
 
-        assert!(
-            password
-                .chars()
-                .all(|ch| ch.is_ascii_alphanumeric())
-        );
+        assert!(password.chars().all(|ch| ch.is_ascii_alphanumeric()));
     }
 
     // --- build_charset ---
@@ -259,14 +261,26 @@ mod tests {
             "20".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok(Config{length: 20, has_symbols: false}));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                length: 20,
+                has_symbols: false
+            })
+        );
     }
 
     #[test]
     fn parses_symbols_flag_alone() {
         let args = vec![PROGRAM.to_string(), "--symbols".to_string()];
 
-        assert_eq!(parse_args(&args), Ok(Config { length: 10, has_symbols: true }));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                length: 10,
+                has_symbols: true
+            })
+        );
     }
 
     #[test]
@@ -278,7 +292,13 @@ mod tests {
             "--symbols".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok(Config { length: 20, has_symbols: true }));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                length: 20,
+                has_symbols: true
+            })
+        );
     }
 
     #[test]
@@ -290,14 +310,26 @@ mod tests {
             "20".to_string(),
         ];
 
-        assert_eq!(parse_args(&args), Ok(Config { length: 20, has_symbols: true }));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                length: 20,
+                has_symbols: true
+            })
+        );
     }
 
     #[test]
     fn returns_default_value_ten_when_no_flag() {
         let args = vec![PROGRAM.to_string()];
 
-        assert_eq!(parse_args(&args), Ok(Config { length: 10, has_symbols: false }));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                length: 10,
+                has_symbols: false
+            })
+        );
     }
 
     #[test]
@@ -391,5 +423,4 @@ mod tests {
             Err("duplicate flag: --length".to_string())
         );
     }
-
 }

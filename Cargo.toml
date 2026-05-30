@@ -6,6 +6,9 @@ edition = "2024"
 # cargo build or run will help install
 [dependencies]
 rand = "0.9"
+# The derive macro (#[derive(Serialize, Deserialize)])
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 
 # [[example]] must stay [[example]] is a Cargo-defined table name
 # name should be lowercase letters/numbers with _ or -
@@ -20,3 +23,7 @@ rand = "0.9"
 [[bin]]
 name = "genpass"
 path = "projects/random_password_cli.rs"
+
+[[bin]]
+name = "jsonfmt"
+path = "projects/json_formatter_cli.rs"
