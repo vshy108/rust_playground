@@ -38,6 +38,8 @@
 // 16. Pre-parse escape hatch — if a flag changes whether *other* flags are even validated
 //     (e.g. `--help`), handle it before the parser runs, not inside the parser.
 //     This ensures it always wins, even when other flags have invalid values.
+// 17. `eprintln!` vs `println!` — errors go to stderr (`eprintln!`), output to stdout (`println!`).
+//     This matters for piping: `genpass | pbcopy` copies only the password, not any error messages.
 
 // Extra:
 

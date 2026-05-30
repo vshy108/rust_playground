@@ -35,7 +35,7 @@ cargo test
 
 ## 3. Next Learning Topics
 
-- [ ] Add `--help` flag — print usage and exit with code 0; teaches early return pattern.
-- [ ] Detect duplicate flags — currently `--length 5 --length 20` silently uses 20; return an error instead.
+- [x] Add `--help` flag — print usage and exit with code 0; teaches early return pattern.
+- [x] Detect duplicate flags — currently `--length 5 --length 20` silently uses 20; return an error instead.
 - [ ] Replace `(usize, bool)` tuple with a named struct `Config { length: usize, symbols: bool }` — teaches when a tuple outgrows itself.
-- [ ] `eprintln!` vs `println!` — errors go to stderr, output to stdout; note why this matters for piping (`genpass | pbcopy`).
+- [x] `eprintln!` vs `println!` — errors go to stderr, output to stdout; note why this matters for piping (`genpass | pbcopy`).
