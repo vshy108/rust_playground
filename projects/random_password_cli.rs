@@ -143,6 +143,28 @@ fn main() {
 
     // --help is a pre-parse escape hatch: check it before parse_args runs so it
     // always wins, even when other flags have invalid values.
+    //
+    // Alternative considered — Option B: richer return enum
+    //
+    //   enum ParseResult {
+    //       Help,
+    //       Ok(usize, bool),
+    //       Err(String),
+    //   }
+    //
+    //   parse_args would return ParseResult instead of Result<(usize, bool), String>.
+    //   main would match on all three variants.
+    //
+    // Why Option B was rejected:
+    //   1. Order-dependency: `--length abc --help` hits the parse error before reaching
+    //      the `--help` arm, so help still loses to bad input — the same problem.
+    //      To fix that, parse_args would need a full two-pass design.
+    //   2. Boilerplate: a custom enum means impl Display, impl PartialEq for tests,
+    //      and updating every match site — all for one extra variant.
+    //   3. Rust already has the right tool: Result<T, E> separates success from failure.
+    //      Help is not a failure, so forcing it into Err("help") pollutes the type,
+    //      and adding a third variant adds complexity the stdlib type avoids.
+    //   Option A (pre-parse scan with `.any()`) is two lines and has no edge cases.
     if args.iter().any(|arg| arg == "--help") {
         println!("Usage: genpass [--length <n>] [--symbols] [--help]");
         std::process::exit(0);
