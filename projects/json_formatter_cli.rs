@@ -59,7 +59,7 @@
 // - [x] validate-only mode (parse without re-serialising)
 
 use serde_json::{from_str, to_string_pretty};
-use std::fs::read_to_string;
+use std::fs::File;
 // `self` brings std::io into scope as `io`, enabling `io::stdin()`.
 // `Read` brings the Read trait into scope; required to call `.read_to_string()`
 // on any impl Read value (the method lives on the trait, not the concrete type).
@@ -75,37 +75,31 @@ struct Config {
 // 0. parse CLI args
 // std::env::args() returns an iterator of the process arguments; collect() turns it into Vec<String>.
 // args[0] is the program name, so iter().skip(1) starts at the first user-supplied argument.
-// Returns Ok(Config) always: file_path is Some(path) if given, None if omitted (stdin mode).
-// is_check is true only if "--check" flag is present.
-fn parse_args(args: &[String]) -> Result<Config, String> {
-    let mut iter = args.iter().skip(1);
+// Returns Config directly: file_path is Some(path) if given, None if omitted (stdin mode).
+// is_check is true only if "--check" flag is present. Never fails, so no Result wrapper needed.
+fn parse_args(args: &[String]) -> Config {
     let mut file_path = "";
     let mut is_check = false;
-    while let Some(arg) = iter.next() {
-        // FIX: arg is &String; matching on arg.as_str() gives &str so string
-        // literal patterns like "--check" (also &str) can match.
+    // FIX: arg is &String; matching on arg.as_str() gives &str so string
+    // literal patterns like "--check" (also &str) can match.
+    // `for arg in iter` is idiomatic over `while let Some(arg) = iter.next()`.
+    for arg in args.iter().skip(1) {
         match arg.as_str() {
             "--check" => is_check = true,
             // `other` captures the &str value produced by arg.as_str() —
             // same content as arg but already the right type for file_path.
-            other => {
-                file_path = other;
-            }
+            other => file_path = other,
         }
     }
 
-    // If file_path was set during the loop, return a Config; otherwise the
-    // user gave no path argument.
-    if file_path != "" {
-        Ok(Config {
-            file_path: Some(file_path.to_string()),
-            is_check,
-        })
-    } else {
-        Ok(Config {
-            file_path: None,
-            is_check,
-        })
+    // is_empty() is idiomatic over `!= ""`.
+    Config {
+        file_path: if !file_path.is_empty() {
+            Some(file_path.to_string())
+        } else {
+            None
+        },
+        is_check,
     }
 }
 
@@ -116,13 +110,6 @@ fn read_input(mut reader: impl Read) -> Result<String, std::io::Error> {
     let mut buf = String::new();
     reader.read_to_string(&mut buf)?;
     Ok(buf)
-}
-
-// 1b. read from file path
-// fs::read_to_string opens the file, reads all bytes, and returns them as a String.
-// On any IO error (file not found, permission denied, etc.) it returns Err(io::Error).
-fn read_file_from_path(path: &str) -> Result<String, std::io::Error> {
-    read_to_string(path)
 }
 
 // 2. parse content as json
@@ -143,17 +130,16 @@ fn format_json(value: &serde_json::Value) -> Result<String, serde_json::Error> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
+    // parse_args returns Config directly — it never fails (no-path means stdin).
     let Config {
         file_path,
         is_check,
-    } = parse_args(&args).unwrap_or_else(|err| {
-        eprintln!("parse_args error: {err}");
-        std::process::exit(1);
-    });
+    } = parse_args(&args);
     // FIX: raw_string must be declared outside the match so it is accessible below.
     // Each arm evaluates to the String; `let raw_string = match` binds it in the outer scope.
     let raw_string = match file_path {
-        Some(path) => read_file_from_path(&path)?,
+        // File::open returns Result<File, io::Error>; ? unwraps to File, which impl Read.
+        Some(path) => read_input(File::open(&path)?)?,
         // read_input accepts any impl Read; io::stdin() satisfies that in production.
         None => read_input(io::stdin())?,
     };
@@ -187,7 +173,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pretty_json_string = format_json(&json_string)?;
     println!("{}", pretty_json_string);
 
-    return Ok(());
+    // Implicit return: last expression in a function is its return value.
+    Ok(())
 }
 
 #[cfg(test)]
@@ -214,10 +201,10 @@ mod tests {
 
         assert_eq!(
             parse_args(&args),
-            Ok(Config {
+            Config {
                 file_path: Some("/tmp/test.json".to_string()),
                 is_check: false,
-            })
+            }
         );
     }
 
@@ -227,10 +214,10 @@ mod tests {
 
         assert_eq!(
             parse_args(&args),
-            Ok(Config {
+            Config {
                 file_path: None,
                 is_check: false,
-            })
+            }
         );
     }
 
@@ -244,10 +231,10 @@ mod tests {
 
         assert_eq!(
             parse_args(&args),
-            Ok(Config {
+            Config {
                 file_path: Some("/tmp/test.json".to_string()),
                 is_check: true,
-            })
+            }
         );
     }
 
@@ -257,10 +244,10 @@ mod tests {
 
         assert_eq!(
             parse_args(&args),
-            Ok(Config {
+            Config {
                 file_path: Some("/tmp/test.json".to_string()),
                 is_check: false,
-            })
+            }
         );
     }
 
