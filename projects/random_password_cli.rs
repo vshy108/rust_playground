@@ -42,51 +42,51 @@
 
 use rand::Rng;
 
-// Returns Ok((length, symbols)) or Err(message).
-// Err variant holds a String (not &str) because some messages are built at runtime with format!.
+// Returns Ok((length, with_symbols)) or Err(message).
+// Uses a mut iterator so flags can appear in any order.
+// Err holds a String (not &str): some messages are built at runtime with format!.
 fn parse_args(args: &[String]) -> Result<(usize, bool), String> {
-    // rewrite with a mut iterator loop to support --symbols before or after --length.
-    // skip(1) to drop the program name
-    let mut arg_iter = args.iter().skip(1);
-    let mut length = 10;
-    let mut has_symbols = false;
+    let mut length = 10;         // default: 10 characters
+    let mut has_symbols = false; // default: alphanumeric only
 
-    while let Some(arg) = arg_iter.next() {
-        // &String to &str
+    // skip(1) drops args[0] (binary name); flags start at index 1.
+    let mut iter = args.iter().skip(1);
+
+    // while let: loop until iterator is exhausted (.next() returns None).
+    while let Some(arg) = iter.next() {
+        // as_str() coerces &String -> &str so match arms can use string literals.
         match arg.as_str() {
-            "--length" => match arg_iter.next() {
+            "--length" => match iter.next() {
+                // iter.next() here consumes the token after --length.
+                // This is what allows flag+value pairs without positional indexing.
                 None => return Err("missing flag value".to_string()),
-                // parse::<usize>() rejects floats, negatives, and letters — all return "invalid digit"
                 Some(val) => match val.parse::<usize>() {
-                    // Note: Err(error: ParseIntError) is not valid match syntax.
-                    // Type annotation in a match arm must use: let e: ParseIntError = error;
+                    // parse::<usize>() rejects floats, negatives, letters — all give "invalid digit"
                     Err(e) => return Err(format!("not a valid usize: {e}")),
                     Ok(0) => return Err("not a valid usize".to_string()),
                     Ok(n) => length = n,
                 },
             },
-            "--symbols" => {
-                has_symbols = true;
-            }
+            "--symbols" => has_symbols = true,
             other => return Err(format!("invalid flag: {other}")),
         }
     }
 
-    // Result need Ok or Err
     Ok((length, has_symbols))
 }
 
 fn build_charset(with_symbols: bool) -> Vec<char> {
-    // Printable ASCII characters are from byte 33 to 126.
-    // !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
-    // letters 65u8..=90u8, 97u8..=122u8
-    // numbers 48u8..=57u8
-    // punctuation
-    // symbols
     // with_symbols=true:  full printable ASCII bytes 33–126 (94 chars)
     // with_symbols=false: alphanumeric only — 0-9 (48–57) + A-Z (65–90) + a-z (97–122) = 62 chars
-    // if is an expression: both branches must return the same type,
-    // so else is required whenever the true branch returns a non-() value.
+    //
+    // ASCII 33–126 reference:
+    //  33– 47  ! " # $ % & ' ( ) * + , - . /
+    //  48– 57  0 1 2 3 4 5 6 7 8 9
+    //  58– 64  : ; < = > ? @
+    //  65– 90  A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+    //  91– 96  [ \ ] ^ _ `
+    //  97–122  a b c d e f g h i j k l m n o p q r s t u v w x y z
+    // 123–126  { | } ~
     if with_symbols {
         (33u8..=126u8).map(char::from).collect()
     } else {
@@ -128,7 +128,7 @@ fn main() {
         eprintln!("parse_args error: {err}");
         std::process::exit(1);
     });
-    println!("{:?}", generate_password(length, with_symbols));
+    println!("{}", generate_password(length, with_symbols));
 }
 
 #[cfg(test)]
