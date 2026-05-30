@@ -41,18 +41,33 @@
 //    - `if let Some(x) = expr { ... }` — use when you only care about the Some branch.
 //    - `match expr { Some(x) => ..., None => ... }` — use when both branches need handling.
 //    - `let Some(x) = expr { ... }` is NOT valid syntax; if let is the correct form.
+//
+// 5. impl Trait in function parameters
+//    - `fn f(x: impl Read)` means "any concrete type that implements Read".
+//    - The compiler generates a separate copy of the function for each concrete type used
+//      (monomorphisation) — no runtime overhead, unlike `dyn Trait` (dynamic dispatch).
+//    - `mut reader: impl Read` — `mut` applies to the local binding, not the caller's value;
+//      needed here because `read_to_string` takes `&mut self`.
+//    - Enables passing io::stdin() in production and Cursor<&[u8]> in tests, same function.
+//    - std::io::Cursor<T>: wraps an in-memory buffer and adds a position pointer so it
+//      satisfies the Read trait. Cursor::new(b"...") lets tests inject fake stdin without
+//      touching the real process IO.
 
 // Extra:
 
 // - [x] pretty print (serde_json::to_string_pretty)
-// - [ ] validate-only mode (parse without re-serialising)
+// - [x] validate-only mode (parse without re-serialising)
 
 use serde_json::{from_str, to_string_pretty};
 use std::fs::read_to_string;
+// `self` brings std::io into scope as `io`, enabling `io::stdin()`.
+// `Read` brings the Read trait into scope; required to call `.read_to_string()`
+// on any impl Read value (the method lives on the trait, not the concrete type).
+use std::io::{self, Read};
 
 #[derive(Debug, PartialEq)]
 struct Config {
-    file_path: String,
+    file_path: Option<String>,
     is_check: bool,
 }
 
@@ -60,7 +75,8 @@ struct Config {
 // 0. parse CLI args
 // std::env::args() returns an iterator of the process arguments; collect() turns it into Vec<String>.
 // args[0] is the program name, so iter().skip(1) starts at the first user-supplied argument.
-// Returns Ok(path) if a path argument is present, Err("missing path") otherwise.
+// Returns Ok(Config) always: file_path is Some(path) if given, None if omitted (stdin mode).
+// is_check is true only if "--check" flag is present.
 fn parse_args(args: &[String]) -> Result<Config, String> {
     let mut iter = args.iter().skip(1);
     let mut file_path = "";
@@ -82,15 +98,27 @@ fn parse_args(args: &[String]) -> Result<Config, String> {
     // user gave no path argument.
     if file_path != "" {
         Ok(Config {
-            file_path: file_path.to_string(),
+            file_path: Some(file_path.to_string()),
             is_check,
         })
     } else {
-        Err("missing path".to_string())
+        Ok(Config {
+            file_path: None,
+            is_check,
+        })
     }
 }
 
-// 1. read from file path
+// 1a. read from any reader (file, stdin, or in-memory buffer in tests)
+// Accepts any type implementing Read (io::stdin(), fs::File, Cursor<&[u8]>, etc.).
+// Reads all bytes into a String and returns it.
+fn read_input(mut reader: impl Read) -> Result<String, std::io::Error> {
+    let mut buf = String::new();
+    reader.read_to_string(&mut buf)?;
+    Ok(buf)
+}
+
+// 1b. read from file path
 // fs::read_to_string opens the file, reads all bytes, and returns them as a String.
 // On any IO error (file not found, permission denied, etc.) it returns Err(io::Error).
 fn read_file_from_path(path: &str) -> Result<String, std::io::Error> {
@@ -122,7 +150,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         eprintln!("parse_args error: {err}");
         std::process::exit(1);
     });
-    let raw_string = read_file_from_path(file_path.as_str())?;
+    // FIX: raw_string must be declared outside the match so it is accessible below.
+    // Each arm evaluates to the String; `let raw_string = match` binds it in the outer scope.
+    let raw_string = match file_path {
+        Some(path) => read_file_from_path(&path)?,
+        // read_input accepts any impl Read; io::stdin() satisfies that in production.
+        None => read_input(io::stdin())?,
+    };
+
     // match instead of ? so --check mode can exit with the right code before pretty-printing.
     let json_string = match parse_json(raw_string.as_str()) {
         Ok(value) => {
@@ -151,6 +186,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let pretty_json_string = format_json(&json_string)?;
     println!("{}", pretty_json_string);
+
     return Ok(());
 }
 
@@ -179,17 +215,23 @@ mod tests {
         assert_eq!(
             parse_args(&args),
             Ok(Config {
-                file_path: "/tmp/test.json".to_string(),
-                is_check: false
+                file_path: Some("/tmp/test.json".to_string()),
+                is_check: false,
             })
         );
     }
 
     #[test]
-    fn return_missing_path_if_no_argument() {
+    fn no_path_sets_file_path_to_none() {
         let args = vec![PROGRAM.to_string()];
 
-        assert_eq!(parse_args(&args), Err("missing path".to_string()));
+        assert_eq!(
+            parse_args(&args),
+            Ok(Config {
+                file_path: None,
+                is_check: false,
+            })
+        );
     }
 
     #[test]
@@ -203,7 +245,7 @@ mod tests {
         assert_eq!(
             parse_args(&args),
             Ok(Config {
-                file_path: "/tmp/test.json".to_string(),
+                file_path: Some("/tmp/test.json".to_string()),
                 is_check: true,
             })
         );
@@ -216,10 +258,18 @@ mod tests {
         assert_eq!(
             parse_args(&args),
             Ok(Config {
-                file_path: "/tmp/test.json".to_string(),
+                file_path: Some("/tmp/test.json".to_string()),
                 is_check: false,
             })
         );
+    }
+
+    #[test]
+    fn read_input_reads_all_bytes_from_reader() {
+        // Cursor<&[u8]> implements Read, so it can stand in for stdin in tests.
+        let cursor = std::io::Cursor::new(r#"{"a":1}"#);
+        let result = read_input(cursor);
+        assert_eq!(result.unwrap(), r#"{"a":1}"#);
     }
 
     #[test]

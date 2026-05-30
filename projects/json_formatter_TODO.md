@@ -36,4 +36,4 @@ cargo test --bin jsonfmt
 
 - [x] Pretty print (already using `to_string_pretty` — verify indentation is 2 spaces).
 - [x] Validate-only mode: `--check` flag exits 0 if valid, 1 if invalid, prints nothing.
-- [ ] Read from stdin when no filename is given (`-` or no arg).
+- [x] Read from stdin when no filename is given (`-` or no arg).
