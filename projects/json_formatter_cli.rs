@@ -61,11 +61,17 @@
 //    - CI and shell scripts use exit codes, not stdout, to decide whether a command succeeded.
 //    - On macOS/Linux, press Ctrl+D to send EOF to stdin, signalling end of input.
 //      The Read trait sees EOF and read_to_string returns with whatever was typed.
+//
+// 7. Pre-parse escape hatch for --help
+//    - parse_args never sees --help; main scans for it first with args.iter().any().
+//    - This ensures --help always wins, even if other flags have invalid values.
+//    - .any() is short-circuiting: stops at the first match, does not scan the whole Vec.
 
 // Extra:
 
 // - [x] pretty print (serde_json::to_string_pretty)
 // - [x] validate-only mode (parse without re-serialising)
+// - [x] --help flag (pre-parse escape hatch in main)
 
 use serde_json::{from_str, to_string_pretty};
 use std::fs::File;
@@ -139,6 +145,17 @@ fn format_json(value: &serde_json::Value) -> Result<String, serde_json::Error> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
+
+    // --help is a pre-parse escape hatch: check before parse_args so it always wins,
+    // even when other args are invalid. .any() short-circuits on the first match.
+    if args.iter().any(|arg| arg == "--help") {
+        println!("Usage: jsonfmt [--check] [<file>]");
+        println!("       jsonfmt              — read JSON from stdin");
+        println!("       jsonfmt <file>        — read JSON from file");
+        println!("       jsonfmt --check <file> — validate only, exit 0/1");
+        std::process::exit(0);
+    }
+
     // parse_args returns Config directly — it never fails (no-path means stdin).
     let Config {
         file_path,
@@ -267,6 +284,21 @@ mod tests {
         let cursor = std::io::Cursor::new(r#"{"a":1}"#);
         let result = read_input(cursor);
         assert_eq!(result.unwrap(), r#"{"a":1}"#);
+    }
+
+    #[test]
+    fn help_flag_is_not_seen_by_parse_args_as_file_path_note() {
+        // parse_args treats --help as a file path (the other catchall) because
+        // main intercepts --help before calling parse_args.
+        // This test documents that behaviour: parse_args itself has no special --help handling.
+        let args = vec![PROGRAM.to_string(), "--help".to_string()];
+        assert_eq!(
+            parse_args(&args),
+            Config {
+                file_path: Some("--help".to_string()),
+                is_check: false,
+            }
+        );
     }
 
     #[test]
