@@ -27,3 +27,7 @@ path = "projects/random_password_cli.rs"
 [[bin]]
 name = "jsonfmt"
 path = "projects/json_formatter_cli.rs"
+
+[[bin]]
+name = "rgrep"
+path = "projects/mini_grep_cli.rs"
