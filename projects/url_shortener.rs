@@ -241,6 +241,24 @@ mod tests {
             .with_state(store)
     }
 
+    // make_app_with_entry: builds a Router pre-seeded with one UrlEntry.
+    // Used by redirect tests that need a known code — avoids repeating the
+    // store-create → insert → router-build block in every test.
+    fn make_app_with_entry(code: &str, expires_at: Option<Instant>) -> Router {
+        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+        store.lock().unwrap().insert(
+            code.to_string(),
+            UrlEntry {
+                original_url: "https://example.com".to_string(),
+                expires_at,
+            },
+        );
+        Router::new()
+            .route("/shorten", post(shorten))
+            .route("/{code}", get(redirect))
+            .with_state(store)
+    }
+
     // #[tokio::test]: axum handlers are async, so tests must also be async.
     // This attribute spins up a tokio runtime for the duration of one test,
     // then tears it down — equivalent to #[tokio::main] but scoped to one test.
@@ -273,23 +291,9 @@ mod tests {
 
     #[tokio::test]
     async fn get_known_code_redirects() {
-        // Seed the store directly: insert a known code without going through POST /shorten.
-        // This avoids parsing the response just to get the code, and makes the test
-        // deterministic — "testcode" is always the key, no random UUID involved.
-        let store: Store = Arc::new(Mutex::new(HashMap::new()));
-        store.lock().unwrap().insert(
-            "testcode".to_string(),
-            UrlEntry {
-                original_url: "https://example.com".to_string(),
-                expires_at: None,
-            },
-        );
-        let app = Router::new()
-            .route("/shorten", post(shorten))
-            .route("/{code}", get(redirect))
-            .with_state(store);
-
-        let response = app
+        // make_app_with_entry seeds the store directly — no HTTP round-trip to POST /shorten.
+        // "testcode" is always the key, making the test deterministic (no random UUID).
+        let response = make_app_with_entry("testcode", None)
             .oneshot(
                 Request::builder()
                     .uri("/testcode")
@@ -327,28 +331,19 @@ mod tests {
     // behind the current time, so the handler must return 410 Gone immediately.
     #[tokio::test]
     async fn get_expired_code_returns_410() {
-        let store: Store = Arc::new(Mutex::new(HashMap::new()));
-        store.lock().unwrap().insert(
-            "expired".to_string(),
-            UrlEntry {
-                original_url: "https://example.com".to_string(),
-                expires_at: Some(Instant::now() - Duration::from_secs(1)),
-            },
-        );
-        let app = Router::new()
-            .route("/shorten", post(shorten))
-            .route("/{code}", get(redirect))
-            .with_state(store);
-
-        let response = app
-            .oneshot(
-                Request::builder()
-                    .uri("/expired")
-                    .body(Body::from(""))
-                    .unwrap(),
-            )
-            .await
-            .unwrap();
+        // Deadline 1 second in the past → already expired when the handler checks.
+        let response = make_app_with_entry(
+            "expired",
+            Some(Instant::now() - Duration::from_secs(1)),
+        )
+        .oneshot(
+            Request::builder()
+                .uri("/expired")
+                .body(Body::from(""))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
 
         assert_eq!(response.status(), StatusCode::GONE);
     }
@@ -356,28 +351,19 @@ mod tests {
     // Seed a code whose deadline is 60 seconds in the future → not yet expired.
     #[tokio::test]
     async fn get_non_expired_code_redirects() {
-        let store: Store = Arc::new(Mutex::new(HashMap::new()));
-        store.lock().unwrap().insert(
-            "fresh".to_string(),
-            UrlEntry {
-                original_url: "https://example.com".to_string(),
-                expires_at: Some(Instant::now() + Duration::from_secs(60)),
-            },
-        );
-        let app = Router::new()
-            .route("/shorten", post(shorten))
-            .route("/{code}", get(redirect))
-            .with_state(store);
-
-        let response = app
-            .oneshot(
-                Request::builder()
-                    .uri("/fresh")
-                    .body(Body::from(""))
-                    .unwrap(),
-            )
-            .await
-            .unwrap();
+        // Deadline 60 seconds in the future → not yet expired.
+        let response = make_app_with_entry(
+            "fresh",
+            Some(Instant::now() + Duration::from_secs(60)),
+        )
+        .oneshot(
+            Request::builder()
+                .uri("/fresh")
+                .body(Body::from(""))
+                .unwrap(),
+        )
+        .await
+        .unwrap();
 
         assert!(response.status().is_redirection());
     }
@@ -385,20 +371,8 @@ mod tests {
     // Seed a code with expires_at: None → no TTL, never expires regardless of time.
     #[tokio::test]
     async fn get_no_ttl_code_never_expires() {
-        let store: Store = Arc::new(Mutex::new(HashMap::new()));
-        store.lock().unwrap().insert(
-            "permanent".to_string(),
-            UrlEntry {
-                original_url: "https://example.com".to_string(),
-                expires_at: None,
-            },
-        );
-        let app = Router::new()
-            .route("/shorten", post(shorten))
-            .route("/{code}", get(redirect))
-            .with_state(store);
-
-        let response = app
+        // expires_at: None → no TTL, never expires regardless of time.
+        let response = make_app_with_entry("permanent", None)
             .oneshot(
                 Request::builder()
                     .uri("/permanent")
