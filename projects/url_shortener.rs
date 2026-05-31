@@ -230,15 +230,20 @@ mod tests {
     // .oneshot(request): sends exactly one request into the router, returns a Future
     // that resolves to the Response. No TCP listener, no port — tests run in-process.
 
-    // make_app: helper that builds a Router with a fresh, empty Store.
-    // Calling this per-test means each test starts with no existing short codes,
-    // so tests don't interfere with each other (no shared global state).
-    fn make_app() -> Router {
-        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+    // build_router: the single place that wires routes + state into a Router.
+    // Both make_app and make_app_with_entry call this — route definitions are not repeated.
+    fn build_router(store: Store) -> Router {
         Router::new()
             .route("/shorten", post(shorten))
             .route("/{code}", get(redirect))
             .with_state(store)
+    }
+
+    // make_app: helper that builds a Router with a fresh, empty Store.
+    // Calling this per-test means each test starts with no existing short codes,
+    // so tests don't interfere with each other (no shared global state).
+    fn make_app() -> Router {
+        build_router(Arc::new(Mutex::new(HashMap::new())))
     }
 
     // make_app_with_entry: builds a Router pre-seeded with one UrlEntry.
@@ -253,10 +258,7 @@ mod tests {
                 expires_at,
             },
         );
-        Router::new()
-            .route("/shorten", post(shorten))
-            .route("/{code}", get(redirect))
-            .with_state(store)
+        build_router(store)
     }
 
     // #[tokio::test]: axum handlers are async, so tests must also be async.
