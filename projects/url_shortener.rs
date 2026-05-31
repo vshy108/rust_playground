@@ -46,6 +46,10 @@
 //    .lock().unwrap() acquires the Mutex — guard is dropped at end of statement, releasing
 //    the lock immediately. Returns (StatusCode::CREATED, Json(...)) as a tuple — axum
 //    accepts tuples of (StatusCode, impl IntoResponse) as a response.
+// 2. GET /:code: Path(code) extracts the path segment as an owned String. .get(&code)
+//    returns Option<&UrlEntry>. Both match arms call .into_response() to unify the return
+//    type — Redirect and StatusCode are different types, wrapping both satisfies impl IntoResponse.
+//    303 See Other with Location header is the correct redirect status for GET requests.
 
 // Extra:
 //
@@ -58,7 +62,13 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use axum::{Json, Router, extract::State, http::StatusCode, response::IntoResponse, routing::post};
+use axum::{
+    Json, Router,
+    extract::{Path, State},
+    http::StatusCode,
+    response::{IntoResponse, Redirect},
+    routing::{get, post},
+};
 use tokio::net::TcpListener;
 use uuid::Uuid;
 
@@ -94,13 +104,59 @@ type Store = Arc<Mutex<HashMap<String, UrlEntry>>>;
 // Returns (StatusCode::CREATED, Json(...)): axum accepts a tuple of (status, body).
 // .lock().unwrap(): acquires the Mutex guard; guard is dropped at end of statement,
 // releasing the lock before the response is returned.
+//
+// Handler parameter syntax — `State(store): State<Store>`:
+//   This is Rust destructuring in function params. `State<Store>` is the wrapper
+//   type axum provides; `State(store)` unpacks the inner value so `store` is already
+//   `Arc<Mutex<...>>`. Without it: `state: State<Store>` and then `state.0` to access.
+//   Same for `Json(payload)` — gives `ShortenRequest` directly, not `Json<ShortenRequest>`.
+//
+// How axum injects these automatically:
+//   axum uses the `FromRequestParts` / `FromRequest` traits. Any type that implements
+//   them can appear as a handler parameter. axum assembles them from the request and
+//   calls the handler — you never call shorten(...) yourself.
+//   .with_state(store) on the router stores an Arc clone; axum clones it per request.
 async fn shorten(
     State(store): State<Store>,
     Json(payload): Json<ShortenRequest>,
 ) -> impl IntoResponse {
+    // Uuid::new_v4().to_string() → owned String e.g. "48ecce4a-1234-..."
+    // [..8] slices the first 8 chars → &str (borrowed, not owned)
+    // .to_string() converts &str back to owned String — needed because `code`
+    // is stored in the HashMap and returned in the response, both require ownership.
     let code = Uuid::new_v4().to_string()[..8].to_string();
-    store.lock().unwrap().insert(code.clone(), UrlEntry { original_url: payload.url });
+    // store.lock()   — acquires the Mutex; blocks until no other handler is writing.
+    //                   returns LockResult<MutexGuard<HashMap>>
+    // .unwrap()       — unwraps LockResult; panics only if another thread panicked
+    //                   while holding the lock ("poisoned mutex") — acceptable here.
+    // .insert(k, v)   — adds the entry to the HashMap.
+    // code.clone()    — insert takes ownership of the key; we clone because `code`
+    //                   is also used on the next line for the response.
+    // payload.url     — moved into UrlEntry (String is not Copy, so no clone needed).
+    // MutexGuard dropped at end of statement → lock released before response is built.
+    store.lock().unwrap().insert(
+        code.clone(),
+        UrlEntry {
+            original_url: payload.url,
+        },
+    );
     (StatusCode::CREATED, Json(ShortenResponse { code }))
+}
+
+// GET /:code handler.
+// Path(code): axum extracts the {code} path segment as an owned String.
+// .get(&code): looks up the code in the HashMap, returns Option<&UrlEntry>.
+// Both match arms call .into_response() to produce a uniform Response type —
+// Redirect and StatusCode are different types; .into_response() erases the
+// difference so the function can return a single impl IntoResponse.
+// 303 See Other: correct redirect status for GET — tells the client to GET the
+// new URL. Location header carries the original URL.
+async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl IntoResponse {
+    let map = store.lock().unwrap();
+    match map.get(&code) {
+        Some(entry) => Redirect::to(&entry.original_url).into_response(),
+        None => StatusCode::NOT_FOUND.into_response(),
+    }
 }
 
 #[tokio::main]
@@ -108,7 +164,15 @@ async fn main() {
     let store: Store = Arc::new(Mutex::new(HashMap::new()));
     let app = Router::new()
         .route("/shorten", post(shorten))
+        .route("/{code}", get(redirect))
         .with_state(store);
+    // TcpListener::bind: asks the OS to reserve port 3000. Async because the OS
+    // call can take a moment (checking port availability, allocating the socket).
+    // .await suspends main until the port is ready; .unwrap() panics if port is in use.
     let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    // axum::serve: starts the accept loop — accept connection → spawn task → handle.
+    // Never returns (runs until the process is killed). .await hands control to tokio
+    // so other tasks can run while the server waits for the next connection.
+    // Without .await, serve() returns a Future — nothing runs until it is awaited.
     axum::serve(listener, app).await.unwrap();
 }

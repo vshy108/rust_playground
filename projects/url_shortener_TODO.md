@@ -4,11 +4,17 @@
 
 ```bash
 cargo run --bin url_shortener                    # start server on :3000
+cargo run --bin url_shortener &                  # start in background (shell free)
 curl -s -X POST http://localhost:3000/shorten \
   -H 'Content-Type: application/json' \
   -d '{"url":"https://example.com"}' | jq       # shorten a URL
 curl -v http://localhost:3000/<code>             # follow redirect
 cargo test --bin url_shortener
+
+# Stop the server:
+# Ctrl+C only kills the foreground process — background jobs (&) are unaffected.
+# To kill a background server on port 3000:
+lsof -ti:3000 | xargs kill -9
 ```
 
 ## 1. POST /shorten
@@ -29,9 +35,9 @@ curl -s -X POST http://localhost:3000/shorten \
 
 ## 2. GET /:code
 
-- [ ] Lock the store and call `.get(&code)`.
-- [ ] If found, return `Redirect::to(&entry.original_url)`.
-- [ ] If not found, return `StatusCode::NOT_FOUND`.
+- [x] Lock the store and call `.get(&code)`.
+- [x] If found, return `Redirect::to(&entry.original_url)`.
+- [x] If not found, return `StatusCode::NOT_FOUND`.
 
 Acceptance check:
 
