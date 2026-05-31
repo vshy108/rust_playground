@@ -71,7 +71,9 @@ fn parse_args(args: &[String]) -> Result<Config, String> {
     }
 }
 
-fn read_file_content(file_path: &String) -> Result<String, std::io::Error> {
+// Takes &str instead of &String: &str is more idiomatic and accepts both
+// &String (via deref coercion) and string literals. &String only accepts &String.
+fn read_file_content(file_path: &str) -> Result<String, std::io::Error> {
     std::fs::read_to_string(file_path)
 }
 
@@ -89,7 +91,8 @@ fn split_contents_to_lines(contents: &str) -> core::str::Lines<'_> {
 // `_` ignores the index inside the filter closure (we only need it for printing).
 // Return type is (usize, &'a str): caller uses index + 1 for 1-based line numbers.
 // 'a ties the output lifetime to `lines`; pattern is &Regex (not moved) because
-// Regex is not Copy — the closure borrows it, which is fine since both live in main.
+// Regex is not Copy — `move` on the closure copies the reference (&Regex), not
+// the Regex itself. The borrow is valid since both iterator and pattern live in main.
 fn filter_lines_with_pattern<'a>(
     lines: core::str::Lines<'a>,
     pattern: &Regex,
