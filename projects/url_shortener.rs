@@ -181,16 +181,28 @@ async fn main() {
 }
 
 #[cfg(test)]
+// #[cfg(test)]: this whole module is compiled only when running `cargo test`.
+// It is stripped from the release binary — no test code ships to production.
 mod tests {
     use super::*;
+    // use super::*: imports everything from the parent module (handlers, Store,
+    // structs, type aliases). Lets tests call shorten/redirect directly without
+    // re-importing each item.
     use axum::{
         body::Body,
+        // Body::from("..."): wraps a byte string into an axum request body.
         http::Request,
+        // Request::builder(): constructs an HTTP request without a real TCP connection.
+        // Set method, URI, headers, and body, then .unwrap() to get the Request.
     };
-    use tower::ServiceExt; // .oneshot(): send one request to a Router without a TCP server
+    use tower::ServiceExt;
+    // ServiceExt adds .oneshot() to any Tower Service (Router implements Service).
+    // .oneshot(request): sends exactly one request into the router, returns a Future
+    // that resolves to the Response. No TCP listener, no port — tests run in-process.
 
-    // Builds a fresh Router with an empty in-memory store.
-    // Calling this in each test keeps tests independent — no shared state between them.
+    // make_app: helper that builds a Router with a fresh, empty Store.
+    // Calling this per-test means each test starts with no existing short codes,
+    // so tests don't interfere with each other (no shared global state).
     fn make_app() -> Router {
         let store: Store = Arc::new(Mutex::new(HashMap::new()));
         Router::new()
@@ -199,7 +211,9 @@ mod tests {
             .with_state(store)
     }
 
-    // POST /shorten should return 201 Created and a non-empty short code.
+    // #[tokio::test]: axum handlers are async, so tests must also be async.
+    // This attribute spins up a tokio runtime for the duration of one test,
+    // then tears it down — equivalent to #[tokio::main] but scoped to one test.
     #[tokio::test]
     async fn post_shorten_returns_201_and_code() {
         let response = make_app()
@@ -208,6 +222,7 @@ mod tests {
                     .method("POST")
                     .uri("/shorten")
                     .header("content-type", "application/json")
+                    // r#"..."#: raw string literal — no need to escape inner quotes.
                     .body(Body::from(r#"{"url":"https://example.com"}"#))
                     .unwrap(),
             )
@@ -215,18 +230,22 @@ mod tests {
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::CREATED);
+        // axum::body::to_bytes: consumes the response body stream into a Bytes buffer.
+        // usize::MAX: no size cap — safe here because test responses are tiny.
         let bytes = axum::body::to_bytes(response.into_body(), usize::MAX)
             .await
             .unwrap();
+        // serde_json::from_slice: deserialises raw bytes → serde_json::Value (generic JSON).
+        // Using Value instead of ShortenResponse avoids coupling the test to the exact struct.
         let v: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
-        // The code field must exist and be non-empty.
         assert!(!v["code"].as_str().unwrap_or("").is_empty());
     }
 
-    // GET /:code with a known code should return a 3xx redirect pointing to the original URL.
     #[tokio::test]
     async fn get_known_code_redirects() {
-        // Seed the store directly so we control the exact code — no HTTP round-trip needed.
+        // Seed the store directly: insert a known code without going through POST /shorten.
+        // This avoids parsing the response just to get the code, and makes the test
+        // deterministic — "testcode" is always the key, no random UUID involved.
         let store: Store = Arc::new(Mutex::new(HashMap::new()));
         store.lock().unwrap().insert(
             "testcode".to_string(),
@@ -249,11 +268,14 @@ mod tests {
             .await
             .unwrap();
 
+        // .is_redirection(): true for any 3xx status (300–399).
+        // Checks the class without hard-coding 303 — protects against
+        // changing redirect type (301 Permanent, 302 Found, etc.) in the future.
         assert!(response.status().is_redirection());
+        // Location header must point back to the original URL.
         assert_eq!(response.headers()["location"], "https://example.com");
     }
 
-    // GET /:code with an unknown code should return 404 Not Found.
     #[tokio::test]
     async fn get_unknown_code_returns_404() {
         let response = make_app()
