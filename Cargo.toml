@@ -4,12 +4,40 @@ version = "0.1.0"
 edition = "2024"
 
 # cargo build or run will help install
+# Dependencies are downloaded and compiled automatically on first `cargo build`.
+# To add a new dependency: `cargo add <crate>` (updates this file automatically).
+# To add with features:    `cargo add <crate> --features <feature1>,<feature2>`
 [dependencies]
+# cargo add axum
+# Async HTTP web framework built on top of tokio and tower. Used by url_shortener.
+axum = "0.8.9"
+
+# cargo add rand
+# Random number generation. Used by genpass to pick random characters.
 rand = "0.9"
+
+# cargo add regex
+# Compiled regex patterns for searching. Used by rgrep.
 regex = "1"
-# The derive macro (#[derive(Serialize, Deserialize)])
+
+# cargo add serde --features derive
+# Serialisation/deserialisation framework. `derive` enables #[derive(Serialize, Deserialize)]
+# on structs so they can be converted to/from JSON automatically.
 serde = { version = "1", features = ["derive"] }
+
+# cargo add serde_json
+# JSON support for serde. Provides json!() macro and serde_json::from_str/to_string.
 serde_json = "1"
+
+# cargo add tokio --features tokio/full
+# Async runtime required by axum. `full` enables all features (net, time, sync, etc.).
+# Without tokio, async fn main and async handlers cannot run.
+tokio = { version = "1.52.3", features = ["full"] }
+
+# cargo add uuid --features v4
+# UUID generation. `v4` enables Uuid::new_v4() which generates a random UUID.
+# Without the feature flag, only the type is available — generation methods are gated.
+uuid = { version = "1.23.2", features = ["v4"] }
 
 # [[example]] must stay [[example]] is a Cargo-defined table name
 # name should be lowercase letters/numbers with _ or -
@@ -32,3 +60,7 @@ path = "projects/json_formatter_cli.rs"
 [[bin]]
 name = "rgrep"
 path = "projects/mini_grep_cli.rs"
+
+[[bin]]
+name = "url_shortener"
+path = "projects/url_shortener.rs"

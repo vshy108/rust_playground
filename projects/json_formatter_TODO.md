@@ -1,5 +1,16 @@
 # TODO: json_formatter_cli
 
+## Usage
+
+```bash
+echo '{"b":2,"a":1}' > /tmp/test.json
+cargo run --bin jsonfmt -- /tmp/test.json        # pretty-print file
+cargo run --bin jsonfmt                          # read from stdin
+cargo run --bin jsonfmt -- --check /tmp/test.json  # validate only
+cargo run --bin jsonfmt -- --help
+cargo test --bin jsonfmt
+```
+
 ## 1. Basic Formatter
 
 - [x] Read filename from CLI args (exit with usage message if missing).

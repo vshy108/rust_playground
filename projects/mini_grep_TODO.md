@@ -1,5 +1,15 @@
 # TODO: mini_grep_cli
 
+## Usage
+
+```bash
+echo -e 'hello world\ngoodbye\nhello rust' > /tmp/logs.txt
+cargo run --bin rgrep -- hello /tmp/logs.txt     # plain string match
+cargo run --bin rgrep -- 'h.llo' /tmp/logs.txt   # regex match
+cargo run --bin rgrep -- --help
+cargo test --bin rgrep
+```
+
 ## 1. Basic Grep
 
 - [x] Read pattern and filename from CLI args (exit with usage message if missing).

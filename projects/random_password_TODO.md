@@ -1,5 +1,14 @@
 # TODO: random_password_cli
 
+## Usage
+
+```bash
+cargo run --bin genpass -- --length 20
+cargo run --bin genpass -- --length 20 --symbols
+cargo run --bin genpass -- --help
+cargo test --bin genpass
+```
+
 ## 1. Update Test
 
 - [x] Replace the placeholder `it_works` test with behavior-focused tests.
