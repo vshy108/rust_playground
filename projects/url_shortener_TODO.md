@@ -54,9 +54,9 @@ curl -v http://localhost:3000/notexist
 
 ## 3. Tests
 
-- [ ] POST /shorten returns 201 and a non-empty code.
-- [ ] GET /:code with a known code returns a redirect.
-- [ ] GET /unknown returns 404.
+- [x] POST /shorten returns 201 and a non-empty code.
+- [x] GET /:code with a known code returns a redirect.
+- [x] GET /unknown returns 404.
 
 Acceptance check:
 

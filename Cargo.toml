@@ -49,6 +49,11 @@ uuid = { version = "1.23.2", features = ["v4"] }
 
 # cargo run --bin genpass -- --length 20
 # cargo install --path .
+[dev-dependencies]
+# cargo add tower --dev --features util
+# ServiceExt adds .oneshot() which sends a single request to a Router in tests.
+tower = { version = "0.5", features = ["util"] }
+
 [[bin]]
 name = "genpass"
 path = "projects/random_password_cli.rs"

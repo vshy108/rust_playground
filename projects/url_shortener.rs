@@ -96,6 +96,9 @@ struct ShortenResponse {
 // Store is a type alias for the shared HashMap wrapped in Arc<Mutex>.
 // Arc: shared ownership across handlers. Mutex: one writer at a time.
 // Using a type alias avoids repeating Arc<Mutex<HashMap<String, UrlEntry>>> everywhere.
+//
+// NOTE: this store is purely in-memory. All short codes are lost when the
+// process exits. For persistence, write entries to a file or external DB.
 type Store = Arc<Mutex<HashMap<String, UrlEntry>>>;
 
 // POST /shorten handler.
@@ -156,6 +159,96 @@ async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl 
     match map.get(&code) {
         Some(entry) => Redirect::to(&entry.original_url).into_response(),
         None => StatusCode::NOT_FOUND.into_response(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use axum::{
+        body::Body,
+        http::Request,
+    };
+    use tower::ServiceExt; // .oneshot(): send one request to a Router without a TCP server
+
+    // Builds a fresh Router with an empty in-memory store.
+    // Calling this in each test keeps tests independent — no shared state between them.
+    fn make_app() -> Router {
+        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+        Router::new()
+            .route("/shorten", post(shorten))
+            .route("/{code}", get(redirect))
+            .with_state(store)
+    }
+
+    // POST /shorten should return 201 Created and a non-empty short code.
+    #[tokio::test]
+    async fn post_shorten_returns_201_and_code() {
+        let response = make_app()
+            .oneshot(
+                Request::builder()
+                    .method("POST")
+                    .uri("/shorten")
+                    .header("content-type", "application/json")
+                    .body(Body::from(r#"{"url":"https://example.com"}"#))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::CREATED);
+        let bytes = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .unwrap();
+        let v: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+        // The code field must exist and be non-empty.
+        assert!(!v["code"].as_str().unwrap_or("").is_empty());
+    }
+
+    // GET /:code with a known code should return a 3xx redirect pointing to the original URL.
+    #[tokio::test]
+    async fn get_known_code_redirects() {
+        // Seed the store directly so we control the exact code — no HTTP round-trip needed.
+        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+        store.lock().unwrap().insert(
+            "testcode".to_string(),
+            UrlEntry {
+                original_url: "https://example.com".to_string(),
+            },
+        );
+        let app = Router::new()
+            .route("/shorten", post(shorten))
+            .route("/{code}", get(redirect))
+            .with_state(store);
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/testcode")
+                    .body(Body::from(""))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert!(response.status().is_redirection());
+        assert_eq!(response.headers()["location"], "https://example.com");
+    }
+
+    // GET /:code with an unknown code should return 404 Not Found.
+    #[tokio::test]
+    async fn get_unknown_code_returns_404() {
+        let response = make_app()
+            .oneshot(
+                Request::builder()
+                    .uri("/doesnotexist")
+                    .body(Body::from(""))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
     }
 }
 
