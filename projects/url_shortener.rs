@@ -50,14 +50,25 @@
 //    returns Option<&UrlEntry>. Both match arms call .into_response() to unify the return
 //    type — Redirect and StatusCode are different types, wrapping both satisfies impl IntoResponse.
 //    303 See Other with Location header is the correct redirect status for GET requests.
+// 3. Tests: tower::ServiceExt::oneshot() sends a Request directly into the Router without
+//    a TCP server. Each test builds its own Store so tests are fully independent.
+//    #[tokio::test] spins up a tokio runtime per test — needed because handlers are async.
+// 4. Expiration (steps 2–3): ShortenRequest gained ttl_secs: Option<u64>. UrlEntry gained
+//    expires_at: Option<Instant>. In shorten, payload.ttl_secs.map(|secs| Instant::now() +
+//    Duration::from_secs(secs)) computes the deadline — .map() preserves the Option shape
+//    without if/else. std::time::Instant is monotonic (never jumps) — safe for in-process
+//    deadline comparison. Duration imported alongside Instant from std::time.
 
 // Extra:
 //
-// - [ ] expiration
+// - [x] expiration steps 2–3 (data model + shorten handler)
+// - [ ] expiration step 4 (redirect: check deadline, return 410 Gone)
+// - [ ] expiration step 5 (tests: expired, non-expired, no-ttl)
 
 use std::{
     collections::HashMap,
     sync::{Arc, Mutex},
+    time::{Duration, Instant},
 };
 
 use serde::{Deserialize, Serialize};
@@ -77,6 +88,7 @@ use uuid::Uuid;
 // Extra: add `expires_at: Option<std::time::Instant>` here for expiration.
 struct UrlEntry {
     original_url: String,
+    expires_at: Option<std::time::Instant>,
 }
 
 // ShortenRequest is parsed from the POST /shorten request body.
@@ -84,6 +96,7 @@ struct UrlEntry {
 #[derive(Deserialize)]
 struct ShortenRequest {
     url: String,
+    ttl_secs: Option<u64>,
 }
 
 // ShortenResponse is serialised into the POST /shorten response body.
@@ -141,6 +154,9 @@ async fn shorten(
         code.clone(),
         UrlEntry {
             original_url: payload.url,
+            // .map() on Option<u64>: Some(n) → Some(deadline), None → None.
+            // Avoids if/else and unwrap — the Option shape is preserved automatically.
+            expires_at: payload.ttl_secs.map(|secs| Instant::now() + Duration::from_secs(secs)),
         },
     );
     (StatusCode::CREATED, Json(ShortenResponse { code }))
@@ -251,6 +267,7 @@ mod tests {
             "testcode".to_string(),
             UrlEntry {
                 original_url: "https://example.com".to_string(),
+                expires_at: None,
             },
         );
         let app = Router::new()
