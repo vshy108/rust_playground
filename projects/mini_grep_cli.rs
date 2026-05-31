@@ -52,6 +52,14 @@
 //    anonymous `pattern: &Regex` lifetime was invisible, so without `move` the
 //    borrow would be rejected. `move` copies the &Regex pointer into the closure,
 //    sidestepping the lifetime issue entirely and making it compile in any edition.
+// 8. Lifetime elision in sink functions: functions returning () don't need to
+//    propagate lifetimes to callers, but `impl Trait` associated types containing
+//    &references still require an explicit lifetime in stable Rust.
+//    '_ inside impl Trait associated types is not yet stable (E0658) — use <'a>.
+//    The named 'a only annotates the input; nothing in the output borrows from it.
+// 9. Option::zip: `a.zip(b)` combines two Options into Option<(A, B)>, returning
+//    None if either is None. Paired with .map() and .ok_or_else() it replaces
+//    `if let Some(a) = ... && let Some(b) = ...` with a concise combinator chain.
 
 // Extra:
 
@@ -66,17 +74,16 @@ struct Config {
     file_path: String,
 }
 
+// Option::zip combines two Options into Option<(A, B)>; None if either is missing.
+// .map() transforms the pair into Config; .ok_or_else() converts None to Err.
 fn parse_args(args: &[String]) -> Result<Config, String> {
-    if let Some(pattern) = args.get(1)
-        && let Some(file_path) = args.get(2)
-    {
-        Ok(Config {
+    args.get(1)
+        .zip(args.get(2))
+        .map(|(pattern, file_path)| Config {
             pattern: pattern.to_string(),
             file_path: file_path.to_string(),
         })
-    } else {
-        Err("Usage: rgrep <pattern> <file>".to_string())
-    }
+        .ok_or_else(|| "Usage: rgrep <pattern> <file>".to_string())
 }
 
 // Takes &str instead of &String: &str is more idiomatic and accepts both
@@ -119,6 +126,8 @@ fn filter_lines_with_pattern<'a>(
 // Iterates over (0-based index, line) tuples from filter_lines_with_pattern.
 // Prints each as "N: line content" where N is 1-based (index + 1).
 // Takes ownership of the iterator — consuming it drives the lazy chain.
+// '_ inside impl Trait associated types is not stable (E0658): use <'a> instead.
+// The lifetime only annotates the input; nothing in the output borrows from it.
 fn print_lines_with_line_numbers<'a>(filter_lines: impl Iterator<Item = (usize, &'a str)>) {
     filter_lines.for_each(|(index, line)| println!("{}: {}", index + 1, line));
 }
@@ -128,9 +137,9 @@ fn main() {
     // --help is a pre-parse escape hatch: check before parse_args so it always wins,
     // even when other args are invalid. .any() short-circuits on the first match.
     if args.iter().any(|arg| arg == "--help") {
-        println!("Usage: rgrep <pattern> <file>");
-        println!("       rgrep <pattern> <file>  — print lines matching pattern");
-        println!("       rgrep --help            — show this help message");
+        println!("Usage:");
+        println!("  rgrep <pattern> <file>  — print lines matching regex pattern");
+        println!("  rgrep --help            — show this help message");
         std::process::exit(0);
     }
     // if let... else cannot bind the Err value, need use match
