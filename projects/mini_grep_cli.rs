@@ -45,10 +45,18 @@
 // 6. regex crate: Regex::new(&str) compiles a pattern; can fail on invalid syntax.
 //    Compile once in main (not per-line) for efficiency. Use .is_match(&str) to test.
 //    Plain strings like "hello" are valid regex, so existing usage still works.
+// 7. Rust 2024 impl Trait capture rules: `impl Iterator` now automatically captures
+//    all in-scope lifetimes, including anonymous ones like the `&Regex` borrow.
+//    So `move` on the filter closure is harmless but not required in edition 2024.
+//    In pre-2024 editions, only explicitly named lifetimes were captured — the
+//    anonymous `pattern: &Regex` lifetime was invisible, so without `move` the
+//    borrow would be rejected. `move` copies the &Regex pointer into the closure,
+//    sidestepping the lifetime issue entirely and making it compile in any edition.
 
 // Extra:
 
 // - [x] regex support (use the `regex` crate)
+// - [x] --help flag (pre-parse escape hatch in main)
 
 use regex::Regex;
 
@@ -93,6 +101,12 @@ fn split_contents_to_lines(contents: &str) -> core::str::Lines<'_> {
 // 'a ties the output lifetime to `lines`; pattern is &Regex (not moved) because
 // Regex is not Copy — `move` on the closure copies the reference (&Regex), not
 // the Regex itself. The borrow is valid since both iterator and pattern live in main.
+// Without `move` compiles the same in Rust 2024: &Regex is Copy, so behavior is
+// identical. The difference is lifetime — without `move` the closure borrows the
+// `pattern` stack variable; Rust 2024's impl Trait capture rules see that dependency
+// automatically and allow it. In pre-2024 editions, `move` was required because
+// impl Iterator only captured explicitly named lifetimes, so the anonymous &Regex
+// lifetime was invisible and the borrow would be rejected without `move`.
 fn filter_lines_with_pattern<'a>(
     lines: core::str::Lines<'a>,
     pattern: &Regex,
@@ -111,6 +125,14 @@ fn print_lines_with_line_numbers<'a>(filter_lines: impl Iterator<Item = (usize, 
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
+    // --help is a pre-parse escape hatch: check before parse_args so it always wins,
+    // even when other args are invalid. .any() short-circuits on the first match.
+    if args.iter().any(|arg| arg == "--help") {
+        println!("Usage: rgrep <pattern> <file>");
+        println!("       rgrep <pattern> <file>  — print lines matching pattern");
+        println!("       rgrep --help            — show this help message");
+        std::process::exit(0);
+    }
     // if let... else cannot bind the Err value, need use match
     match parse_args(&args) {
         Ok(Config { pattern, file_path }) => {
@@ -190,5 +212,14 @@ mod tests {
         // Regex::new returns Err on invalid syntax — main uses this to exit early.
         // "he[llo" has an unclosed bracket, which is a parse error.
         assert!(Regex::new("he[llo").is_err());
+    }
+
+    #[test]
+    fn help_flag_is_intercepted_before_parse_args() {
+        // --help is a pre-parse escape hatch: main intercepts it before parse_args.
+        // parse_args itself has no special --help handling — it would treat it as the
+        // pattern arg. This test documents that parse_args still returns Ok for --help.
+        let args = vec![PROGRAM.to_string(), "--help".to_string(), "file.txt".to_string()];
+        assert!(parse_args(&args).is_ok());
     }
 }
