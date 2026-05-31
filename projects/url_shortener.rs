@@ -162,6 +162,24 @@ async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl 
     }
 }
 
+#[tokio::main]
+async fn main() {
+    let store: Store = Arc::new(Mutex::new(HashMap::new()));
+    let app = Router::new()
+        .route("/shorten", post(shorten))
+        .route("/{code}", get(redirect))
+        .with_state(store);
+    // TcpListener::bind: asks the OS to reserve port 3000. Async because the OS
+    // call can take a moment (checking port availability, allocating the socket).
+    // .await suspends main until the port is ready; .unwrap() panics if port is in use.
+    let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    // axum::serve: starts the accept loop — accept connection → spawn task → handle.
+    // Never returns (runs until the process is killed). .await hands control to tokio
+    // so other tasks can run while the server waits for the next connection.
+    // Without .await, serve() returns a Future — nothing runs until it is awaited.
+    axum::serve(listener, app).await.unwrap();
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -250,22 +268,4 @@ mod tests {
 
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
     }
-}
-
-#[tokio::main]
-async fn main() {
-    let store: Store = Arc::new(Mutex::new(HashMap::new()));
-    let app = Router::new()
-        .route("/shorten", post(shorten))
-        .route("/{code}", get(redirect))
-        .with_state(store);
-    // TcpListener::bind: asks the OS to reserve port 3000. Async because the OS
-    // call can take a moment (checking port availability, allocating the socket).
-    // .await suspends main until the port is ready; .unwrap() panics if port is in use.
-    let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    // axum::serve: starts the accept loop — accept connection → spawn task → handle.
-    // Never returns (runs until the process is killed). .await hands control to tokio
-    // so other tasks can run while the server waits for the next connection.
-    // Without .await, serve() returns a Future — nothing runs until it is awaited.
-    axum::serve(listener, app).await.unwrap();
 }
