@@ -85,10 +85,10 @@ use uuid::Uuid;
 
 // UrlEntry is the value stored in the HashMap for each short code.
 // Lives only in server memory — never serialised to JSON.
-// Extra: add `expires_at: Option<std::time::Instant>` here for expiration.
+// expires_at: None = no TTL (never expires); Some(t) = deadline as a monotonic Instant.
 struct UrlEntry {
     original_url: String,
-    expires_at: Option<std::time::Instant>,
+    expires_at: Option<Instant>,
 }
 
 // ShortenRequest is parsed from the POST /shorten request body.
@@ -192,13 +192,20 @@ async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl 
     }
 }
 
+// app: wires routes and shared state into a Router.
+// Extracted so main and tests share the same route definitions — adding a route
+// here automatically covers both the running server and all test Routers.
+fn app(store: Store) -> Router {
+    Router::new()
+        .route("/shorten", post(shorten))
+        .route("/{code}", get(redirect))
+        .with_state(store)
+}
+
 #[tokio::main]
 async fn main() {
     let store: Store = Arc::new(Mutex::new(HashMap::new()));
-    let app = Router::new()
-        .route("/shorten", post(shorten))
-        .route("/{code}", get(redirect))
-        .with_state(store);
+    let app = app(store);
     // TcpListener::bind: asks the OS to reserve port 3000. Async because the OS
     // call can take a moment (checking port availability, allocating the socket).
     // .await suspends main until the port is ready; .unwrap() panics if port is in use.
@@ -230,13 +237,10 @@ mod tests {
     // .oneshot(request): sends exactly one request into the router, returns a Future
     // that resolves to the Response. No TCP listener, no port — tests run in-process.
 
-    // build_router: the single place that wires routes + state into a Router.
-    // Both make_app and make_app_with_entry call this — route definitions are not repeated.
+    // build_router: thin wrapper around the module-level app() function.
+    // Keeps test helpers readable while sharing the real route definitions.
     fn build_router(store: Store) -> Router {
-        Router::new()
-            .route("/shorten", post(shorten))
-            .route("/{code}", get(redirect))
-            .with_state(store)
+        app(store)
     }
 
     // make_app: helper that builds a Router with a fresh, empty Store.
