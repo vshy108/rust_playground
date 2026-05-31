@@ -62,8 +62,8 @@
 // Extra:
 //
 // - [x] expiration steps 2–3 (data model + shorten handler)
-// - [ ] expiration step 4 (redirect: check deadline, return 410 Gone)
-// - [ ] expiration step 5 (tests: expired, non-expired, no-ttl)
+// - [x] expiration step 4 (redirect: check deadline, return 410 Gone)
+// - [x] expiration step 5 (tests: expired, non-expired, no-ttl)
 
 use std::{
     collections::HashMap,
@@ -156,7 +156,9 @@ async fn shorten(
             original_url: payload.url,
             // .map() on Option<u64>: Some(n) → Some(deadline), None → None.
             // Avoids if/else and unwrap — the Option shape is preserved automatically.
-            expires_at: payload.ttl_secs.map(|secs| Instant::now() + Duration::from_secs(secs)),
+            expires_at: payload
+                .ttl_secs
+                .map(|secs| Instant::now() + Duration::from_secs(secs)),
         },
     );
     (StatusCode::CREATED, Json(ShortenResponse { code }))
@@ -173,7 +175,19 @@ async fn shorten(
 async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl IntoResponse {
     let map = store.lock().unwrap();
     match map.get(&code) {
-        Some(entry) => Redirect::to(&entry.original_url).into_response(),
+        Some(entry) => {
+            // .map_or(false, |t| t < Instant::now()):
+            //   - None      → false (no expiry set, never expired)
+            //   - Some(t)   → true if deadline t is already in the past
+            // Instant subtraction is not used because it panics on underflow;
+            // comparing two Instants with < is always safe.
+            let expired = entry.expires_at.map_or(false, |t| t < Instant::now());
+            if expired {
+                StatusCode::GONE.into_response()
+            } else {
+                Redirect::to(&entry.original_url).into_response()
+            }
+        }
         None => StatusCode::NOT_FOUND.into_response(),
     }
 }
@@ -306,5 +320,94 @@ mod tests {
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::NOT_FOUND);
+    }
+
+    // Seed a code whose deadline is 1 second in the past → already expired.
+    // Instant::now() - Duration::from_secs(1) gives a deadline that is already
+    // behind the current time, so the handler must return 410 Gone immediately.
+    #[tokio::test]
+    async fn get_expired_code_returns_410() {
+        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+        store.lock().unwrap().insert(
+            "expired".to_string(),
+            UrlEntry {
+                original_url: "https://example.com".to_string(),
+                expires_at: Some(Instant::now() - Duration::from_secs(1)),
+            },
+        );
+        let app = Router::new()
+            .route("/shorten", post(shorten))
+            .route("/{code}", get(redirect))
+            .with_state(store);
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/expired")
+                    .body(Body::from(""))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::GONE);
+    }
+
+    // Seed a code whose deadline is 60 seconds in the future → not yet expired.
+    #[tokio::test]
+    async fn get_non_expired_code_redirects() {
+        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+        store.lock().unwrap().insert(
+            "fresh".to_string(),
+            UrlEntry {
+                original_url: "https://example.com".to_string(),
+                expires_at: Some(Instant::now() + Duration::from_secs(60)),
+            },
+        );
+        let app = Router::new()
+            .route("/shorten", post(shorten))
+            .route("/{code}", get(redirect))
+            .with_state(store);
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/fresh")
+                    .body(Body::from(""))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert!(response.status().is_redirection());
+    }
+
+    // Seed a code with expires_at: None → no TTL, never expires regardless of time.
+    #[tokio::test]
+    async fn get_no_ttl_code_never_expires() {
+        let store: Store = Arc::new(Mutex::new(HashMap::new()));
+        store.lock().unwrap().insert(
+            "permanent".to_string(),
+            UrlEntry {
+                original_url: "https://example.com".to_string(),
+                expires_at: None,
+            },
+        );
+        let app = Router::new()
+            .route("/shorten", post(shorten))
+            .route("/{code}", get(redirect))
+            .with_state(store);
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/permanent")
+                    .body(Body::from(""))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert!(response.status().is_redirection());
     }
 }

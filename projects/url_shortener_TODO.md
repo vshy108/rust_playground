@@ -80,14 +80,14 @@ cargo test --bin url_shortener
       Fix existing `UrlEntry { original_url: payload.url }` — now needs `expires_at` too.
 
 ### Step 4: `redirect` handler — reject expired entries
-- [ ] After the `.get(&code)` `Some(entry)` arm, check if `expires_at` is set and in the past:
+- [x] After the `.get(&code)` `Some(entry)` arm, check if `expires_at` is set and in the past:
       `entry.expires_at.map_or(false, |t| t < Instant::now())`
       If expired → return `StatusCode::GONE` (410). Otherwise → redirect as before.
 
 ### Step 5: tests
-- [ ] `get_expired_code_returns_410`: seed store with `expires_at = Some(Instant::now() - Duration::from_secs(1))` (already past), GET → 410.
-- [ ] `get_non_expired_code_redirects`: seed with `expires_at = Some(Instant::now() + Duration::from_secs(60))`, GET → 3xx.
-- [ ] `get_no_ttl_code_redirects`: seed with `expires_at = None`, GET → 3xx (never expires).
+- [x] `get_expired_code_returns_410`: seed store with `expires_at = Some(Instant::now() - Duration::from_secs(1))` (already past), GET → 410.
+- [x] `get_non_expired_code_redirects`: seed with `expires_at = Some(Instant::now() + Duration::from_secs(60))`, GET → 3xx.
+- [x] `get_no_ttl_code_never_expires`: seed with `expires_at = None`, GET → 3xx (never expires).
 
 Acceptance check:
 
