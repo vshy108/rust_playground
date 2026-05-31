@@ -39,6 +39,9 @@
 // 4. .enumerate() order matters: enumerate before filter preserves original line
 //    numbers. enumerate after filter resets the index to match count only.
 //    Each item becomes (usize, T); use _ to ignore unused parts of the tuple.
+// 5. Testing iterators: iterators can't be compared directly — .collect::<Vec<_>>()
+//    materialises them into a Vec so assert_eq! can compare element by element.
+//    Test through public functions (filter_lines_with_pattern), not main.
 
 // Extra:
 
@@ -82,22 +85,20 @@ fn split_contents_to_lines(contents: &str) -> core::str::Lines<'_> {
 // Return type is (usize, &'a str): caller uses index + 1 for 1-based line numbers.
 // 'a ties the output lifetime to `lines`; `move` copies the &str `pattern` into
 // the closure so it doesn't borrow from this function's stack frame.
-fn filter_lines_with_pattern<'a>(lines: core::str::Lines<'a>, pattern: &str) -> impl Iterator<Item = (usize, &'a str)> {
-    lines.enumerate().filter(move |(_, line)| line.contains(pattern))
+fn filter_lines_with_pattern<'a>(
+    lines: core::str::Lines<'a>,
+    pattern: &str,
+) -> impl Iterator<Item = (usize, &'a str)> {
+    lines
+        .enumerate()
+        .filter(move |(_, line)| line.contains(pattern))
 }
 
 // Iterates over (0-based index, line) tuples from filter_lines_with_pattern.
 // Prints each as "N: line content" where N is 1-based (index + 1).
 // Takes ownership of the iterator — consuming it drives the lazy chain.
 fn print_lines_with_line_numbers<'a>(filter_lines: impl Iterator<Item = (usize, &'a str)>) {
-    // for (index, line) in filter_lines {
-    //     println!("{}: {}", index + 1, line);
-    // }
-
-    filter_lines.for_each(|(index, line)| {
-        println!("{}: {}", index + 1, line);
-    });
-
+    filter_lines.for_each(|(index, line)| println!("{}: {}", index + 1, line));
 }
 
 fn main() {
@@ -125,4 +126,33 @@ mod tests {
     use super::*;
 
     const PROGRAM: &str = "rgrep";
+
+    #[test]
+    fn return_lines_match_pattern() {
+        // .collect::<Vec<_>>() is needed because iterators can't be compared directly.
+        // The index is 0-based here — 1-based formatting happens only in print_lines_with_line_numbers.
+        // "goodbye" is at index 1 and does not contain "hello", so it is absent from results.
+        let lines = split_contents_to_lines("hello world\ngoodbye\nhello rust");
+        let result = filter_lines_with_pattern(lines, "hello").collect::<Vec<_>>();
+        assert_eq!(result.len(), 2);
+        assert_eq!(result[0].0, 0);
+        assert_eq!(result[0].1, "hello world");
+        assert_eq!(result[1].0, 2);
+        assert_eq!(result[1].1, "hello rust");
+    }
+
+    #[test]
+    fn return_empty_results_when_no_match() {
+        let lines = split_contents_to_lines("hello world\ngoodbye\nhello rust");
+        let result = filter_lines_with_pattern(lines, "hellowa").collect::<Vec<_>>();
+        assert!(result.is_empty());
+    }
+
+    #[test]
+    fn missing_args_returns_usage_error() {
+        // args[0] is always the program name; pattern and file are args[1] and args[2].
+        // Passing only the program name should return Err with the usage message.
+        let args = vec![PROGRAM.to_string()];
+        assert!(parse_args(&args).is_err());
+    }
 }

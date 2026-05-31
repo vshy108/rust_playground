@@ -24,9 +24,9 @@ cargo run --bin rgrep
 
 ## 2. Tests
 
-- [ ] Matching a pattern returns only lines that contain it.
-- [ ] Non-matching pattern returns empty results.
-- [ ] Line numbers are correct (1-based).
+- [x] Matching a pattern returns only lines that contain it.
+- [x] Non-matching pattern returns empty results.
+- [x] Line numbers are correct (1-based).
 
 Acceptance check:
 
