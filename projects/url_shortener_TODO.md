@@ -71,11 +71,11 @@ cargo test --bin url_shortener
       `Option` = no expiry when `None`; `Instant` = monotonic deadline, safe for in-process comparison.
 
 ### Step 2: request model (`ShortenRequest`)
-- [ ] Add `ttl_secs: Option<u64>` to `ShortenRequest`.
+- [x] Add `ttl_secs: Option<u64>` to `ShortenRequest`.
       `Option` = caller omits the field → no expiry. `u64` = seconds, can't be negative.
 
 ### Step 3: `shorten` handler — compute deadline
-- [ ] When `ttl_secs` is `Some(n)`, set `expires_at = Some(Instant::now() + Duration::from_secs(n))`.
+- [x] When `ttl_secs` is `Some(n)`, set `expires_at = Some(Instant::now() + Duration::from_secs(n))`.
       When `None`, set `expires_at = None`.
       Fix existing `UrlEntry { original_url: payload.url }` — now needs `expires_at` too.
 
