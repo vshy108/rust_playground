@@ -36,4 +36,4 @@ cargo test --bin rgrep
 
 ## 3. Extra
 
-- [ ] Regex support: accept a regex pattern instead of a plain string (use `regex` crate).
+- [x] Regex support: accept a regex pattern instead of a plain string (use `regex` crate).
