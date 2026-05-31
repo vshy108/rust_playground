@@ -46,20 +46,34 @@
 //
 // - [ ] expiration
 
-use std::sync::Arc;
+use std::{collections::HashMap, sync::{Arc, Mutex}};
 
+use serde::{Deserialize, Serialize};
+
+// UrlEntry is the value stored in the HashMap for each short code.
+// Lives only in server memory — never serialised to JSON.
+// Extra: add `expires_at: Option<std::time::Instant>` here for expiration.
 struct UrlEntry {
-    original_url: String
+    original_url: String,
 }
 
+// ShortenRequest is parsed from the POST /shorten request body.
+// #[derive(Deserialize)]: serde reads {"url":"https://..."} → ShortenRequest { url }.
+#[derive(Deserialize)]
 struct ShortenRequest {
-    url: String
+    url: String,
 }
 
+// ShortenResponse is serialised into the POST /shorten response body.
+// #[derive(Serialize)]: serde writes ShortenResponse { code } → {"code":"abc123"}.
+#[derive(Serialize)]
 struct ShortenResponse {
-    code: String
+    code: String,
 }
 
+// Store is a type alias for the shared HashMap wrapped in Arc<Mutex>.
+// Arc: shared ownership across handlers. Mutex: one writer at a time.
+// Using a type alias avoids repeating Arc<Mutex<HashMap<String, UrlEntry>>> everywhere.
 type Store = Arc<Mutex<HashMap<String, UrlEntry>>>;
 
 
