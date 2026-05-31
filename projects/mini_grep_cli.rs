@@ -228,7 +228,11 @@ mod tests {
         // --help is a pre-parse escape hatch: main intercepts it before parse_args.
         // parse_args itself has no special --help handling — it would treat it as the
         // pattern arg. This test documents that parse_args still returns Ok for --help.
-        let args = vec![PROGRAM.to_string(), "--help".to_string(), "file.txt".to_string()];
+        let args = vec![
+            PROGRAM.to_string(),
+            "--help".to_string(),
+            "file.txt".to_string(),
+        ];
         assert!(parse_args(&args).is_ok());
     }
 }

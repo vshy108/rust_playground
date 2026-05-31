@@ -41,14 +41,26 @@
 //     for a compact short code.
 
 // Progress:
+// 1. POST /shorten: State(store) injects the shared Arc<Mutex<HashMap>>; Json(payload)
+//    deserialises the request body. Uuid::new_v4().to_string()[..8] gives an 8-char code.
+//    .lock().unwrap() acquires the Mutex — guard is dropped at end of statement, releasing
+//    the lock immediately. Returns (StatusCode::CREATED, Json(...)) as a tuple — axum
+//    accepts tuples of (StatusCode, impl IntoResponse) as a response.
 
 // Extra:
 //
 // - [ ] expiration
 
-use std::{collections::HashMap, sync::{Arc, Mutex}};
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 
 use serde::{Deserialize, Serialize};
+
+use axum::{Json, Router, extract::State, http::StatusCode, response::IntoResponse, routing::post};
+use tokio::net::TcpListener;
+use uuid::Uuid;
 
 // UrlEntry is the value stored in the HashMap for each short code.
 // Lives only in server memory — never serialised to JSON.
@@ -76,5 +88,27 @@ struct ShortenResponse {
 // Using a type alias avoids repeating Arc<Mutex<HashMap<String, UrlEntry>>> everywhere.
 type Store = Arc<Mutex<HashMap<String, UrlEntry>>>;
 
+// POST /shorten handler.
+// State(store): axum extracts the shared Store from the router's app state.
+// Json(payload): axum deserialises the request body JSON into ShortenRequest.
+// Returns (StatusCode::CREATED, Json(...)): axum accepts a tuple of (status, body).
+// .lock().unwrap(): acquires the Mutex guard; guard is dropped at end of statement,
+// releasing the lock before the response is returned.
+async fn shorten(
+    State(store): State<Store>,
+    Json(payload): Json<ShortenRequest>,
+) -> impl IntoResponse {
+    let code = Uuid::new_v4().to_string()[..8].to_string();
+    store.lock().unwrap().insert(code.clone(), UrlEntry { original_url: payload.url });
+    (StatusCode::CREATED, Json(ShortenResponse { code }))
+}
 
-fn main() {}
+#[tokio::main]
+async fn main() {
+    let store: Store = Arc::new(Mutex::new(HashMap::new()));
+    let app = Router::new()
+        .route("/shorten", post(shorten))
+        .with_state(store);
+    let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    axum::serve(listener, app).await.unwrap();
+}

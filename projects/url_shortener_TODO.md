@@ -13,9 +13,9 @@ cargo test --bin url_shortener
 
 ## 1. POST /shorten
 
-- [ ] Generate a short code: first 8 chars of `Uuid::new_v4().to_string()`.
-- [ ] Insert `UrlEntry { original_url }` into the store under the code.
-- [ ] Return `Json(ShortenResponse { code })` with `StatusCode::CREATED`.
+- [x] Generate a short code: first 8 chars of `Uuid::new_v4().to_string()`.
+- [x] Insert `UrlEntry { original_url }` into the store under the code.
+- [x] Return `Json(ShortenResponse { code })` with `StatusCode::CREATED`.
 
 Acceptance check:
 
