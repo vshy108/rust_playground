@@ -89,7 +89,14 @@ get(2)  → None.
 
 ## Extra: TTL
 
-- [ ] Add `expires_at: Option<std::time::Instant>` to `Node`.
-- [ ] `put` accepts an optional `ttl_secs: Option<u64>`.
-- [ ] `get` treats an expired entry as a cache miss (return `None`, evict the entry).
-- [ ] Test: expired key returns `None`; non-expired key still returns the value.
+- [x] Add `expires_at: Option<std::time::Instant>` to `Node`.
+- [x] `put` accepts an optional `ttl_secs: Option<u64>`.
+- [x] `get` treats an expired entry as a cache miss (return `None`, evict the entry).
+- [x] Test: expired key returns `None`; non-expired key still returns the value.
+- [x] Reclaim expired entries before evicting a still-live key when the cache is full.
+
+Acceptance check:
+
+```bash
+cargo test --bin lru_cache
+```

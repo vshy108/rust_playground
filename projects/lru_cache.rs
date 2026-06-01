@@ -6,6 +6,31 @@
 //   cache.put(key, value, ttl_secs)   insert or update; evicts LRU entry when at capacity
 //   cache.get(key)                    returns Option<i32>; promotes the entry to MRU on hit
 //
+// Progress:
+// 1. Data model: `Vec<Node>` + `usize` indices avoids Rust's two-owner problem for
+//    doubly-linked structures. `HEAD` and `TAIL` are sentinel indices, so insert/remove
+//    never need empty-list special cases. `map: HashMap<i32, usize>` gives O(1) average
+//    lookup from cache key to node slot.
+// 2. Core list operations: `unlink(idx)` bridges a node's neighbours so the node becomes
+//    unreachable from the list; `insert_after_head(idx)` rewires four edges to make the
+//    node the new MRU entry. Both helpers read the old neighbour indices before writes,
+//    because later rewiring would otherwise overwrite the information they still need.
+// 3. Core LRU behavior: `put` handles update, evict-and-reuse, and allocate paths.
+//    Existing keys are moved to MRU after updating; full-cache inserts evict the node just
+//    before `TAIL` (= current LRU); new inserts either reuse a free slot or append.
+//    `get` returns `Option<i32>` and promotes hits to MRU, so reads also mutate recency.
+// 4. TTL support: `Node` gained `expires_at: Option<Instant>`. `put(..., ttl_secs)` maps
+//    `Some(secs)` to `Some(Instant::now() + Duration::from_secs(secs))` and stores `None`
+//    when no TTL is provided. `get` treats expired entries as misses and removes them from
+//    both the HashMap and the recency list before returning `None`.
+// 5. TTL eviction fix: on a full cache, `put` now walks backward from LRU toward MRU to
+//    reclaim any expired entry before evicting a still-live one. This makes the full-cache
+//    TTL path O(n), but preserves the intended rule that expired entries should not keep
+//    consuming capacity while live entries are being evicted.
+// 6. Verification: focused tests cover empty reads, round-trip, LRU eviction, promotion,
+//    update-without-growth, expired miss cleanup, non-expired reads, and reclaiming expired
+//    entries before live eviction. `cargo test --bin lru_cache` is passing.
+//
 // Learn:
 //
 // - HashMap
