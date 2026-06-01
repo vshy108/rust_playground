@@ -8,10 +8,11 @@ cargo test --bin lru_cache
 
 ## 1. Data model
 
-- [x] Define a `CacheEntry` struct with `key: i32`, `value: i32`, and `prev`/`next` pointers.
+- [x] Define a `Node` struct with `key: i32`, `value: i32`, and `prev`/`next` pointers.
       - `key` is needed so that when evicting the tail, the HashMap entry can be removed without a search.
       - `prev`/`next` make it a doubly-linked list node: any node can splice itself out in O(1)
         by rewiring its two neighbours, without walking from the head.
+  - `Node` is the final implemented name; `CacheEntry` was only earlier planning vocabulary.
 - [x] Define an `LruCache` struct with `capacity: usize`, a `HashMap` for O(1) lookup,
       and a doubly-linked list (or ordered structure) for O(1) LRU eviction.
 - [x] Decide how to represent the linked list in safe Rust.
@@ -88,7 +89,7 @@ get(2)  → None.
 
 ## Extra: TTL
 
-- [ ] Add `expires_at: Option<std::time::Instant>` to `CacheEntry`.
+- [ ] Add `expires_at: Option<std::time::Instant>` to `Node`.
 - [ ] `put` accepts an optional `ttl_secs: Option<u64>`.
 - [ ] `get` treats an expired entry as a cache miss (return `None`, evict the entry).
 - [ ] Test: expired key returns `None`; non-expired key still returns the value.

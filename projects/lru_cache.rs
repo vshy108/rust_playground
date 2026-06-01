@@ -1,8 +1,10 @@
+#![allow(dead_code)]
+
 // Goal: Ownership thinking
 //
 // API:
-//   cache.put(key, value)   insert or update; evicts LRU entry when at capacity
-//   cache.get(key)          returns Option<i32>; promotes the entry to MRU on hit
+//   cache.put(key, value, ttl_secs)   insert or update; evicts LRU entry when at capacity
+//   cache.get(key)                    returns Option<i32>; promotes the entry to MRU on hit
 //
 // Learn:
 //
@@ -34,7 +36,10 @@
 //
 //   List invariant:  HEAD <-> [MRU] <-> ... <-> [LRU] <-> TAIL
 
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    time::{Duration, Instant},
+};
 
 // HEAD and TAIL are the fixed Vec indices of the two sentinel nodes.
 // They are constants so that `self.nodes[HEAD]` reads clearly instead of
@@ -57,6 +62,7 @@ struct Node {
     value: i32,
     prev: usize, // index of the node closer to HEAD
     next: usize, // index of the node closer to TAIL
+    expires_at: Option<std::time::Instant>,
 }
 
 // LruCache is the single owner of all data.
@@ -94,6 +100,7 @@ impl LruCache {
             value: 0,
             prev: 0,
             next: TAIL,
+            expires_at: None,
         });
         // Sentinel TAIL: prev points to HEAD initially
         nodes.push(Node {
@@ -101,6 +108,7 @@ impl LruCache {
             value: 0,
             prev: HEAD,
             next: 0,
+            expires_at: None,
         });
         LruCache {
             capacity,
@@ -114,15 +122,35 @@ impl LruCache {
     // 1) key exists       → update value, move node to MRU position
     // 2) key is new, full → evict LRU node, reuse its slot, insert as MRU
     // 3) key is new, room → allocate/reuse a free slot, insert as MRU
-    fn put(&mut self, key: i32, value: i32) {
+    fn put(&mut self, key: i32, value: i32, ttl_secs: Option<u64>) {
+        let expires_at = ttl_secs.map(|secs| Instant::now() + Duration::from_secs(secs));
         // Existing key: keep the same slot, just refresh its value and recency.
         if let Some(idx) = self.map.get(&key).copied() {
             // FIXED ORDER: unlink before re-inserting at the head, otherwise the
             // old neighbours would still point at idx and the list would be corrupted.
             self.unlink(idx);
             self.nodes[idx].value = value;
+            self.nodes[idx].expires_at = expires_at;
             self.insert_after_head(idx);
             return;
+        }
+
+        // Reclaim expired entries before deciding the cache is truly full.
+        while self.map.len() == self.capacity {
+            let victim = self.nodes[TAIL].prev;
+            if let Some(expires_at) = self.nodes[victim].expires_at {
+                if expires_at <= Instant::now() {
+                    let old_key = self.nodes[victim].key;
+                    // FIX: without reclaiming expired nodes here, put() can evict a
+                    // live LRU entry even though an expired entry is already wasting
+                    // capacity. Remove the expired node first, then re-check fullness.
+                    self.map.remove(&old_key);
+                    self.unlink(victim);
+                    self.free.push(victim);
+                    continue;
+                }
+            }
+            break;
         }
 
         // Full cache: evict the real node just before TAIL (= current LRU).
@@ -137,6 +165,7 @@ impl LruCache {
             // Reuse the evicted node's Vec slot instead of growing the arena.
             self.nodes[victim].key = key;
             self.nodes[victim].value = value;
+            self.nodes[victim].expires_at = expires_at;
             self.map.insert(key, victim);
             self.insert_after_head(victim);
             return;
@@ -149,6 +178,7 @@ impl LruCache {
                 value,
                 prev: HEAD,
                 next: TAIL,
+                expires_at,
             };
             free_idx
         } else {
@@ -158,6 +188,7 @@ impl LruCache {
                 value,
                 prev: HEAD,
                 next: TAIL,
+                expires_at,
             });
             idx
         };
@@ -170,8 +201,22 @@ impl LruCache {
     // the accessed node becomes the new MRU node right after HEAD.
     fn get(&mut self, key: i32) -> Option<i32> {
         let idx = self.map.get(&key).copied()?;
-        // Copy the value out before rewiring the list so the later mutable
-        // operations stay simple and we can return the cached value at the end.
+
+        if let Some(expires_at) = self.nodes[idx].expires_at {
+            if expires_at <= Instant::now() {
+                // FIX: treating an expired entry as a plain miss by only returning
+                // None would leave stale state behind in both the HashMap and the
+                // recency list, so the expired entry would still consume capacity.
+                // Remove it from both structures and recycle its slot before
+                // reporting the miss.
+                self.map.remove(&key);
+                self.unlink(idx);
+                self.free.push(idx);
+                return None;
+            }
+        }
+
+        // Read after the expiry check so we only copy a live value.
         let value = self.nodes[idx].value;
         self.unlink(idx);
         self.insert_after_head(idx);
@@ -226,7 +271,7 @@ mod tests {
     fn put_and_get_round_trip() {
         let mut cache = LruCache::new(2);
 
-        cache.put(1, 10);
+        cache.put(1, 10, None);
 
         assert_eq!(cache.get(1), Some(10));
     }
@@ -235,9 +280,9 @@ mod tests {
     fn lru_eviction_removes_oldest_untouched_key() {
         let mut cache = LruCache::new(2);
 
-        cache.put(1, 10);
-        cache.put(2, 20);
-        cache.put(3, 30);
+        cache.put(1, 10, None);
+        cache.put(2, 20, None);
+        cache.put(3, 30, None);
 
         assert_eq!(cache.get(1), None);
         assert_eq!(cache.get(2), Some(20));
@@ -248,10 +293,10 @@ mod tests {
     fn get_promotes_key_so_different_key_is_evicted() {
         let mut cache = LruCache::new(2);
 
-        cache.put(1, 10);
-        cache.put(2, 20);
+        cache.put(1, 10, None);
+        cache.put(2, 20, None);
         assert_eq!(cache.get(1), Some(10));
-        cache.put(3, 30);
+        cache.put(3, 30, None);
 
         assert_eq!(cache.get(1), Some(10));
         assert_eq!(cache.get(2), None);
@@ -262,13 +307,49 @@ mod tests {
     fn updating_existing_key_does_not_grow_beyond_capacity() {
         let mut cache = LruCache::new(2);
 
-        cache.put(1, 10);
-        cache.put(2, 20);
-        cache.put(1, 15);
-        cache.put(3, 30);
+        cache.put(1, 10, None);
+        cache.put(2, 20, None);
+        cache.put(1, 15, None);
+        cache.put(3, 30, None);
 
         assert_eq!(cache.get(1), Some(15));
         assert_eq!(cache.get(2), None);
+        assert_eq!(cache.get(3), Some(30));
+    }
+
+    #[test]
+    fn expired_key_returns_none_and_frees_capacity() {
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10, Some(0));
+        assert_eq!(cache.get(1), None);
+
+        cache.put(2, 20, None);
+        cache.put(3, 30, None);
+
+        assert_eq!(cache.get(2), Some(20));
+        assert_eq!(cache.get(3), Some(30));
+    }
+
+    #[test]
+    fn non_expired_key_still_returns_value() {
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10, Some(60));
+
+        assert_eq!(cache.get(1), Some(10));
+    }
+
+    #[test]
+    fn put_reclaims_expired_entry_before_evicting_live_one() {
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10, Some(0));
+        cache.put(2, 20, None);
+        cache.put(3, 30, None);
+
+        assert_eq!(cache.get(1), None);
+        assert_eq!(cache.get(2), Some(20));
         assert_eq!(cache.get(3), Some(30));
     }
 }
