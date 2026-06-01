@@ -73,3 +73,7 @@ path = "projects/url_shortener.rs"
 [[bin]]
 name = "lru_cache"
 path = "projects/lru_cache.rs"
+
+[[bin]]
+name = "watchdir"
+path = "projects/file_watcher_cli.rs"
