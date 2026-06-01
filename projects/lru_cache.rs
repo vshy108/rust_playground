@@ -137,18 +137,32 @@ impl LruCache {
 
         // Reclaim expired entries before deciding the cache is truly full.
         while self.map.len() == self.capacity {
-            let victim = self.nodes[TAIL].prev;
-            if let Some(expires_at) = self.nodes[victim].expires_at {
-                if expires_at <= Instant::now() {
-                    let old_key = self.nodes[victim].key;
-                    // FIX: without reclaiming expired nodes here, put() can evict a
-                    // live LRU entry even though an expired entry is already wasting
-                    // capacity. Remove the expired node first, then re-check fullness.
-                    self.map.remove(&old_key);
-                    self.unlink(victim);
-                    self.free.push(victim);
-                    continue;
+            let mut cursor = self.nodes[TAIL].prev;
+            let mut reclaimed = false;
+            // Walk backward from LRU toward MRU and stop at the HEAD sentinel.
+            // Tradeoff: this makes full-cache put() O(n), but it lets TTL reclaim
+            // any expired entry before evicting a still-live one.
+            while cursor != HEAD {
+                let prev = self.nodes[cursor].prev;
+                if let Some(expires_at) = self.nodes[cursor].expires_at {
+                    if expires_at <= Instant::now() {
+                        let old_key = self.nodes[cursor].key;
+                        // FIX: checking only TAIL.prev misses expired entries that are
+                        // newer than the current LRU, which can wrongly evict a live
+                        // entry while a dead one still consumes capacity. Scan the
+                        // whole live list and reclaim any expired node before falling
+                        // back to normal LRU eviction.
+                        self.map.remove(&old_key);
+                        self.unlink(cursor);
+                        self.free.push(cursor);
+                        reclaimed = true;
+                        break;
+                    }
                 }
+                cursor = prev;
+            }
+            if reclaimed {
+                continue;
             }
             break;
         }
@@ -350,6 +364,20 @@ mod tests {
 
         assert_eq!(cache.get(1), None);
         assert_eq!(cache.get(2), Some(20));
+        assert_eq!(cache.get(3), Some(30));
+    }
+
+    #[test]
+    fn put_reclaims_expired_non_lru_entry_before_evicting_live_one() {
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10, None);
+        cache.put(2, 20, Some(0));
+        assert_eq!(cache.get(1), Some(10));
+        cache.put(3, 30, None);
+
+        assert_eq!(cache.get(1), Some(10));
+        assert_eq!(cache.get(2), None);
         assert_eq!(cache.get(3), Some(30));
     }
 }
