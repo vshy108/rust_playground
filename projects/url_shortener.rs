@@ -338,18 +338,16 @@ mod tests {
     #[tokio::test]
     async fn get_expired_code_returns_410() {
         // Deadline 1 second in the past → already expired when the handler checks.
-        let response = make_app_with_entry(
-            "expired",
-            Some(Instant::now() - Duration::from_secs(1)),
-        )
-        .oneshot(
-            Request::builder()
-                .uri("/expired")
-                .body(Body::from(""))
-                .unwrap(),
-        )
-        .await
-        .unwrap();
+        let response =
+            make_app_with_entry("expired", Some(Instant::now() - Duration::from_secs(1)))
+                .oneshot(
+                    Request::builder()
+                        .uri("/expired")
+                        .body(Body::from(""))
+                        .unwrap(),
+                )
+                .await
+                .unwrap();
 
         assert_eq!(response.status(), StatusCode::GONE);
     }
@@ -358,18 +356,15 @@ mod tests {
     #[tokio::test]
     async fn get_non_expired_code_redirects() {
         // Deadline 60 seconds in the future → not yet expired.
-        let response = make_app_with_entry(
-            "fresh",
-            Some(Instant::now() + Duration::from_secs(60)),
-        )
-        .oneshot(
-            Request::builder()
-                .uri("/fresh")
-                .body(Body::from(""))
-                .unwrap(),
-        )
-        .await
-        .unwrap();
+        let response = make_app_with_entry("fresh", Some(Instant::now() + Duration::from_secs(60)))
+            .oneshot(
+                Request::builder()
+                    .uri("/fresh")
+                    .body(Body::from(""))
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
 
         assert!(response.status().is_redirection());
     }
