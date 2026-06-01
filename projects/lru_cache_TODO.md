@@ -8,13 +8,13 @@ cargo test --bin lru_cache
 
 ## 1. Data model
 
-- [ ] Define a `CacheEntry` struct with `key: i32`, `value: i32`, and `prev`/`next` pointers.
+- [x] Define a `CacheEntry` struct with `key: i32`, `value: i32`, and `prev`/`next` pointers.
       - `key` is needed so that when evicting the tail, the HashMap entry can be removed without a search.
       - `prev`/`next` make it a doubly-linked list node: any node can splice itself out in O(1)
         by rewiring its two neighbours, without walking from the head.
-- [ ] Define an `LruCache` struct with `capacity: usize`, a `HashMap` for O(1) lookup,
+- [x] Define an `LruCache` struct with `capacity: usize`, a `HashMap` for O(1) lookup,
       and a doubly-linked list (or ordered structure) for O(1) LRU eviction.
-- [ ] Decide how to represent the linked list in safe Rust.
+- [x] Decide how to represent the linked list in safe Rust.
       The core problem: `Box<T>` means unique ownership. A doubly-linked node has
       two neighbours pointing at it (`prev` from one side, `next` from the other),
       so two `Box` values would claim ownership of the same node — Rust rejects that.
@@ -48,11 +48,13 @@ Acceptance check: structs compile, fields are private, `new(capacity)` returns a
 
 ## 2. `put(key, value)`
 
-- [ ] If the key already exists, update the value and move it to the front (most-recently-used).
-- [ ] If the key is new and the cache is at capacity, evict the least-recently-used entry first.
-- [ ] Insert the new key at the front.
+- [x] If the key already exists, update the value and move it to the front (most-recently-used).
+- [x] If the key is new and the cache is at capacity, evict the least-recently-used entry first.
+- [x] Insert the new key at the front.
 
 Acceptance check:
+
+Implementation is in place; final verification still depends on the tests in section 4.
 
 ```
 put(1, 10), put(2, 20), put(3, 30) with capacity 2:
@@ -61,11 +63,13 @@ after put(3): key 1 must have been evicted.
 
 ## 3. `get(key) -> Option<i32>`
 
-- [ ] Look up the key in the HashMap.
-- [ ] If found, move the entry to the front (counts as a use) and return `Some(value)`.
-- [ ] If not found, return `None`.
+- [x] Look up the key in the HashMap.
+- [x] If found, move the entry to the front (counts as a use) and return `Some(value)`.
+- [x] If not found, return `None`.
 
 Acceptance check:
+
+Implementation is in place; final verification still depends on the tests in section 4.
 
 ```
 put(1, 10), put(2, 20) — capacity 2.
@@ -76,11 +80,11 @@ get(2)  → None.
 
 ## 4. Tests
 
-- [ ] `get` on empty cache returns `None`.
-- [ ] `put` + `get` round-trip returns the right value.
-- [ ] LRU eviction: put past capacity, confirm oldest untouched key is gone.
-- [ ] `get` promotes a key: access it, then overflow, confirm a different key is evicted.
-- [ ] Updating an existing key does not grow the cache beyond capacity.
+- [x] `get` on empty cache returns `None`.
+- [x] `put` + `get` round-trip returns the right value.
+- [x] LRU eviction: put past capacity, confirm oldest untouched key is gone.
+- [x] `get` promotes a key: access it, then overflow, confirm a different key is evicted.
+- [x] Updating an existing key does not grow the cache beyond capacity.
 
 ## Extra: TTL
 

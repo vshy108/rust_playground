@@ -72,7 +72,13 @@ struct LruCache {
     capacity: usize,
     nodes: Vec<Node>,
     map: HashMap<i32, usize>, // key → node index in `nodes`
-    free: Vec<usize>,         // recycled indices from evicted nodes
+    // map.get(&key) returns Option<&usize>, not Option<usize>.
+    // HashMap::get always returns a reference to the stored value, not a copy.
+    // Since usize is Copy, use .copied() to convert Option<&usize> → Option<usize>:
+    //   let idx = self.map.get(&key).copied()?;
+    // Alternatively: let idx = *self.map.get(&key)?;  (manual deref)
+    // .copied() is idiomatic for Copy types.
+    free: Vec<usize>, // recycled indices from evicted nodes
 }
 
 // impl block groups all behaviour on LruCache in one place.
@@ -83,9 +89,19 @@ impl LruCache {
         assert!(capacity > 0, "capacity must be > 0");
         let mut nodes = Vec::with_capacity(capacity + 2);
         // Sentinel HEAD: next points to TAIL initially (empty list)
-        nodes.push(Node { key: 0, value: 0, prev: 0, next: TAIL });
+        nodes.push(Node {
+            key: 0,
+            value: 0,
+            prev: 0,
+            next: TAIL,
+        });
         // Sentinel TAIL: prev points to HEAD initially
-        nodes.push(Node { key: 0, value: 0, prev: HEAD, next: 0 });
+        nodes.push(Node {
+            key: 0,
+            value: 0,
+            prev: HEAD,
+            next: 0,
+        });
         LruCache {
             capacity,
             nodes,
@@ -94,25 +110,99 @@ impl LruCache {
         }
     }
 
-    // TODO slice 2: implement put
-    fn put(&mut self, _key: i32, _value: i32) {
-        todo!()
+    // put has 3 cases:
+    // 1) key exists       → update value, move node to MRU position
+    // 2) key is new, full → evict LRU node, reuse its slot, insert as MRU
+    // 3) key is new, room → allocate/reuse a free slot, insert as MRU
+    fn put(&mut self, key: i32, value: i32) {
+        // Existing key: keep the same slot, just refresh its value and recency.
+        if let Some(idx) = self.map.get(&key).copied() {
+            // FIXED ORDER: unlink before re-inserting at the head, otherwise the
+            // old neighbours would still point at idx and the list would be corrupted.
+            self.unlink(idx);
+            self.nodes[idx].value = value;
+            self.insert_after_head(idx);
+            return;
+        }
+
+        // Full cache: evict the real node just before TAIL (= current LRU).
+        if self.map.len() == self.capacity {
+            let victim = self.nodes[TAIL].prev;
+            // Read the old key BEFORE overwriting the slot, or we would lose the
+            // HashMap entry that still points at this node index.
+            let old_key = self.nodes[victim].key;
+            self.map.remove(&old_key);
+            self.unlink(victim);
+
+            // Reuse the evicted node's Vec slot instead of growing the arena.
+            self.nodes[victim].key = key;
+            self.nodes[victim].value = value;
+            self.map.insert(key, victim);
+            self.insert_after_head(victim);
+            return;
+        }
+
+        // Cache has room: use a recycled slot if one exists, otherwise append.
+        let idx = if let Some(free_idx) = self.free.pop() {
+            self.nodes[free_idx] = Node {
+                key,
+                value,
+                prev: HEAD,
+                next: TAIL,
+            };
+            free_idx
+        } else {
+            let idx = self.nodes.len();
+            self.nodes.push(Node {
+                key,
+                value,
+                prev: HEAD,
+                next: TAIL,
+            });
+            idx
+        };
+
+        self.map.insert(key, idx);
+        self.insert_after_head(idx);
     }
 
-    // TODO slice 3: implement get
-    fn get(&mut self, _key: i32) -> Option<i32> {
-        todo!()
+    // get is a read semantically, but an LRU hit also mutates recency order:
+    // the accessed node becomes the new MRU node right after HEAD.
+    fn get(&mut self, key: i32) -> Option<i32> {
+        let idx = self.map.get(&key).copied()?;
+        // Copy the value out before rewiring the list so the later mutable
+        // operations stay simple and we can return the cached value at the end.
+        let value = self.nodes[idx].value;
+        self.unlink(idx);
+        self.insert_after_head(idx);
+        Some(value)
     }
 
     // Unlink the node at `idx` from wherever it currently sits in the list.
     // Does NOT remove it from `nodes` or `map` — callers do that.
-    fn unlink(&mut self, _idx: usize) {
-        todo!()
+    fn unlink(&mut self, idx: usize) {
+        // Read prev/next BEFORE any writes — insert_after_head overwrites these
+        // fields, so reading them after would give wrong neighbours.
+        let prev = self.nodes[idx].prev;
+        let next = self.nodes[idx].next;
+        // Bridge the gap: tell each neighbour to skip over idx.
+        // self.nodes[prev].next = next  →  prev now points forward to next
+        // self.nodes[next].prev = prev  →  next now points backward to prev
+        // idx is now unreachable from the list; its own prev/next are stale but unused.
+        self.nodes[prev].next = next;
+        self.nodes[next].prev = prev;
     }
 
     // Insert the node at `idx` immediately after the HEAD sentinel (= MRU position).
-    fn insert_after_head(&mut self, _idx: usize) {
-        todo!()
+    // Before: HEAD <-> old_first <-> ...
+    // After:  HEAD <-> idx <-> old_first <-> ...
+    fn insert_after_head(&mut self, idx: usize) {
+        // Save old_first BEFORE any writes — we need it for two later assignments.
+        let old_first = self.nodes[HEAD].next;
+        self.nodes[HEAD].next = idx; // HEAD  →(next)→  idx
+        self.nodes[idx].prev = HEAD; // HEAD  ←(prev)←  idx
+        self.nodes[idx].next = old_first; // idx   →(next)→  old_first
+        self.nodes[old_first].prev = idx; // idx   ←(prev)←  old_first
     }
 }
 
@@ -124,29 +214,61 @@ fn main() {
 mod tests {
     use super::*;
 
-    // TODO slice 4: write tests
+    // Focused behavior checks for the core LRU semantics.
     #[test]
     fn get_on_empty_cache_returns_none() {
-        todo!()
+        // &mut self on get hence need mut
+        let mut cache = LruCache::new(2);
+        assert_eq!(cache.get(123), None);
     }
 
     #[test]
     fn put_and_get_round_trip() {
-        todo!()
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10);
+
+        assert_eq!(cache.get(1), Some(10));
     }
 
     #[test]
     fn lru_eviction_removes_oldest_untouched_key() {
-        todo!()
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10);
+        cache.put(2, 20);
+        cache.put(3, 30);
+
+        assert_eq!(cache.get(1), None);
+        assert_eq!(cache.get(2), Some(20));
+        assert_eq!(cache.get(3), Some(30));
     }
 
     #[test]
     fn get_promotes_key_so_different_key_is_evicted() {
-        todo!()
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10);
+        cache.put(2, 20);
+        assert_eq!(cache.get(1), Some(10));
+        cache.put(3, 30);
+
+        assert_eq!(cache.get(1), Some(10));
+        assert_eq!(cache.get(2), None);
+        assert_eq!(cache.get(3), Some(30));
     }
 
     #[test]
     fn updating_existing_key_does_not_grow_beyond_capacity() {
-        todo!()
+        let mut cache = LruCache::new(2);
+
+        cache.put(1, 10);
+        cache.put(2, 20);
+        cache.put(1, 15);
+        cache.put(3, 30);
+
+        assert_eq!(cache.get(1), Some(15));
+        assert_eq!(cache.get(2), None);
+        assert_eq!(cache.get(3), Some(30));
     }
 }

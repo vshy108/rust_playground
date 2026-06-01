@@ -69,3 +69,7 @@ path = "projects/mini_grep_cli.rs"
 [[bin]]
 name = "url_shortener"
 path = "projects/url_shortener.rs"
+
+[[bin]]
+name = "lru_cache"
+path = "projects/lru_cache.rs"
