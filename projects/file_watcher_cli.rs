@@ -58,6 +58,9 @@ enum WatchMessage {
 // Returned by `run_loop` so `main` can print a different message depending on
 // whether the loop ended by a deliberate Ctrl+C (`Shutdown`) or an unexpected
 // channel close (`Disconnected`, e.g. the watcher was dropped early).
+// `PartialEq` lets tests use `assert_eq!` (with a value in the failure message).
+// `Debug` is needed by `assert_eq!` to format the actual and expected values.
+#[derive(Debug, PartialEq)]
 enum LoopExit {
     Shutdown,
     Disconnected,
@@ -319,7 +322,7 @@ mod tests {
         let mut out: Vec<String> = Vec::new();
         // Large window so none expire naturally; Shutdown flushes whatever is pending.
         let exit = run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
-        assert!(matches!(exit, LoopExit::Shutdown));
+        assert_eq!(exit, LoopExit::Shutdown);
 
         // All 3 events collapse into 1 log line for that path.
         // "stopping watcher" is printed by main, not run_loop, so it does not appear here.
@@ -347,7 +350,7 @@ mod tests {
 
         let mut out: Vec<String> = Vec::new();
         let exit = run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
-        assert!(matches!(exit, LoopExit::Shutdown));
+        assert_eq!(exit, LoopExit::Shutdown);
 
         // Each path produces its own log line.
         // "stopping watcher" is printed by main, not run_loop, so it does not appear here.
