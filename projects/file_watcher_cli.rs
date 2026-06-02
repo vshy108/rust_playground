@@ -118,6 +118,10 @@ fn run_loop(rx: Receiver<WatchMessage>, debounce_window: Duration, mut output: i
                 Ok(event) if event.paths.len() == 1 => {
                     // Single-path success event: store/replace in pending so bursts
                     // for the same file collapse into the latest event seen.
+                    // `event_number` is assigned here (first-seen order) and incremented
+                    // even if this entry is later replaced by a newer burst event.
+                    // That means some numbers will never appear in the output — gaps are
+                    // intentional and reflect "how many events were silently collapsed".
                     let path = event.paths[0].clone();
                     pending.insert(
                         path,
