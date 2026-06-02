@@ -9,15 +9,15 @@ cargo test --bin logparse
 
 ## 1. Data model
 
-- [ ] Define a `LogEntry` struct: IP, method, path, status code, latency (ms).
-- [ ] Write a `parse_line(line: &str) -> Option<LogEntry>` function.
+- [x] Define a `LogEntry` struct: IP, method, path, status code, latency (ms).
+- [x] Write a `parse_line(line: &str) -> Option<LogEntry>` function.
 
 Acceptance check: `parse_line` returns `Some` for a valid line, `None` for malformed input.
 
 ## 2. File reading
 
-- [ ] Read the log file path from CLI args.
-- [ ] Read the file into lines; skip unparseable lines with a warning count.
+- [x] Read the log file path from CLI args.
+- [x] Read the file into lines; skip unparseable lines with a warning count.
 
 Acceptance check: running against a sample log prints line count.
 
@@ -42,7 +42,7 @@ Acceptance check: error rate prints for sample file.
 
 ## 6. Tests
 
-- [ ] `parse_line` round-trips a known log line.
+- [x] `parse_line` round-trips a known log line.
 - [ ] Top-IP aggregation over a small in-memory slice.
 - [ ] Error rate calculation over a fixed set of entries.
 
