@@ -12,6 +12,11 @@ edition = "2024"
 # Async HTTP web framework built on top of tokio and tower. Used by url_shortener.
 axum = "0.8.9"
 
+# cargo add notify
+# Cross-platform filesystem watching. Used by file_watcher_cli to detect create/
+# modify/delete events and feed them into the channel -> receive loop pipeline.
+notify = "8.2.0"
+
 # cargo add rand
 # Random number generation. Used by genpass to pick random characters.
 rand = "0.9"
