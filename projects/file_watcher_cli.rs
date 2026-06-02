@@ -14,6 +14,17 @@
 // - `recv_timeout` — receive with a deadline so quiet ticks can trigger a flush
 // - debounce — collapse noisy event bursts into one logical update per path
 // - match guards — `Ok(x) if cond` falls through to the next arm when `cond` fails
+// - loop as expression — `loop { ... break value }` makes the loop itself evaluate to `value`
+//   - `break Expr` exits the loop and uses `Expr` as the loop expression's result
+//   - the function return type must match every `break` value type
+//   - cleaner than a trailing `return` because the compiler knows `loop {}` is exhaustive;
+//     no unreachable trailing expression warning
+// - FnMut — a closure trait for callables that may mutate captured state
+//   - `impl FnMut(T)` as a parameter accepts any closure that takes T and may mutate
+//   - the binding needs `mut` (e.g. `mut output`) because calling FnMut requires `&mut self`
+//   - pass `&mut output` to helpers so they borrow the closure instead of consuming it
+//   - use FnMut when you call the closure more than once and it accumulates state
+//   - hierarchy: Fn ⊂ FnMut ⊂ FnOnce — FnMut accepts anything Fn also accepts
 
 // Design:
 //   watcher callback -> mpsc channel -> run_loop -> output closure -> println!
