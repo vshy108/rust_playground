@@ -45,7 +45,8 @@ watch folder
 Progress notes:
 
 - Slice 1 mental model: watcher callback -> channel -> receive loop -> log.
-- Slice 3 has started: log lines now include event order, event kind, and paths.
+- Slice 3 has started: log lines now include timestamps, event order, event kind,
+	and paths.
 - Current watcher crate: `notify`, using `recommended_watcher(...)`.
 - Channel choice: start with `std::sync::mpsc::channel()`.
 	- `tx` stays with the watcher callback.
@@ -73,6 +74,8 @@ Progress notes:
 	the repo root, it watches `rust_playground/`.
 - Startup visibility exists: the program prints `watching {path}` after
 	`watcher.watch(...)` succeeds and before the receive loop starts.
+- Graceful shutdown exists: Ctrl+C now sends an explicit shutdown message through
+	the channel so the blocked receive loop can print `stopping watcher` and exit.
 - Smallest Slice 1 success criterion: change one file in a watched folder and see at
 	least one raw event printed.
 - Completed smoke check: running `cargo run --bin watchdir` from the repo root and then
@@ -80,7 +83,7 @@ Progress notes:
 	`Remove(File)` events.
 - Formatting is no longer raw debug-only:
 	- `format_event(...)` formats event kind and paths.
-	- `format_event_line(...)` prefixes logs with `event#N`.
+	- `format_event_line(...)` prefixes logs with epoch milliseconds and `event#N`.
 - Focused formatter tests now cover:
 	- single path formatting
 	- multiple path formatting
@@ -89,13 +92,19 @@ Progress notes:
 - Manual verification so far:
 	- missing path returns `PathNotFound`
 	- existing custom path can be watched successfully
+	- Ctrl+C exits cleanly after printing `stopping watcher`
+	- a fresh file in `/tmp/testdir` produced visible `Create(File)`,
+	  `Modify(Data(Content))`, and `Remove(File)` events on the custom watch path
+	- event order can be bursty or backend-dependent, so rapid create/write/remove
+	  actions may not print in the same order the shell commands were issued
 
 ## 1. Watch Setup
 
 - [x] Pick a filesystem watching approach.
 - [x] Define the first CLI shape: current directory in, raw event stream out.
 - [x] Expand the first CLI shape to accept an optional custom watch path.
-- [ ] Decide what event data to keep for nicer logs beyond kind/path/order, maybe timestamp.
+- [x] Keep the first readable log shape to: timestamp, event order, event kind, and paths.
+- [ ] Revisit whether timestamps still pull their weight after debounce is added.
 
 Acceptance check:
 
@@ -152,22 +161,23 @@ Expected: an event arrives and is handled by the receive loop.
 
 - [x] Prefix each event with a stable order number.
 - [x] Print event kind and paths in a readable format.
-- [ ] Decide whether to add timestamp output.
+- [x] Prefix each log line with epoch milliseconds.
 - [ ] Avoid panicking on ordinary watcher noise or duplicate events.
 
 Acceptance check:
 
 ```text
 Change a file in the watched folder.
-Expected: output shows event order, event kind, and path in one readable log line.
+Expected: output shows timestamp, event order, event kind, and path in one readable log line.
 ```
 
 ## 4. Verification
 
 - [x] Add at least one focused testable seam, or document a repeatable manual smoke test.
-- [ ] Confirm create/update/delete scenarios are visible on one chosen custom watch path.
+- [x] Confirm create/update/delete scenarios are visible on one chosen custom watch path.
 - [x] Confirm the program handles watching an existing folder without crashing.
 - [x] Confirm the program reports a missing watch path as `PathNotFound`.
+- [x] Confirm Ctrl+C stops the watcher cleanly.
 
 Acceptance check:
 
@@ -183,6 +193,12 @@ cargo run --bin watchdir -- /tmp/testdir
 touch /tmp/testdir/abc
 echo hi >> /tmp/testdir/abc
 rm /tmp/testdir/abc
+
+# for a cleaner create/modify/remove check, use a fresh filename
+f=/tmp/testdir/verify_$RANDOM && touch "$f" && echo hi >> "$f" && rm "$f"
+
+# then in the watcher terminal
+# press Ctrl+C
 ```
 
 ## Extra: Debounce
