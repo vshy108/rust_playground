@@ -4,7 +4,7 @@
 // Build:
 
 // ```bash
-// cargo run --bin watchdir -- /tmp/testdir
+// cargo run --bin watchdir -- fixtures/
 // ```
 
 // Learn:

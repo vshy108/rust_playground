@@ -4,7 +4,7 @@
 // Build:
 
 // ```bash
-// rgrep "hello" logs.txt
+// rgrep hello fixtures/sample.txt
 // ```
 
 // Learn:

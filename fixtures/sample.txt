@@ -1,0 +1,9 @@
+hello world
+goodbye cruel world
+hello rust
+the quick brown fox
+hello from fixtures
+error: something went wrong
+hello again
+warning: low memory
+debug: all systems go

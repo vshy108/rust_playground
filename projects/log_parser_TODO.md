@@ -3,7 +3,7 @@
 ## Usage
 
 ```bash
-cargo run --bin logparse -- access.log
+cargo run --bin logparse -- fixtures/access.log
 cargo test --bin logparse
 ```
 

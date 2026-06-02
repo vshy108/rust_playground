@@ -4,7 +4,8 @@
 // Build:
 
 // ```bash
-// jsonfmt input.json
+// jsonfmt fixtures/compact.json
+// jsonfmt --check fixtures/bad.json
 // ```
 
 // Learn:
