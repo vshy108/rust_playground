@@ -87,3 +87,55 @@ path = "projects/lru_cache.rs"
 [[bin]]
 name = "watchdir"
 path = "projects/file_watcher_cli.rs"
+
+[[bin]]
+name = "logparse"
+path = "projects/log_parser_cli.rs"
+
+[[bin]]
+name = "rest_api"
+path = "projects/rest_api.rs"
+
+[[bin]]
+name = "crawler"
+path = "projects/web_crawler.rs"
+
+[[bin]]
+name = "redis_clone"
+path = "projects/redis_clone.rs"
+
+[[bin]]
+name = "metrics_collector"
+path = "projects/metrics_collector.rs"
+
+[[bin]]
+name = "api_gateway"
+path = "projects/api_gateway.rs"
+
+[[bin]]
+name = "kafka_consumer"
+path = "projects/kafka_consumer.rs"
+
+[[bin]]
+name = "workflow_engine"
+path = "projects/workflow_engine.rs"
+
+[[bin]]
+name = "otel_collector"
+path = "projects/otel_collector.rs"
+
+[[bin]]
+name = "fake_sql_server"
+path = "projects/fake_sql_server.rs"
+
+[[bin]]
+name = "sidecar"
+path = "projects/service_mesh_sidecar.rs"
+
+[[bin]]
+name = "dist_cache"
+path = "projects/dist_cache.rs"
+
+[[bin]]
+name = "mini_runtime"
+path = "projects/mini_runtime.rs"

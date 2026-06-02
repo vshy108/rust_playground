@@ -1,0 +1,47 @@
+# TODO: mini_runtime
+
+## Usage
+
+```bash
+cargo run --bin mini_runtime
+cargo test --bin mini_runtime
+```
+
+## 1. Manual Future
+
+- [ ] Implement a `TimerFuture` that yields `Pending` on the first poll and `Ready` on the second.
+- [ ] Store a `completed: Arc<AtomicBool>` flag; background thread sets it and calls `waker.wake()`.
+
+Acceptance check: awaiting `TimerFuture` in a test resolves after the delay.
+
+## 2. Task and Waker
+
+- [ ] Define a `Task` struct wrapping a `Pin<Box<dyn Future<Output = ()>>>`.
+- [ ] Implement the `Wake` trait for `Task` so `waker.wake()` pushes the task back to the ready queue.
+
+Acceptance check: `wake()` moves the task to the run queue without panicking.
+
+## 3. Single-threaded executor
+
+- [ ] Maintain a `VecDeque<Arc<Task>>` as the run queue.
+- [ ] `run()` loop: pop a task, call `poll` with a Waker backed by `Arc::clone(&task)`.
+- [ ] Stop when the queue is empty and no tasks are outstanding.
+
+Acceptance check: `executor.spawn(async { 42 })` runs to completion.
+
+## 4. Multiple tasks
+
+- [ ] Spawn two `TimerFuture` tasks; verify both complete.
+- [ ] Demonstrate that task 2 makes progress while task 1 is sleeping (interleaving).
+
+Acceptance check: both tasks print their completion message; task 2 completes before task 1 if its delay is shorter.
+
+## 5. Tests
+
+- [ ] A simple `async { 1 + 1 }` task resolves to 2.
+- [ ] Two concurrent timer tasks both complete.
+- [ ] Waker only reschedules the task that called `wake`, not all tasks.
+
+## Extra: multi-threaded scheduler
+
+- [ ] Add a thread pool; distribute tasks with a work-stealing deque (`crossbeam-deque`).
