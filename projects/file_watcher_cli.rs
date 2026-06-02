@@ -45,8 +45,8 @@
 // 9. Debounce (extra) — reduce noisy bursts of near-duplicate events into a
 //    cleaner stream with an explicit tradeoff window.
 
+use notify::{RecursiveMode, Watcher, recommended_watcher};
 use std::sync::mpsc::channel;
-use notify::{recommended_watcher, RecursiveMode, Watcher};
 
 fn format_event(res: &notify::Result<notify::Event>) -> String {
     match res {
@@ -72,12 +72,13 @@ fn format_event(res: &notify::Result<notify::Event>) -> String {
 }
 
 fn main() -> notify::Result<()> {
-    let (tx, rx) = channel();
     // `.` means the current working directory where the program is launched.
     // It does not mean the `projects/` source folder unless you run the binary from there.
+    let path_arg = std::env::args().nth(1).unwrap_or(".".to_string());
+    let (tx, rx) = channel();
     // `Path` is a borrowed view of a path. Use `PathBuf` when a struct needs to own
     // and store path data, like `notify::Event { paths: Vec<PathBuf> }` in the tests.
-    let watch_path = std::path::Path::new(".");
+    let watch_path = std::path::Path::new(&path_arg);
 
     // Keep the watcher in a local binding so it stays alive for the whole receive loop.
     let mut watcher = recommended_watcher(move |res| {
@@ -99,8 +100,8 @@ mod tests {
     use std::path::PathBuf;
 
     use notify::{
-        event::{CreateKind, EventKind},
         Error, Event,
+        event::{CreateKind, EventKind},
     };
 
     #[test]
@@ -128,7 +129,10 @@ mod tests {
 
         let formatted = format_event(&Ok(event));
 
-        assert_eq!(formatted, "kind=Create(File) paths=/tmp/from.txt, /tmp/to.txt");
+        assert_eq!(
+            formatted,
+            "kind=Create(File) paths=/tmp/from.txt, /tmp/to.txt"
+        );
     }
 
     #[test]
