@@ -1,49 +1,19 @@
-// example must have main function
-// Goal: Events
-
-// Build:
-
-// ```text
-// watch folder
-// -> detect changes
-// -> log
-// ```
-
-// Learn:
-
-// - channels
-// - filesystem
-// - `notify`
-//   - `notify` is the standard cross-platform Rust crate for filesystem events.
-//   - It gives a real watcher + callback API, which fits this project's shape:
-//     watcher callback -> channel -> receive loop -> log.
-// 2. Slice 1 architecture — fix the pipeline first:
-//    watcher callback -> tx.send(result) -> rx.recv() loop -> println!("{res:?}").
-//    The exact watcher crate and exact event type can be decided later; the
-//    stable design is producer -> channel -> single consumer.
-// 3. Channel choice — start with `std::sync::mpsc::channel()`.
-//    `tx` belongs to the watcher callback, `rx` belongs to the main receive loop.
-//    `mpsc` fits well because one central loop should consume and log events.
-// 3a. Progress — the placeholder closure has been replaced with
-//     `recommended_watcher(...)`. `main` now returns `notify::Result<()>`, so
-//     watcher setup errors bubble up with `?` instead of panicking with `expect`.
-// 4. First receive loop — `while let Ok(res) = rx.recv()` blocks for one event at a
-//    time and stops when the channel closes; good enough for the first raw event flow.
-// 5. Watcher lifetime — keep the watcher value alive in `main`; if it is dropped
-//    early, filesystem watching stops even if the channel receiver still exists.
-// 6. Slice 1 success bar — edit one file in the watched folder and see at least
-//    one raw event printed. Debug the fundamentals first: watcher alive, path
-//    actually watched, callback sending, receive loop running.
-// 7. Logging — once raw events are flowing, print useful event details such as
-//    path and event kind in a readable format.
-// 7a. Progress — raw `Debug` printing has been replaced with `format_event(...)`
-//     so logging now has a small pure seam that is easy to test.
-// 8. Verification — add a small repeatable smoke test or focused test seam for
-//    create / update / delete events.
-// 8a. Progress — focused unit tests now cover formatter output for a single path,
-//     multiple paths, and watcher errors.
-// 9. Debounce (extra) — reduce noisy bursts of near-duplicate events into a
-//    cleaner stream with an explicit tradeoff window.
+// file_watcher_cli — `watchdir` binary
+//
+// Architecture:
+//   watcher callback -> mpsc channel -> run_loop -> output closure -> println!
+//
+// Key design decisions:
+//   - `notify::recommended_watcher` sends `Result<Event>` into `mpsc::channel`.
+//   - Both the watcher callback and the Ctrl+C handler share a cloned `tx`;
+//     the Ctrl+C handler sends `WatchMessage::Shutdown` to unblock the loop.
+//   - `run_loop` uses `recv_timeout(debounce_window)` so it can flush buffered
+//     events even when no new events arrive (a `Timeout` tick triggers the flush).
+//   - Debounce: single-path events are stored in `HashMap<PathBuf, PendingEvent>`;
+//     a newer event for the same path replaces the older one. Entries are flushed
+//     once `last_seen.elapsed() >= debounce_window` (default 100ms).
+//   - `run_loop` accepts an `output: impl FnMut(String)` closure so tests can
+//     collect log lines without touching stdout.
 
 use notify::{RecursiveMode, Watcher, recommended_watcher};
 use std::collections::HashMap;
