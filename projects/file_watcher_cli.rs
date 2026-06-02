@@ -1,9 +1,23 @@
-// file_watcher_cli — `watchdir` binary
-//
-// Architecture:
+// example must have main function
+// Goal: filesystem events + channels + debounce
+
+// Build:
+
+// ```bash
+// cargo run --bin watchdir -- /tmp/testdir
+// ```
+
+// Learn:
+
+// - `notify` — cross-platform filesystem watcher crate
+// - `std::sync::mpsc` — multi-producer single-consumer channel
+// - `recv_timeout` — receive with a deadline so quiet ticks can trigger a flush
+// - debounce — collapse noisy event bursts into one logical update per path
+// - match guards — `Ok(x) if cond` falls through to the next arm when `cond` fails
+
+// Design:
 //   watcher callback -> mpsc channel -> run_loop -> output closure -> println!
 //
-// Key design decisions:
 //   - `notify::recommended_watcher` sends `Result<Event>` into `mpsc::channel`.
 //   - Both the watcher callback and the Ctrl+C handler share a cloned `tx`;
 //     the Ctrl+C handler sends `WatchMessage::Shutdown` to unblock the loop.
