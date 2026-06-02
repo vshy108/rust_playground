@@ -89,6 +89,7 @@ fn main() -> notify::Result<()> {
         let _ = tx.send(res);
     })?;
     watcher.watch(watch_path, RecursiveMode::Recursive)?;
+    println!("watching {}", watch_path.display());
 
     let mut event_number = 1;
 
