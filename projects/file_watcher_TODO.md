@@ -173,7 +173,10 @@ Expected: an event arrives and is handled by the receive loop.
 - [x] Prefix each event with a stable order number.
 - [x] Print event kind and paths in a readable format.
 - [x] Prefix each log line with epoch milliseconds.
-- [ ] Avoid panicking on ordinary watcher noise or duplicate events.
+- [x] Avoid panicking on ordinary watcher noise or duplicate events.
+      Verified: no unguarded `unwrap`/`expect` in hot paths. `paths[0]` is guarded
+      by the `len() == 1` match guard. Watcher errors fall to the `other =>` arm
+      and are printed. All remaining `unwrap_or` calls have safe fallback values.
 
 Acceptance check:
 
