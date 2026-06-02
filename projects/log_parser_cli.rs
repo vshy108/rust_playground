@@ -57,9 +57,10 @@
 
 // Extra:
 
-// - [ ] CSV export
+// - [x] CSV export — ip_stats (count + mean per IP) + write_csv (header + rows)
 
 use std::collections::HashMap;
+use std::io::Write;
 use std::net::IpAddr;
 use std::str::FromStr;
 use std::sync::LazyLock;
@@ -256,9 +257,58 @@ fn error_rate(entries: &[LogEntry]) -> Option<f64> {
     Some(status_5xx_count as f64 / total as f64 * 100.0)
 }
 
+// Aggregates per-IP statistics in a single pass over entries.
+// Returns one tuple per unique IP: (ip, request_count, mean_latency_ms).
+//
+// Value type is (usize, u64) — count and latency sum — so a single .entry() call
+// accumulates both fields without a second HashMap or a second loop.
+fn ip_stats(entries: &[LogEntry]) -> Vec<(IpAddr, usize, f64)> {
+    let mut map: HashMap<IpAddr, (usize, u64)> = HashMap::new();
+    for e in entries {
+        // or_insert((0, 0)) returns &mut (usize, u64) for the existing or freshly inserted slot.
+        let slot = map.entry(e.ip).or_insert((0, 0));
+        slot.0 += 1; // count
+        slot.1 += e.latency_ms; // latency sum
+    }
+    // Consume map with into_iter() — iter() would yield borrowed (&IpAddr, &(usize, u64))
+    // that can't outlive the local `map`. into_iter() yields owned values, safe to return.
+    // Divide inside the map closure so callers receive the final mean directly.
+    map.into_iter()
+        .map(|(ip, (count, sum))| (ip, count, sum as f64 / count as f64))
+        .collect()
+}
+
+// Writes a CSV file at `path` with one header row and one data row per IP.
+// File::create truncates any existing file at that path before writing.
+// writeln! returns io::Result; the ? operator propagates any write error to the caller.
+// {mean:.2} rounds the float to two decimal places in the output (e.g. 45.67).
+fn write_csv(path: &str, stats: &[(IpAddr, usize, f64)]) -> Result<(), std::io::Error> {
+    let mut file = std::fs::File::create(path)?;
+    writeln!(file, "ip,requests,mean_latency_ms")?;
+    for (ip, count, mean) in stats {
+        writeln!(file, "{ip},{count},{mean:.2}")?;
+    }
+    Ok(())
+}
+
 fn main() {
-    let path_arg = std::env::args()
-        .nth(1)
+    // skip(1) drops argv[0] (the binary name) so all indices below are 0-based over user args.
+    let args: Vec<String> = std::env::args().skip(1).collect();
+
+    // windows(2) slides a two-element view [flag, value] across the args vec.
+    // find returns the first window where the flag matches; map extracts the value after it.
+    // Result: Some("out.csv") if --csv was passed, None otherwise.
+    let csv_path = args
+        .windows(2)
+        .find(|w| w[0] == "--csv")
+        .map(|w| w[1].clone());
+
+    // Treat the first arg that doesn't start with "--" as the log file path.
+    // This lets flags appear in any order without breaking positional arg logic.
+    let path_arg = args
+        .iter()
+        .find(|a| !a.starts_with("--"))
+        .cloned()
         .unwrap_or("./fixtures/access.log".to_string());
     let contents = read_file_content(&path_arg).unwrap_or_else(|e| {
         eprintln!("Error reading file: {}", e);
@@ -267,6 +317,12 @@ fn main() {
     let lines = split_contents_to_lines(&contents);
     // .collect() drives the lazy iterator — without it, parse_line never runs.
     let entries: Vec<LogEntry> = parse_entries(lines).collect();
+
+    if let Some(ref path) = csv_path {
+        let stats = ip_stats(&entries);
+        write_csv(path, &stats).unwrap_or_else(|e| eprintln!("csv error: {e}"));
+        println!("wrote csv: {path}");
+    }
     println!("parsed {} log entries", entries.len());
     println!("top 5: {:?}", top_ips(&entries));
     // latency_stats returns Option — if entries is empty there is nothing to print.
@@ -276,6 +332,7 @@ fn main() {
     }
 
     if let Some(error_rate) = error_rate(&entries) {
+        // error_rate returns Option — None if entries is empty; if let skips that case safely.
         println!("error rate: {}%", error_rate);
     }
 }
@@ -429,5 +486,68 @@ mod tests {
     #[test]
     fn error_rate_returns_none_for_empty_slice() {
         assert!(error_rate(&[]).is_none());
+    }
+
+    #[test]
+    fn ip_stats_returns_count_and_mean_latency() {
+        // Two requests from 1.2.3.4 with latencies 10 and 30 → mean = 20.0 (exactly representable).
+        // One request from 2.2.3.4 with latency 50 → mean = 50.0.
+        let entries = vec![
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 10,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 30,
+            },
+            LogEntry {
+                ip: "2.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 50,
+            },
+        ];
+
+        let mut stats = ip_stats(&entries);
+        // HashMap iteration order is non-deterministic; sort by IP string for a stable assertion.
+        stats.sort_by_key(|(ip, _, _)| ip.to_string());
+
+        assert_eq!(stats.len(), 2);
+        assert_eq!(stats[0].0, "1.2.3.4".parse::<IpAddr>().unwrap());
+        assert_eq!(stats[0].1, 2);    // count
+        assert_eq!(stats[0].2, 20.0); // mean latency
+        assert_eq!(stats[1].0, "2.2.3.4".parse::<IpAddr>().unwrap());
+        assert_eq!(stats[1].1, 1);
+        assert_eq!(stats[1].2, 50.0);
+    }
+
+    #[test]
+    fn write_csv_produces_correct_rows() {
+        // Write to a temp file and read it back to verify the content.
+        let path = "/tmp/logparse_test_out.csv";
+        let stats: Vec<(IpAddr, usize, f64)> = vec![
+            ("1.2.3.4".parse().unwrap(), 3, 25.5),
+            ("2.2.3.4".parse().unwrap(), 1, 50.0),
+        ];
+
+        write_csv(path, &stats).expect("write_csv should not fail");
+
+        let contents = std::fs::read_to_string(path).expect("should read temp file");
+        let lines: Vec<&str> = contents.lines().collect();
+
+        // Header row must be first.
+        assert_eq!(lines[0], "ip,requests,mean_latency_ms");
+        // Data rows — mean rounded to 2 decimal places.
+        assert_eq!(lines[1], "1.2.3.4,3,25.50");
+        assert_eq!(lines[2], "2.2.3.4,1,50.00");
+        assert_eq!(lines.len(), 3);
     }
 }

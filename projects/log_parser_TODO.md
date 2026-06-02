@@ -48,4 +48,7 @@ Acceptance check: error rate prints for sample file.
 
 ## Extra: CSV export
 
-- [ ] Add `--csv out.csv` flag; write one row per IP with request count and mean latency.
+- [x] Add `--csv out.csv` flag; write one row per IP with request count and mean latency.
+- [x] `ip_stats` aggregation: count + mean latency per IP in one pass.
+- [x] `write_csv` writes header + one row per IP with 2-decimal mean latency.
+- [x] Tests: `ip_stats_returns_count_and_mean_latency`, `write_csv_produces_correct_rows`.
