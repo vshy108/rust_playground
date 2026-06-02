@@ -47,6 +47,15 @@
 
 use notify::{RecursiveMode, Watcher, recommended_watcher};
 use std::sync::mpsc::channel;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+fn current_timestamp_ms() -> u128 {
+    SystemTime::now()
+        // 1970-01-01 00:00:00 UTC
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis()
+}
 
 fn format_event(res: &notify::Result<notify::Event>) -> String {
     match res {
@@ -72,7 +81,10 @@ fn format_event(res: &notify::Result<notify::Event>) -> String {
 }
 
 fn format_event_line(event_number: usize, res: &notify::Result<notify::Event>) -> String {
-    format!("event#{event_number} {}", format_event(res))
+    // Prefix each line with epoch milliseconds so event bursts can be compared in time
+    // without pulling in a date/time formatting crate for this learning slice.
+    let timestamp_ms = current_timestamp_ms();
+    format!("[{timestamp_ms}] event#{event_number} {}", format_event(res))
 }
 
 fn main() -> notify::Result<()> {
@@ -160,6 +172,7 @@ mod tests {
 
         let formatted = format_event_line(3, &Ok(event));
 
-        assert_eq!(formatted, "event#3 kind=Create(File) paths=/tmp/demo.txt");
+        assert!(formatted.starts_with("["));
+        assert!(formatted.ends_with("event#3 kind=Create(File) paths=/tmp/demo.txt"));
     }
 }
