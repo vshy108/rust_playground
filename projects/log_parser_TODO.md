@@ -23,28 +23,28 @@ Acceptance check: running against a sample log prints line count.
 
 ## 3. Top IPs
 
-- [ ] Count requests per IP using `HashMap<String, usize>`.
-- [ ] Print the top 5 IPs by request count.
+- [x] Count requests per IP using `HashMap<IpAddr, usize>`.
+- [x] Print the top 5 IPs by request count.
 
 Acceptance check: top IP matches manual count in sample.
 
 ## 4. Latency stats
 
-- [ ] Compute mean and p99 latency across all entries.
+- [x] Compute mean and p99 latency across all entries.
 
 Acceptance check: mean and p99 print for sample file.
 
 ## 5. Error rate
 
-- [ ] Count 5xx responses; compute error rate = errors / total.
+- [x] Count 5xx responses; compute error rate = errors / total.
 
 Acceptance check: error rate prints for sample file.
 
 ## 6. Tests
 
 - [x] `parse_line` round-trips a known log line.
-- [ ] Top-IP aggregation over a small in-memory slice.
-- [ ] Error rate calculation over a fixed set of entries.
+- [x] Top-IP aggregation over a small in-memory slice.
+- [x] Error rate calculation over a fixed set of entries.
 
 ## Extra: CSV export
 

@@ -20,6 +20,11 @@
 //   - pattern for top-N: `HashMap` to count → `Vec` to sort by value → `.take(N)` for top entries
 // - `.entry(key).or_insert(0)` — HashMap method that returns &mut V for an existing key, or inserts
 //   a default and returns &mut V for a new key; dereference and increment: `*map.entry(k).or_insert(0) += 1`
+// - `iter()` vs `into_iter()` vs `iter_mut()` — three ways to iterate a collection:
+//   - `.iter()`      → yields `&T`      (shared borrow);  collection stays alive; use for read-only access
+//   - `.iter_mut()`  → yields `&mut T`  (mutable borrow); collection stays alive; use to modify in place
+//   - `.into_iter()` → yields `T`       (owned value);    collection is consumed;  use when done with it
+//   - rule: if you need to return data from a function, it must be owned — use `.into_iter()`, not `.iter()`
 // - `&str` vs `String` — both represent text, but ownership differs:
 //   - `&str`   — borrowed view into existing memory; no allocation; cannot outlive its source
 //   - `String` — heap-allocated, owned copy; can be stored in structs and returned from functions
@@ -54,6 +59,7 @@
 
 // - [ ] CSV export
 
+use std::collections::HashMap;
 use std::net::IpAddr;
 use std::str::FromStr;
 use std::sync::LazyLock;
@@ -171,6 +177,85 @@ fn parse_entries(lines: core::str::Lines<'_>) -> impl Iterator<Item = LogEntry> 
     lines.filter_map(parse_line)
 }
 
+// FIX 1: `&Vec<LogEntry>` → `&[LogEntry]`: Clippy prefers slices over &Vec; slices are more general
+//         (any contiguous sequence works, not just Vec) and avoid a redundant indirection.
+// FIX 2: return type was `std::iter::Take<std::slice::Iter<'_, (&IpAddr, &usize)>>` — a borrow of a
+//         local variable. Local variables are dropped when the function returns, so the borrow would
+//         dangle. An owned `Vec<(IpAddr, usize)>` has no lifetime dependency and can be returned safely.
+fn top_ips(entries: &[LogEntry]) -> Vec<(IpAddr, usize)> {
+    // Step 1: count requests per IP using .entry().or_insert(0) to avoid a separate if/else.
+    let mut counts: HashMap<IpAddr, usize> = HashMap::new();
+    for entry in entries {
+        *counts.entry(entry.ip).or_insert(0) += 1;
+    }
+    // Step 2: convert to Vec for sorting.
+    // ❌ counts.iter()      → (&IpAddr, &usize): borrows from `counts`; can't return — `counts` is local
+    // ✅ counts.into_iter() → (IpAddr, usize):   owned values; safe to return after `counts` is consumed
+    // FIX 3: was `counts.iter().collect::<Vec<(&IpAddr, &usize)>>()` — iter() yields references that
+    //         borrow from `counts`; those references can't outlive the local `counts`. into_iter()
+    //         consumes `counts` and yields owned (IpAddr, usize) tuples with no lifetime attachment.
+    let mut vec: Vec<(IpAddr, usize)> = counts.into_iter().collect();
+    // Step 3: sort descending by count. b.1.cmp(&a.1) reverses order vs a.1.cmp(&b.1).
+    vec.sort_by(|a, b| b.1.cmp(&a.1)); // b before a = descending
+    // Step 4: take top 5 and collect into owned Vec so there are no dangling borrows.
+    // FIX 4: was `vec.into_iter().take(5)` — a lazy iterator, not a Vec; the return type promised Vec.
+    //         .collect() drives the iterator and materialises the result into the declared return type.
+    vec.into_iter().take(5).collect()
+}
+
+// Returns None if entries is empty (no meaningful stats to compute).
+// Returns Some((mean_ms, p99_ms)) otherwise.
+//   mean — arithmetic average; sensitive to outliers (one 10s request pulls it up)
+//   p99  — value at the 99th percentile; the slowest 1% of requests are above this
+fn latency_stats(entries: &[LogEntry]) -> Option<(f64, u64)> {
+    // Early return keeps the happy path flat — no else block needed after a return.
+    if entries.is_empty() {
+        return None;
+    }
+
+    // Collect into Vec<u64> so we can sort in place for the p99 calculation.
+    // .map(|e| e.latency_ms) extracts the field; .collect() drives the lazy iterator.
+    let mut latencies: Vec<u64> = entries.iter().map(|e| e.latency_ms).collect();
+    // .sort() works without a comparator because u64 implements Ord (total ordering).
+    // sort_by is only needed when the comparison is non-standard (e.g. descending, floats).
+    latencies.sort();
+
+    let n = latencies.len();
+    // turbofish ::<u64> tells the compiler which numeric type to accumulate into;
+    // without it, .sum() is ambiguous — u32, u64, i64 all implement Sum.
+    let sum = latencies.iter().sum::<u64>();
+    // cast to f64 before dividing so integer truncation doesn't lose the fractional part;
+    // e.g. 21 / 2 = 10 in u64, but 21.0 / 2.0 = 10.5 in f64.
+    let mean = sum as f64 / n as f64;
+
+    // p99 index: for n=20 → 20*99/100 = 19 (last element ≈ max for small samples).
+    // integer division is intentional: n*99/100 gives the floor index into the sorted vec.
+    let p99_index = n * 99 / 100;
+    let p99 = latencies[p99_index];
+
+    Some((mean, p99))
+}
+
+// Returns None if entries is empty — dividing by zero total would give NaN, not a meaningful rate.
+// Returns Some(percentage) otherwise, e.g. 25.0 means 25% of requests were 5xx errors.
+fn error_rate(entries: &[LogEntry]) -> Option<f64> {
+    if entries.is_empty() {
+        return None;
+    }
+    let total = entries.len();
+    // .filter() keeps only entries matching the predicate; .count() drives the iterator and tallies.
+    // status_code >= 500 && < 600 covers all 5xx codes (500, 502, 503, 504, …).
+    // status_code < 600 is technically redundant for well-formed logs but makes the intent explicit.
+    let status_5xx_count = entries
+        .iter()
+        .filter(|e| e.status_code >= 500 && e.status_code < 600)
+        .count();
+
+    // Cast both counts to f64 before dividing — integer division would truncate to 0 for any
+    // error rate below 100%. Multiply by 100.0 to express as a percentage.
+    Some(status_5xx_count as f64 / total as f64 * 100.0)
+}
+
 fn main() {
     let path_arg = std::env::args()
         .nth(1)
@@ -183,6 +268,16 @@ fn main() {
     // .collect() drives the lazy iterator — without it, parse_line never runs.
     let entries: Vec<LogEntry> = parse_entries(lines).collect();
     println!("parsed {} log entries", entries.len());
+    println!("top 5: {:?}", top_ips(&entries));
+    // latency_stats returns Option — if entries is empty there is nothing to print.
+    // if let unpacks Some((mean, p99)) in one step and skips the None case silently.
+    if let Some((mean, p99)) = latency_stats(&entries) {
+        println!("mean latency: {:.1}ms  p99: {}ms", mean, p99);
+    }
+
+    if let Some(error_rate) = error_rate(&entries) {
+        println!("error rate: {}%", error_rate);
+    }
 }
 
 #[cfg(test)]
@@ -239,5 +334,100 @@ mod tests {
         assert_eq!(entries.len(), 2);
         assert_eq!(entries[0].path, "/a");
         assert_eq!(entries[1].path, "/b");
+    }
+
+    #[test]
+    fn return_top_ips_from_logs() {
+        let entries: Vec<LogEntry> = vec![
+            LogEntry {
+                ip: "2.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 0,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 0,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 0,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200,
+                latency_ms: 0,
+            },
+        ];
+        let top_entries = top_ips(&entries);
+        assert_eq!(top_entries.len(), 2);
+        // FIX: `.parse()` alone is ambiguous — `FromStr` is implemented by many types, so the
+        // compiler can't infer which one to use. `assert_eq!` infers each side independently;
+        // even though `.0` is `IpAddr`, that fact doesn't flow back into `.parse()`.
+        // Turbofish `::<IpAddr>` pins the target type explicitly so the compiler can resolve it.
+        assert_eq!(top_entries[0].0, "1.2.3.4".parse::<IpAddr>().unwrap());
+        assert_eq!(top_entries[0].1, 3);
+        assert_eq!(top_entries[1].0, "2.2.3.4".parse::<IpAddr>().unwrap());
+        assert_eq!(top_entries[1].1, 1);
+    }
+
+    #[test]
+    fn top_ips_returns_none_for_empty_slice() {
+        assert!(top_ips(&[]).is_empty());
+    }
+
+    #[test]
+    fn error_rate_counts_5xx_as_percentage() {
+        // 1 error out of 4 total = 25.0% exactly — safe to assert with == on f64 because
+        // 25.0 is representable exactly in binary floating point (25 = 11001 in binary).
+        // Avoid fractions like 1/3 or 1/6 whose binary representations are infinite repeating.
+        let entries = vec![
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200, // ok
+                latency_ms: 0,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200, // ok
+                latency_ms: 0,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 200, // ok
+                latency_ms: 0,
+            },
+            LogEntry {
+                ip: "1.2.3.4".parse().unwrap(),
+                method: HttpMethod::Get,
+                path: String::new(),
+                status_code: 500, // error — this is the one 5xx
+                latency_ms: 0,
+            },
+        ];
+
+        // unwrap() is safe here: slice is non-empty, so error_rate always returns Some.
+        let rate = error_rate(&entries).unwrap();
+        assert_eq!(rate, 25.0);
+    }
+
+    #[test]
+    fn error_rate_returns_none_for_empty_slice() {
+        assert!(error_rate(&[]).is_none());
     }
 }
