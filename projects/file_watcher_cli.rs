@@ -71,6 +71,10 @@ fn format_event(res: &notify::Result<notify::Event>) -> String {
     }
 }
 
+fn format_event_line(event_number: usize, res: &notify::Result<notify::Event>) -> String {
+    format!("event#{event_number} {}", format_event(res))
+}
+
 fn main() -> notify::Result<()> {
     // `.` means the current working directory where the program is launched.
     // It does not mean the `projects/` source folder unless you run the binary from there.
@@ -86,15 +90,18 @@ fn main() -> notify::Result<()> {
     })?;
     watcher.watch(watch_path, RecursiveMode::Recursive)?;
 
+    let mut event_number = 1;
+
     while let Ok(res) = rx.recv() {
-        println!("{}", format_event(&res));
+        println!("{}", format_event_line(event_number, &res));
+        event_number += 1;
     }
     Ok(())
 }
 
 #[cfg(test)]
 mod tests {
-    use super::format_event;
+    use super::{format_event, format_event_line};
     // `notify::Event` stores owned paths (`Vec<PathBuf>`), so tests build `PathBuf`
     // values directly. In contrast, `Path::new(".")` in `main` only borrows a path.
     use std::path::PathBuf;
@@ -140,5 +147,18 @@ mod tests {
         let formatted = format_event(&Err(Error::generic("boom")));
 
         assert_eq!(formatted, "watch error: boom");
+    }
+
+    #[test]
+    fn prefixes_event_order_for_log_lines() {
+        let event = Event {
+            kind: EventKind::Create(CreateKind::File),
+            paths: vec![PathBuf::from("/tmp/demo.txt")],
+            attrs: Default::default(),
+        };
+
+        let formatted = format_event_line(3, &Ok(event));
+
+        assert_eq!(formatted, "event#3 kind=Create(File) paths=/tmp/demo.txt");
     }
 }
