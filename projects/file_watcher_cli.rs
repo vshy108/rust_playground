@@ -144,7 +144,6 @@ fn run_loop(rx: Receiver<WatchMessage>, debounce_window: Duration, mut output: i
                 // Flush any remaining pending events before stopping.
                 let ready_keys: Vec<PathBuf> = pending.keys().cloned().collect();
                 flush_pending_keys(ready_keys, &mut pending, &mut output);
-                output("stopping watcher".to_string());
                 break;
             }
             // Timeout means no new event arrived; fall through to flush ready entries.
@@ -193,6 +192,9 @@ fn main() -> notify::Result<()> {
 
     // Events for the same path within this window are collapsed into one log line.
     run_loop(rx, Duration::from_millis(100), |line| println!("{line}"));
+    // Print after run_loop returns so the shutdown message is a presentation concern
+    // of main, not a logic concern of run_loop.
+    println!("stopping watcher");
     Ok(())
 }
 
@@ -289,10 +291,10 @@ mod tests {
         // Large window so none expire naturally; Shutdown flushes whatever is pending.
         run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
 
-        // All 3 events collapse into 1 log line for that path, plus "stopping watcher".
-        assert_eq!(out.len(), 2);
+        // All 3 events collapse into 1 log line for that path.
+        // "stopping watcher" is printed by main, not run_loop, so it does not appear here.
+        assert_eq!(out.len(), 1);
         assert!(out[0].contains("test.txt"));
-        assert_eq!(out[1], "stopping watcher");
     }
 
     #[test]
@@ -316,8 +318,8 @@ mod tests {
         let mut out: Vec<String> = Vec::new();
         run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
 
-        // Each path produces its own log line, plus "stopping watcher".
-        assert_eq!(out.len(), 3);
-        assert_eq!(out[2], "stopping watcher");
+        // Each path produces its own log line.
+        // "stopping watcher" is printed by main, not run_loop, so it does not appear here.
+        assert_eq!(out.len(), 2);
     }
 }
