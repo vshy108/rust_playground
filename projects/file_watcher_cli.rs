@@ -51,12 +51,21 @@ use std::path::PathBuf;
 use std::sync::mpsc::{RecvTimeoutError, channel};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
+// Holds the latest event for a given path during the debounce window.
+// Replacing an entry with a newer event collapses a burst into one log line.
 struct PendingEvent {
+    // The sequence number assigned when this event first entered the buffer.
     event_number: usize,
+    // The latest raw event for this path; the whole Result is stored so the
+    // formatter sees the same type it already handles.
     event: notify::Result<notify::Event>,
+    // Reset to `Instant::now()` every time a newer event replaces this entry.
+    // Flushing checks `last_seen.elapsed() >= debounce_window`.
     last_seen: Instant,
 }
 
+// Sent through the mpsc channel so the receive loop can handle both filesystem
+// events and a graceful shutdown signal from the Ctrl+C handler.
 enum WatchMessage {
     Event(notify::Result<notify::Event>),
     Shutdown,
@@ -103,6 +112,18 @@ fn format_event_line(event_number: usize, res: &notify::Result<notify::Event>) -
     )
 }
 
+// Print and remove each entry in `keys` from `pending`.
+// Keys are passed in as a pre-collected Vec rather than derived inside this function
+// because the caller holds a borrow on `pending` for filtering — passing them
+// separately avoids a simultaneous mutable + immutable borrow of the same HashMap.
+fn flush_pending_keys(keys: Vec<PathBuf>, pending: &mut HashMap<PathBuf, PendingEvent>) {
+    for key in keys {
+        if let Some(p) = pending.remove(&key) {
+            println!("{}", format_event_line(p.event_number, &p.event));
+        }
+    }
+}
+
 fn main() -> notify::Result<()> {
     // `.` means the current working directory where the program is launched.
     // It does not mean the `projects/` source folder unless you run the binary from there.
@@ -133,9 +154,16 @@ fn main() -> notify::Result<()> {
     let debounce_window = Duration::from_millis(100);
     let mut pending: HashMap<PathBuf, PendingEvent> = HashMap::new();
 
+    // `loop` is used instead of `while let Ok(...)` because `recv_timeout` returns
+    // `Err(RecvTimeoutError::Timeout)` on every quiet tick. `while let Ok` would exit
+    // the loop on that `Err`, dropping all buffered pending events. `loop` + `match`
+    // lets us handle Timeout as a no-op and continue to the flush step.
     loop {
         match rx.recv_timeout(debounce_window) {
             Ok(WatchMessage::Event(res)) => match res {
+                // The `if` here is a match guard, not an `if` expression.
+                // When the guard fails (0 paths or 2+ paths), Rust does NOT drop
+                // the event — it falls through to the next arm (`other =>`).
                 Ok(event) if event.paths.len() == 1 => {
                     // Single-path success event: store/replace in pending so bursts
                     // for the same file collapse into the latest event seen.
@@ -160,12 +188,9 @@ fn main() -> notify::Result<()> {
             Ok(WatchMessage::Shutdown) => {
                 // Flush any remaining pending events before stopping.
                 let ready_keys: Vec<PathBuf> = pending.keys().cloned().collect();
-                for key in ready_keys {
-                    if let Some(p) = pending.remove(&key) {
-                        println!("{}", format_event_line(p.event_number, &p.event));
-                    }
-                }
+                flush_pending_keys(ready_keys, &mut pending);
                 println!("stopping watcher");
+                // out of loop
                 break;
             }
             // Timeout means no new event arrived; fall through to flush ready entries.
@@ -175,18 +200,16 @@ fn main() -> notify::Result<()> {
         }
 
         // After every tick (new event or timeout), flush entries whose debounce
-        // window has expired. Collect keys first because HashMap cannot be mutated
-        // while being iterated.
+        // window has expired.
+        // Collect keys into a Vec first: calling `pending.remove()` inside
+        // `pending.iter()` would require two mutable borrows of the same HashMap
+        // at the same time, which Rust does not allow.
         let ready_keys: Vec<PathBuf> = pending
             .iter()
             .filter(|(_, p)| p.last_seen.elapsed() >= debounce_window)
             .map(|(k, _)| k.clone())
             .collect();
-        for key in ready_keys {
-            if let Some(p) = pending.remove(&key) {
-                println!("{}", format_event_line(p.event_number, &p.event));
-            }
-        }
+        flush_pending_keys(ready_keys, &mut pending);
     }
     Ok(())
 }

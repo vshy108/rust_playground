@@ -38,9 +38,9 @@ watch folder
 
 - [x] Slice 1: choose the watcher crate / event source and define the event flow.
 - [x] Slice 2: watch a folder and receive events through a channel.
-- [ ] Slice 3: log useful event details (path, kind, timestamp/order).
+- [x] Slice 3: log useful event details (path, kind, timestamp/order).
 - [x] Slice 4: add focused tests or a small manual smoke-check plan.
-- [ ] Extra: debounce noisy event bursts into a cleaner stream.
+- [x] Extra: debounce noisy event bursts into a cleaner stream.
 
 Progress notes:
 
@@ -89,6 +89,15 @@ Progress notes:
 	- multiple path formatting
 	- watcher error formatting
 	- event-order prefix formatting
+- Debounce implementation complete: 100ms window, `HashMap<PathBuf, PendingEvent>`,
+	`recv_timeout` loop. Single-path events are buffered and replaced; only the last
+	event per path within the window is flushed. Errors and multi-path events bypass
+	debounce and print immediately. Keys are collected to `Vec` before removal because
+	Rust does not allow mutating a `HashMap` while iterating it.
+- Match guard note: `if event.paths.len() == 1` in the `match` arm is a guard, not
+	an `if` expression. A failed guard falls through to the next arm — it does not
+	drop the event.
+
 - Manual verification so far:
 	- missing path returns `PathNotFound`
 	- existing custom path can be watched successfully
@@ -104,7 +113,9 @@ Progress notes:
 - [x] Define the first CLI shape: current directory in, raw event stream out.
 - [x] Expand the first CLI shape to accept an optional custom watch path.
 - [x] Keep the first readable log shape to: timestamp, event order, event kind, and paths.
-- [ ] Revisit whether timestamps still pull their weight after debounce is added.
+- [x] Revisit whether timestamps still pull their weight after debounce is added.
+	  Decision: keep them. The flushed timestamp shows when the quiet period ended,
+	  which is useful for comparing burst timing across runs.
 
 Acceptance check:
 
@@ -203,9 +214,12 @@ f=/tmp/testdir/verify_$RANDOM && touch "$f" && echo hi >> "$f" && rm "$f"
 
 ## Extra: Debounce
 
-- [ ] Group rapid duplicate events into one cleaner logical update.
-- [ ] Decide on a debounce window and document the tradeoff.
-- [ ] Verify that saving a file no longer floods the output with near-identical events.
+- [x] Group rapid duplicate events into one cleaner logical update.
+- [x] Decide on a debounce window and document the tradeoff.
+      Decision: 100ms. Short enough to feel responsive; long enough to collapse
+      typical editor save bursts (which fire 2-6 events within ~50ms on macOS).
+- [x] Verify that saving a file no longer floods the output with near-identical events.
+      Verified: 6 rapid writes to one file produced exactly 1 log line.
 
 Acceptance check:
 
