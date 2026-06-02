@@ -17,6 +17,11 @@ axum = "0.8.9"
 # modify/delete events and feed them into the channel -> receive loop pipeline.
 notify = "8.2.0"
 
+# cargo add ctrlc
+# Installs a Ctrl+C handler. Used by file_watcher_cli to stop the receive loop
+# cleanly instead of forcing the process to be killed.
+ctrlc = "3"
+
 # cargo add rand
 # Random number generation. Used by genpass to pick random characters.
 rand = "0.9"

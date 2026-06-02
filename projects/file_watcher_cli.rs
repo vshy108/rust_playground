@@ -49,6 +49,11 @@ use notify::{RecursiveMode, Watcher, recommended_watcher};
 use std::sync::mpsc::channel;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+enum WatchMessage {
+    Event(notify::Result<notify::Event>),
+    Shutdown,
+}
+
 fn current_timestamp_ms() -> u128 {
     SystemTime::now()
         // 1970-01-01 00:00:00 UTC
@@ -96,18 +101,34 @@ fn main() -> notify::Result<()> {
     // and store path data, like `notify::Event { paths: Vec<PathBuf> }` in the tests.
     let watch_path = std::path::Path::new(&path_arg);
 
+    // Ctrl+C cannot interrupt `rx.recv()` directly, so the signal handler sends an
+    // explicit shutdown message through the same channel to unblock the receive loop.
+    let shutdown_tx = tx.clone();
+    ctrlc::set_handler(move || {
+        let _ = shutdown_tx.send(WatchMessage::Shutdown);
+    })
+    .map_err(|err| notify::Error::generic(&format!("failed to install Ctrl+C handler: {err}")))?;
+
     // Keep the watcher in a local binding so it stays alive for the whole receive loop.
     let mut watcher = recommended_watcher(move |res| {
-        let _ = tx.send(res);
+        let _ = tx.send(WatchMessage::Event(res));
     })?;
     watcher.watch(watch_path, RecursiveMode::Recursive)?;
     println!("watching {}", watch_path.display());
 
     let mut event_number = 1;
 
-    while let Ok(res) = rx.recv() {
-        println!("{}", format_event_line(event_number, &res));
-        event_number += 1;
+    while let Ok(message) = rx.recv() {
+        match message {
+            WatchMessage::Event(res) => {
+                println!("{}", format_event_line(event_number, &res));
+                event_number += 1;
+            }
+            WatchMessage::Shutdown => {
+                println!("stopping watcher");
+                break;
+            }
+        }
     }
     Ok(())
 }
