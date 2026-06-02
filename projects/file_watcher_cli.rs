@@ -55,6 +55,14 @@ enum WatchMessage {
     Shutdown,
 }
 
+// Returned by `run_loop` so `main` can print a different message depending on
+// whether the loop ended by a deliberate Ctrl+C (`Shutdown`) or an unexpected
+// channel close (`Disconnected`, e.g. the watcher was dropped early).
+enum LoopExit {
+    Shutdown,
+    Disconnected,
+}
+
 fn current_timestamp_ms() -> u128 {
     SystemTime::now()
         // 1970-01-01 00:00:00 UTC
@@ -115,7 +123,12 @@ fn flush_pending_keys(
 // Core event loop: receives WatchMessages and applies debounce logic.
 // `output` is a closure called for every log line — `main` passes `|line| println!("{line}")`
 // while tests pass a collector so they can assert on the lines without touching stdout.
-fn run_loop(rx: Receiver<WatchMessage>, debounce_window: Duration, mut output: impl FnMut(String)) {
+// Returns `LoopExit` so the caller knows whether the loop ended cleanly or unexpectedly.
+fn run_loop(
+    rx: Receiver<WatchMessage>,
+    debounce_window: Duration,
+    mut output: impl FnMut(String),
+) -> LoopExit {
     let mut event_number = 1;
     let mut pending: HashMap<PathBuf, PendingEvent> = HashMap::new();
 
@@ -158,12 +171,13 @@ fn run_loop(rx: Receiver<WatchMessage>, debounce_window: Duration, mut output: i
                 // Flush any remaining pending events before stopping.
                 let ready_keys: Vec<PathBuf> = pending.keys().cloned().collect();
                 flush_pending_keys(ready_keys, &mut pending, &mut output);
-                break;
+                // `break Expr` exits the loop and uses `Expr` as the loop's value.
+                break LoopExit::Shutdown;
             }
             // Timeout means no new event arrived; fall through to flush ready entries.
             Err(RecvTimeoutError::Timeout) => {}
             // Channel closed (watcher dropped); stop.
-            Err(RecvTimeoutError::Disconnected) => break,
+            Err(RecvTimeoutError::Disconnected) => break LoopExit::Disconnected,
         }
 
         // After every tick (new event or timeout), flush entries whose debounce
@@ -205,16 +219,17 @@ fn main() -> notify::Result<()> {
     println!("watching {}", watch_path.display());
 
     // Events for the same path within this window are collapsed into one log line.
-    run_loop(rx, Duration::from_millis(100), |line| println!("{line}"));
-    // Print after run_loop returns so the shutdown message is a presentation concern
-    // of main, not a logic concern of run_loop.
-    println!("stopping watcher");
+    // Match on the exit reason so the shutdown message reflects what actually happened.
+    match run_loop(rx, Duration::from_millis(100), |line| println!("{line}")) {
+        LoopExit::Shutdown => println!("stopping watcher"),
+        LoopExit::Disconnected => eprintln!("watcher channel closed unexpectedly"),
+    }
     Ok(())
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{WatchMessage, format_event, format_event_line, run_loop};
+    use super::{LoopExit, WatchMessage, format_event, format_event_line, run_loop};
     // `notify::Event` stores owned paths (`Vec<PathBuf>`), so tests build `PathBuf`
     // values directly. In contrast, `Path::new(".")` in `main` only borrows a path.
     use std::path::PathBuf;
@@ -303,7 +318,8 @@ mod tests {
 
         let mut out: Vec<String> = Vec::new();
         // Large window so none expire naturally; Shutdown flushes whatever is pending.
-        run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
+        let exit = run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
+        assert!(matches!(exit, LoopExit::Shutdown));
 
         // All 3 events collapse into 1 log line for that path.
         // "stopping watcher" is printed by main, not run_loop, so it does not appear here.
@@ -330,10 +346,13 @@ mod tests {
         tx.send(WatchMessage::Shutdown).unwrap();
 
         let mut out: Vec<String> = Vec::new();
-        run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
+        let exit = run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
+        assert!(matches!(exit, LoopExit::Shutdown));
 
         // Each path produces its own log line.
         // "stopping watcher" is printed by main, not run_loop, so it does not appear here.
         assert_eq!(out.len(), 2);
+        assert!(out.iter().any(|l| l.contains("a.txt")));
+        assert!(out.iter().any(|l| l.contains("b.txt")));
     }
 }
