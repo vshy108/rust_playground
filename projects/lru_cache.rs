@@ -33,6 +33,18 @@
 //
 // Learn:
 //
+// - Option<T>
+//   - Rust's null-free way to represent a value that may or may not exist.
+//   - `Some(v)` wraps a value; `None` signals absence.
+//   - `.map(|v| expr)` transforms the inner value without unwrapping; preserves the Option shape.
+//   - Used here for both the return type of `get` and for optional TTL fields.
+//
+// - std::time::Instant and Duration
+//   - Instant is a monotonic clock snapshot — it never jumps back, safe for elapsed-time checks.
+//   - Duration represents a span of time; `Instant::now() + Duration::from_secs(n)` is a deadline.
+//   - `instant.elapsed()` returns a Duration; compare with a window Duration to check expiry.
+//   - Used here to store and check per-entry TTL deadlines.
+//
 // - HashMap
 //   - HashMap<K, V> maps keys to values with O(1) average lookup.
 //   - Here the HashMap maps each key → the Vec index of its node, for O(1) lookup

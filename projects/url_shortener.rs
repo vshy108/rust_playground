@@ -35,6 +35,22 @@
 //   - #[derive(Deserialize)] lets serde parse incoming JSON into a struct.
 //   - #[derive(Serialize)] lets serde turn a struct into outgoing JSON.
 //
+// - axum
+//   - A web framework built on top of tokio and hyper.
+//   - Router maps HTTP methods + paths to async handler functions.
+//   - Extractors (State, Path, Json) appear as function parameters; axum resolves them from
+//     the request automatically. State shares app-level data; Path extracts URL segments;
+//     Json deserialises the request body.
+//   - Handlers return impl IntoResponse — StatusCode, Json<T>, Redirect, and tuples of those
+//     all implement IntoResponse.
+//
+// - async / await
+//   - `async fn` returns a Future that does nothing until polled by an executor.
+//   - `.await` suspends the current task until the Future resolves, yielding the thread
+//     to other tasks instead of blocking.
+//   - `#[tokio::main]` starts the tokio async runtime and polls the top-level future.
+//   - `#[tokio::test]` does the same for each test function.
+//
 // - UUID
 //   - Uuid::new_v4() generates a random 128-bit identifier.
 //   - .to_string() gives the full 36-char hyphenated form; take the first 8 chars
@@ -49,7 +65,8 @@
 // 2. GET /:code: Path(code) extracts the path segment as an owned String. .get(&code)
 //    returns Option<&UrlEntry>. Both match arms call .into_response() to unify the return
 //    type — Redirect and StatusCode are different types, wrapping both satisfies impl IntoResponse.
-//    303 See Other with Location header is the correct redirect status for GET requests.
+//    axum's Redirect::to() emits 303 See Other. 303 is idiomatic for Post/Redirect/Get
+//    (forces the follow-up to GET); for a plain GET shortener, 301/302 is also conventional.
 // 3. Tests: tower::ServiceExt::oneshot() sends a Request directly into the Router without
 //    a TCP server. Each test builds its own Store so tests are fully independent.
 //    #[tokio::test] spins up a tokio runtime per test — needed because handlers are async.
@@ -170,8 +187,8 @@ async fn shorten(
 // Both match arms call .into_response() to produce a uniform Response type —
 // Redirect and StatusCode are different types; .into_response() erases the
 // difference so the function can return a single impl IntoResponse.
-// 303 See Other: correct redirect status for GET — tells the client to GET the
-// new URL. Location header carries the original URL.
+// axum's Redirect::to() emits 303 See Other — idiomatic for Post/Redirect/Get.
+// For a plain GET shortener, 301 (permanent) or 302 (temporary) are also conventional.
 async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl IntoResponse {
     let map = store.lock().unwrap();
     match map.get(&code) {

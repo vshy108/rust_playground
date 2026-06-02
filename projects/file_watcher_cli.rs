@@ -10,8 +10,14 @@
 // Learn:
 
 // - `notify` — cross-platform filesystem watcher crate
+// - `ctrlc` crate — installs a Ctrl+C signal handler; the handler sends a WatchMessage
+//   through a cloned `tx` so the receive loop can shut down gracefully
 // - `std::sync::mpsc` — multi-producer single-consumer channel
 // - `recv_timeout` — receive with a deadline so quiet ticks can trigger a flush
+// - HashMap<K, V> — key/value map with O(1) average insert and lookup
+//   - here: `HashMap<PathBuf, PendingEvent>` is the debounce buffer; path is the key
+//   - `.insert(k, v)` adds or replaces; `.keys()` iterates current keys; `.remove(&k)` evicts
+//   - can't remove inside an active iter borrow — collect keys into a Vec first
 // - debounce — collapse noisy event bursts into one logical update per path
 // - match guards — `Ok(x) if cond` falls through to the next arm when `cond` fails
 // - loop as expression — `loop { ... break value }` makes the loop itself evaluate to `value`

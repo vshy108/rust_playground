@@ -36,11 +36,12 @@
 //    - Useful for JSON test strings: r#"{"a":1}"# vs "{\"a\":1}"
 //    - r means raw (escape sequences like \n are NOT processed inside).
 //
-// 4. if let vs match on Option
+// 4. if let vs match vs let-else on Option
 //    - iter.next() returns Option<T>: Some(T) if a value exists, None if exhausted.
 //    - `if let Some(x) = expr { ... }` — use when you only care about the Some branch.
 //    - `match expr { Some(x) => ..., None => ... }` — use when both branches need handling.
-//    - `let Some(x) = expr { ... }` is NOT valid syntax; if let is the correct form.
+//    - `let Some(x) = expr else { return; }` (let-else, stable since Rust 1.65) — use when
+//      the None branch should exit early; keeps the happy path unindented.
 //
 // 5. impl Trait in function parameters
 //    - `fn f(x: impl Read)` means "any concrete type that implements Read".

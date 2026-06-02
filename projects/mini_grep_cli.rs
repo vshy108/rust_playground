@@ -54,8 +54,10 @@
 //    sidestepping the lifetime issue entirely and making it compile in any edition.
 // 8. Lifetime elision in sink functions: functions returning () don't need to
 //    propagate lifetimes to callers, but `impl Trait` associated types containing
-//    &references still require an explicit lifetime in stable Rust.
-//    '_ inside impl Trait associated types is not yet stable (E0658) — use <'a>.
+//    &references in parameter position need an explicit lifetime in older editions.
+//    '_ in function parameters follows normal elision: each '_ is a fresh named lifetime.
+//    In return-position impl Trait, anonymous lifetimes were once rejected (E0658) but
+//    that restriction was stabilized in Rust 1.79. Using <'a> is still clear and portable.
 //    The named 'a only annotates the input; nothing in the output borrows from it.
 // 9. Option::zip: `a.zip(b)` combines two Options into Option<(A, B)>, returning
 //    None if either is None. Paired with .map() and .ok_or_else() it replaces
