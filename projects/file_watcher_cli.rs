@@ -46,8 +46,16 @@
 //    cleaner stream with an explicit tradeoff window.
 
 use notify::{RecursiveMode, Watcher, recommended_watcher};
-use std::sync::mpsc::channel;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::collections::HashMap;
+use std::path::PathBuf;
+use std::sync::mpsc::{RecvTimeoutError, channel};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+
+struct PendingEvent {
+    event_number: usize,
+    event: notify::Result<notify::Event>,
+    last_seen: Instant,
+}
 
 enum WatchMessage {
     Event(notify::Result<notify::Event>),
@@ -89,7 +97,10 @@ fn format_event_line(event_number: usize, res: &notify::Result<notify::Event>) -
     // Prefix each line with epoch milliseconds so event bursts can be compared in time
     // without pulling in a date/time formatting crate for this learning slice.
     let timestamp_ms = current_timestamp_ms();
-    format!("[{timestamp_ms}] event#{event_number} {}", format_event(res))
+    format!(
+        "[{timestamp_ms}] event#{event_number} {}",
+        format_event(res)
+    )
 }
 
 fn main() -> notify::Result<()> {
@@ -118,15 +129,62 @@ fn main() -> notify::Result<()> {
 
     let mut event_number = 1;
 
-    while let Ok(message) = rx.recv() {
-        match message {
-            WatchMessage::Event(res) => {
-                println!("{}", format_event_line(event_number, &res));
-                event_number += 1;
-            }
-            WatchMessage::Shutdown => {
+    // Events for the same path within this window are collapsed into one log line.
+    let debounce_window = Duration::from_millis(100);
+    let mut pending: HashMap<PathBuf, PendingEvent> = HashMap::new();
+
+    loop {
+        match rx.recv_timeout(debounce_window) {
+            Ok(WatchMessage::Event(res)) => match res {
+                Ok(event) if event.paths.len() == 1 => {
+                    // Single-path success event: store/replace in pending so bursts
+                    // for the same file collapse into the latest event seen.
+                    let path = event.paths[0].clone();
+                    pending.insert(
+                        path,
+                        PendingEvent {
+                            event_number,
+                            event: Ok(event),
+                            last_seen: Instant::now(),
+                        },
+                    );
+                    event_number += 1;
+                }
+                other => {
+                    // Errors, empty-path events, and multi-path events are printed
+                    // immediately because they cannot be collapsed by path.
+                    println!("{}", format_event_line(event_number, &other));
+                    event_number += 1;
+                }
+            },
+            Ok(WatchMessage::Shutdown) => {
+                // Flush any remaining pending events before stopping.
+                let ready_keys: Vec<PathBuf> = pending.keys().cloned().collect();
+                for key in ready_keys {
+                    if let Some(p) = pending.remove(&key) {
+                        println!("{}", format_event_line(p.event_number, &p.event));
+                    }
+                }
                 println!("stopping watcher");
                 break;
+            }
+            // Timeout means no new event arrived; fall through to flush ready entries.
+            Err(RecvTimeoutError::Timeout) => {}
+            // Channel closed (watcher dropped); stop.
+            Err(RecvTimeoutError::Disconnected) => break,
+        }
+
+        // After every tick (new event or timeout), flush entries whose debounce
+        // window has expired. Collect keys first because HashMap cannot be mutated
+        // while being iterated.
+        let ready_keys: Vec<PathBuf> = pending
+            .iter()
+            .filter(|(_, p)| p.last_seen.elapsed() >= debounce_window)
+            .map(|(k, _)| k.clone())
+            .collect();
+        for key in ready_keys {
+            if let Some(p) = pending.remove(&key) {
+                println!("{}", format_event_line(p.event_number, &p.event));
             }
         }
     }
