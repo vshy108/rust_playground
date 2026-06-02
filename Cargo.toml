@@ -60,6 +60,7 @@ uuid = { version = "1.23.2", features = ["v4"] }
 # cargo run --bin genpass -- --length 20
 # cargo install --path .
 [dev-dependencies]
+tempfile = "3.27.0"
 # cargo add tower --dev --features util
 # ServiceExt adds .oneshot() which sends a single request to a Router in tests.
 tower = { version = "0.5", features = ["util"] }

@@ -531,8 +531,11 @@ mod tests {
 
     #[test]
     fn write_csv_produces_correct_rows() {
-        // Write to a temp file and read it back to verify the content.
-        let path = "/tmp/logparse_test_out.csv";
+        // tempfile::NamedTempFile creates a unique file per test run and deletes it on drop.
+        // This avoids a fixed /tmp path that could cause races if tests ever run in parallel.
+        let tmp = tempfile::NamedTempFile::new().expect("should create temp file");
+        let path = tmp.path().to_str().expect("temp path should be valid UTF-8");
+
         let stats: Vec<(IpAddr, usize, f64)> = vec![
             ("1.2.3.4".parse().unwrap(), 3, 25.5),
             ("2.2.3.4".parse().unwrap(), 1, 50.0),
