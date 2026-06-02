@@ -54,6 +54,11 @@
 
 // 1. `FromStr` trait — implement `from_str(s: &str) -> Result<Self, Self::Err>` on a type
 //    to unlock `.parse::<T>()` on any `&str`; `type Err` is the associated error type returned on failure
+// 2. `tempfile::NamedTempFile` — creates a uniquely-named temp file on disk; auto-deletes when the
+//    value is dropped (RAII); use in tests instead of a fixed /tmp path to avoid parallel-test races
+// 3. `impl AsRef<std::path::Path>` — a bound that accepts any type convertible to a `Path`:
+//    `&str`, `&String`, `PathBuf`, `Path`, and `NamedTempFile::path()` all satisfy it.
+//    Prefer it over `&str` for functions that touch the filesystem — no conversion needed at call sites.
 
 // Extra:
 
@@ -282,8 +287,10 @@ fn ip_stats(entries: &[LogEntry]) -> Vec<(IpAddr, usize, f64)> {
 // File::create truncates any existing file at that path before writing.
 // writeln! returns io::Result; the ? operator propagates any write error to the caller.
 // {mean:.2} rounds the float to two decimal places in the output (e.g. 45.67).
-fn write_csv(path: &str, stats: &[(IpAddr, usize, f64)]) -> Result<(), std::io::Error> {
-    let mut file = std::fs::File::create(path)?;
+// impl AsRef<std::path::Path> accepts &str, &String, PathBuf, &Path, and NamedTempFile::path()
+// without any conversion at the call site. Prefer this over &str for filesystem functions.
+fn write_csv(path: impl AsRef<std::path::Path>, stats: &[(IpAddr, usize, f64)]) -> Result<(), std::io::Error> {
+    let mut file = std::fs::File::create(path.as_ref())?;
     writeln!(file, "ip,requests,mean_latency_ms")?;
     for (ip, count, mean) in stats {
         writeln!(file, "{ip},{count},{mean:.2}")?;
@@ -533,17 +540,17 @@ mod tests {
     fn write_csv_produces_correct_rows() {
         // tempfile::NamedTempFile creates a unique file per test run and deletes it on drop.
         // This avoids a fixed /tmp path that could cause races if tests ever run in parallel.
+        // tmp.path() returns &Path — write_csv accepts it directly via impl AsRef<Path>.
         let tmp = tempfile::NamedTempFile::new().expect("should create temp file");
-        let path = tmp.path().to_str().expect("temp path should be valid UTF-8");
 
         let stats: Vec<(IpAddr, usize, f64)> = vec![
             ("1.2.3.4".parse().unwrap(), 3, 25.5),
             ("2.2.3.4".parse().unwrap(), 1, 50.0),
         ];
 
-        write_csv(path, &stats).expect("write_csv should not fail");
+        write_csv(tmp.path(), &stats).expect("write_csv should not fail");
 
-        let contents = std::fs::read_to_string(path).expect("should read temp file");
+        let contents = std::fs::read_to_string(tmp.path()).expect("should read temp file");
         let lines: Vec<&str> = contents.lines().collect();
 
         // Header row must be first.
