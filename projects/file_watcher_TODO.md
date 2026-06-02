@@ -224,6 +224,21 @@ f=/tmp/testdir/verify_$RANDOM && touch "$f" && echo hi >> "$f" && rm "$f"
 - [x] Verify that saving a file no longer floods the output with near-identical events.
       Verified: 6 rapid writes to one file produced exactly 1 log line.
 
+Testing note — the debounce loop lives inside `main()` and cannot be called from a
+unit test directly. Two options to make it testable:
+
+- Option A (preferred): extract the loop into `fn run_loop(rx, window) -> Vec<String>`
+  that collects log lines instead of calling `println!`. A test can then:
+  1. Create an `mpsc` channel.
+  2. Send several `WatchMessage::Event(...)` for the same path in rapid succession.
+  3. Send `WatchMessage::Shutdown`.
+  4. Call `run_loop(rx, Duration::from_millis(200))`.
+  5. Assert the returned `Vec` has exactly one entry for that path.
+
+- Option B (integration): spawn the binary with `std::process::Command`, write files
+  rapidly, send SIGINT, read stdout, count lines. Slower and more brittle; better
+  suited for an end-to-end suite.
+
 Acceptance check:
 
 ```text

@@ -48,7 +48,7 @@
 use notify::{RecursiveMode, Watcher, recommended_watcher};
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::mpsc::{RecvTimeoutError, channel};
+use std::sync::mpsc::{Receiver, RecvTimeoutError, channel};
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 // Holds the latest event for a given path during the debounce window.
@@ -116,42 +116,23 @@ fn format_event_line(event_number: usize, res: &notify::Result<notify::Event>) -
 // Keys are passed in as a pre-collected Vec rather than derived inside this function
 // because the caller holds a borrow on `pending` for filtering — passing them
 // separately avoids a simultaneous mutable + immutable borrow of the same HashMap.
-fn flush_pending_keys(keys: Vec<PathBuf>, pending: &mut HashMap<PathBuf, PendingEvent>) {
+fn flush_pending_keys(
+    keys: Vec<PathBuf>,
+    pending: &mut HashMap<PathBuf, PendingEvent>,
+    output: &mut impl FnMut(String),
+) {
     for key in keys {
         if let Some(p) = pending.remove(&key) {
-            println!("{}", format_event_line(p.event_number, &p.event));
+            output(format_event_line(p.event_number, &p.event));
         }
     }
 }
 
-fn main() -> notify::Result<()> {
-    // `.` means the current working directory where the program is launched.
-    // It does not mean the `projects/` source folder unless you run the binary from there.
-    let path_arg = std::env::args().nth(1).unwrap_or(".".to_string());
-    let (tx, rx) = channel();
-    // `Path` is a borrowed view of a path. Use `PathBuf` when a struct needs to own
-    // and store path data, like `notify::Event { paths: Vec<PathBuf> }` in the tests.
-    let watch_path = std::path::Path::new(&path_arg);
-
-    // Ctrl+C cannot interrupt `rx.recv()` directly, so the signal handler sends an
-    // explicit shutdown message through the same channel to unblock the receive loop.
-    let shutdown_tx = tx.clone();
-    ctrlc::set_handler(move || {
-        let _ = shutdown_tx.send(WatchMessage::Shutdown);
-    })
-    .map_err(|err| notify::Error::generic(&format!("failed to install Ctrl+C handler: {err}")))?;
-
-    // Keep the watcher in a local binding so it stays alive for the whole receive loop.
-    let mut watcher = recommended_watcher(move |res| {
-        let _ = tx.send(WatchMessage::Event(res));
-    })?;
-    watcher.watch(watch_path, RecursiveMode::Recursive)?;
-    println!("watching {}", watch_path.display());
-
+// Core event loop: receives WatchMessages and applies debounce logic.
+// `output` is a closure called for every log line — `main` passes `|line| println!("{line}")`
+// while tests pass a collector so they can assert on the lines without touching stdout.
+fn run_loop(rx: Receiver<WatchMessage>, debounce_window: Duration, mut output: impl FnMut(String)) {
     let mut event_number = 1;
-
-    // Events for the same path within this window are collapsed into one log line.
-    let debounce_window = Duration::from_millis(100);
     let mut pending: HashMap<PathBuf, PendingEvent> = HashMap::new();
 
     // `loop` is used instead of `while let Ok(...)` because `recv_timeout` returns
@@ -181,16 +162,15 @@ fn main() -> notify::Result<()> {
                 other => {
                     // Errors, empty-path events, and multi-path events are printed
                     // immediately because they cannot be collapsed by path.
-                    println!("{}", format_event_line(event_number, &other));
+                    output(format_event_line(event_number, &other));
                     event_number += 1;
                 }
             },
             Ok(WatchMessage::Shutdown) => {
                 // Flush any remaining pending events before stopping.
                 let ready_keys: Vec<PathBuf> = pending.keys().cloned().collect();
-                flush_pending_keys(ready_keys, &mut pending);
-                println!("stopping watcher");
-                // out of loop
+                flush_pending_keys(ready_keys, &mut pending, &mut output);
+                output("stopping watcher".to_string());
                 break;
             }
             // Timeout means no new event arrived; fall through to flush ready entries.
@@ -209,17 +189,47 @@ fn main() -> notify::Result<()> {
             .filter(|(_, p)| p.last_seen.elapsed() >= debounce_window)
             .map(|(k, _)| k.clone())
             .collect();
-        flush_pending_keys(ready_keys, &mut pending);
+        flush_pending_keys(ready_keys, &mut pending, &mut output);
     }
+}
+
+fn main() -> notify::Result<()> {
+    // `.` means the current working directory where the program is launched.
+    // It does not mean the `projects/` source folder unless you run the binary from there.
+    let path_arg = std::env::args().nth(1).unwrap_or(".".to_string());
+    let (tx, rx) = channel();
+    // `Path` is a borrowed view of a path. Use `PathBuf` when a struct needs to own
+    // and store path data, like `notify::Event { paths: Vec<PathBuf> }` in the tests.
+    let watch_path = std::path::Path::new(&path_arg);
+
+    // Ctrl+C cannot interrupt `rx.recv()` directly, so the signal handler sends an
+    // explicit shutdown message through the same channel to unblock the receive loop.
+    let shutdown_tx = tx.clone();
+    ctrlc::set_handler(move || {
+        let _ = shutdown_tx.send(WatchMessage::Shutdown);
+    })
+    .map_err(|err| notify::Error::generic(&format!("failed to install Ctrl+C handler: {err}")))?;
+
+    // Keep the watcher in a local binding so it stays alive for the whole receive loop.
+    let mut watcher = recommended_watcher(move |res| {
+        let _ = tx.send(WatchMessage::Event(res));
+    })?;
+    watcher.watch(watch_path, RecursiveMode::Recursive)?;
+    println!("watching {}", watch_path.display());
+
+    // Events for the same path within this window are collapsed into one log line.
+    run_loop(rx, Duration::from_millis(100), |line| println!("{line}"));
     Ok(())
 }
 
 #[cfg(test)]
 mod tests {
-    use super::{format_event, format_event_line};
+    use super::{WatchMessage, format_event, format_event_line, run_loop};
     // `notify::Event` stores owned paths (`Vec<PathBuf>`), so tests build `PathBuf`
     // values directly. In contrast, `Path::new(".")` in `main` only borrows a path.
     use std::path::PathBuf;
+    use std::sync::mpsc::channel;
+    use std::time::Duration;
 
     use notify::{
         Error, Event,
@@ -276,5 +286,64 @@ mod tests {
 
         assert!(formatted.starts_with("["));
         assert!(formatted.ends_with("event#3 kind=Create(File) paths=/tmp/demo.txt"));
+    }
+
+    #[test]
+    fn debounce_collapses_burst_for_same_path() {
+        // Tests the core debounce invariant: multiple events for the same path
+        // within the window are replaced in the HashMap, so only the last one
+        // survives to be flushed.
+        //
+        // Using a 5-second window means none of the events expire on their own —
+        // the Shutdown message is what triggers the final flush. This keeps the
+        // test fast and deterministic: no real sleeping needed.
+        let (tx, rx) = channel();
+        let path = PathBuf::from("/tmp/test.txt");
+
+        // Send 3 events for the same path in rapid succession.
+        for _ in 0..3 {
+            let event = Event {
+                kind: EventKind::Create(CreateKind::File),
+                paths: vec![path.clone()],
+                attrs: Default::default(),
+            };
+            tx.send(WatchMessage::Event(Ok(event))).unwrap();
+        }
+        tx.send(WatchMessage::Shutdown).unwrap();
+
+        let mut out: Vec<String> = Vec::new();
+        // Large window so none expire naturally; Shutdown flushes whatever is pending.
+        run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
+
+        // All 3 events collapse into 1 log line for that path, plus "stopping watcher".
+        assert_eq!(out.len(), 2);
+        assert!(out[0].contains("test.txt"));
+        assert_eq!(out[1], "stopping watcher");
+    }
+
+    #[test]
+    fn debounce_keeps_separate_paths_separate() {
+        // Tests that debounce uses the path as the HashMap key, so events for
+        // different paths are buffered independently and each produces its own
+        // log line — debounce only collapses events *for the same path*.
+        let (tx, rx) = channel();
+
+        // One event each for two different paths.
+        for name in &["a.txt", "b.txt"] {
+            let event = Event {
+                kind: EventKind::Create(CreateKind::File),
+                paths: vec![PathBuf::from(format!("/tmp/{name}"))],
+                attrs: Default::default(),
+            };
+            tx.send(WatchMessage::Event(Ok(event))).unwrap();
+        }
+        tx.send(WatchMessage::Shutdown).unwrap();
+
+        let mut out: Vec<String> = Vec::new();
+        run_loop(rx, Duration::from_millis(5000), |line| out.push(line));
+
+        // Each path produces its own log line, plus "stopping watcher".
+        assert_eq!(out.len(), 3);
+        assert_eq!(out[2], "stopping watcher");
     }
 }
