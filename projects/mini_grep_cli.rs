@@ -26,7 +26,7 @@
 //   - args: &[String] is a slice of the collected CLI arg Vec.
 //   - Slices do not own their data; they borrow it.
 
-// Progress:
+// Notes:
 
 // 1. Result<Config, String>: parse_args returns Ok(Config) or Err(message).
 //    `if let Ok(...) = ...` cannot bind Err — use `match` to handle both arms.

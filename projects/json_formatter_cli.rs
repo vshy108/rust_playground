@@ -15,7 +15,7 @@
 // - file IO with `std::fs`
 // - `Box<dyn Error>` as a catch-all error type
 
-// Progress:
+// Notes:
 
 // 1. Box<dyn Error> as main's return error type
 //    - Error is a trait; both std::io::Error and serde_json::Error implement it.

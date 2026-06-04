@@ -15,7 +15,7 @@
 // - `rand`
 // - argument parsing
 
-// Progress:
+// Notes:
 
 // 1. Cargo — build, run, test with `cargo`
 // 2. `String` vs `&str` — use `String` for runtime-constructed values (e.g. error messages)

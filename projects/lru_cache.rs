@@ -6,7 +6,7 @@
 //   cache.put(key, value, ttl_secs)   insert or update; evicts LRU entry when at capacity
 //   cache.get(key)                    returns Option<i32>; promotes the entry to MRU on hit
 //
-// Progress:
+// Notes:
 // 1. Data model: `Vec<Node>` + `usize` indices avoids Rust's two-owner problem for
 //    doubly-linked structures. `HEAD` and `TAIL` are sentinel indices, so insert/remove
 //    never need empty-list special cases. `map: HashMap<i32, usize>` gives O(1) average

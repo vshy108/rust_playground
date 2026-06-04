@@ -14,7 +14,7 @@
 // - distributed systems — consistent hashing assigns keys to nodes; adding/removing a node
 //   remaps only a fraction of keys; vector clocks or last-write-wins resolve write conflicts
 
-// Progress:
+// Notes:
 
 // Extra:
 

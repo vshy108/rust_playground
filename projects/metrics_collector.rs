@@ -14,7 +14,7 @@
 // - aggregation — the aggregator loop accumulates counters and histograms in a HashMap;
 //   a query interface reads snapshots without blocking producers
 
-// Progress:
+// Notes:
 
 // Extra:
 

@@ -8,57 +8,45 @@
 // ```
 
 // Learn:
-
+//
 // - iterators — chaining map/filter/fold to aggregate log data without intermediate allocations
 // - parsing — splitting lines into fields; using split_once and FromStr for typed values
 // - aggregation — HashMap counters for per-IP counts; running totals for latency and errors
-// - `HashMap` vs `BTreeMap` vs `Vec + sort_by` — choosing the right collection:
-//   - `HashMap<K, V>`   — fast O(1) insert/lookup; no iteration order; use for counting and grouping
-//   - `BTreeMap<K, V>`  — O(log n) insert/lookup; always iterates in ascending key order; use when
-//                         you need ordered-by-key traversal (e.g. sorted output by IP string)
-//   - `Vec + sort_by`   — sort by any field, including value (count); use for top-N-by-value queries
-//   - pattern for top-N: `HashMap` to count → `Vec` to sort by value → `.take(N)` for top entries
-// - `.entry(key).or_insert(0)` — HashMap method that returns &mut V for an existing key, or inserts
-//   a default and returns &mut V for a new key; dereference and increment: `*map.entry(k).or_insert(0) += 1`
-// - `iter()` vs `into_iter()` vs `iter_mut()` — three ways to iterate a collection:
-//   - `.iter()`      → yields `&T`      (shared borrow);  collection stays alive; use for read-only access
-//   - `.iter_mut()`  → yields `&mut T`  (mutable borrow); collection stays alive; use to modify in place
-//   - `.into_iter()` → yields `T`       (owned value);    collection is consumed;  use when done with it
-//   - rule: if you need to return data from a function, it must be owned — use `.into_iter()`, not `.iter()`
-// - `&str` vs `String` — both represent text, but ownership differs:
-//   - `&str`   — borrowed view into existing memory; no allocation; cannot outlive its source
-//   - `String` — heap-allocated, owned copy; can be stored in structs and returned from functions
-//   - convert `&str` → `String` with `.to_string()` or `.to_owned()`; this copies the bytes onto the heap
-//   - use `&str` for read-only access; use `String` when the value must be owned (e.g. struct fields)
-//   - temporary lifetime pitfall: `read_to_string(...).lines()` does not compile — `.lines()` borrows
-//     from the `String`, but the `String` is a temporary with no binding and is dropped immediately;
-//     fix: bind to `let contents` first, then call `contents.lines()` so the `String` outlives the iterator
-// - `regex::Regex` vs `regex::bytes::Regex`
-//   - `regex::Regex`       — input is `&str` (UTF-8 text); captures are `&str`; use for log files
-//   - `regex::bytes::Regex` — input is `&[u8]` (raw bytes); captures are `&[u8]`; use for binary/network data
-// - `std::net::IpAddr` — enum covering both address families:
-//   - `IpAddr::V4(Ipv4Addr)` — four u8 octets; "127.0.0.1".parse::<IpAddr>() → Ok(V4(...))
-//   - `IpAddr::V6(Ipv6Addr)` — sixteen u8 octets; "::1".parse::<IpAddr>() → Ok(V6(...))
-//   - implements `FromStr`, so any valid IPv4 or IPv6 string parses directly; invalid input returns Err
-// - `std::sync::LazyLock<T>` — initializes a value on first access, then caches it for all future accesses
-//   - useful for `static` variables whose value can only be computed at runtime (e.g. compiled `Regex`)
-//   - `LazyLock::new(|| { ... })` takes a closure that runs exactly once; result is stored and reused
-//   - thread-safe: if two threads race on first access, only one runs the closure; the other waits
-// - raw strings `r"..."` / `r#"..."#` — string literals where backslashes are not escape sequences
-//   - `r"..."` — basic raw string; cannot contain a literal `"` inside
-//   - `r#"..."#` — raw string delimited by `#`; can contain `"` freely; use when the string itself has quotes
-//   - `r##"..."##` — add more `#` pairs if the content contains `"#`; the rule is: delimiters must not
-//     appear inside the string, so add as many `#` as needed to make the delimiters unique
 
-// Progress:
-
-// 1. `FromStr` trait — implement `from_str(s: &str) -> Result<Self, Self::Err>` on a type
+// Notes:
+//
+// 1. `HashMap` vs `BTreeMap` vs `Vec + sort_by` — choosing the right collection:
+//    - `HashMap<K, V>`   — fast O(1) insert/lookup; no iteration order; use for counting and grouping
+//    - `BTreeMap<K, V>`  — O(log n) insert/lookup; always iterates in ascending key order; use when
+//                          you need ordered-by-key traversal (e.g. sorted output by IP string)
+//    - `Vec + sort_by`   — sort by any field, including value (count); use for top-N-by-value queries
+//    - pattern for top-N: `HashMap` to count → `Vec` to sort by value → `.take(N)` for top entries
+// 2. `.entry(key).or_insert(0)` — returns &mut V for an existing key, or inserts a default and
+//    returns &mut V for a new key; dereference and increment: `*map.entry(k).or_insert(0) += 1`
+// 3. `iter()` vs `into_iter()` vs `iter_mut()` — three ways to iterate a collection:
+//    - `.iter()`      → yields `&T`      (shared borrow);  collection stays alive; use for read-only access
+//    - `.iter_mut()`  → yields `&mut T`  (mutable borrow); collection stays alive; use to modify in place
+//    - `.into_iter()` → yields `T`       (owned value);    collection is consumed;  use when done with it
+//    - rule: if you need to return data from a function, it must be owned — use `.into_iter()`, not `.iter()`
+// 4. `&str` vs `String` — `&str` is a borrowed view (no allocation; cannot outlive its source);
+//    `String` is heap-allocated and owned; convert with `.to_string()` or `.to_owned()`.
+//    Pitfall: `read_to_string(...).lines()` does not compile — `.lines()` borrows from the
+//    temporary `String` which is dropped immediately; bind to `let contents` first.
+// 5. `regex::Regex` vs `regex::bytes::Regex` — `Regex` input is `&str` (UTF-8); captures are `&str`;
+//    `bytes::Regex` input is `&[u8]` (raw bytes); use `Regex` for log files.
+// 6. `std::net::IpAddr` — enum covering `V4(Ipv4Addr)` and `V6(Ipv6Addr)`; implements `FromStr`,
+//    so any valid IPv4 or IPv6 string parses directly; invalid input returns `Err`.
+// 7. `std::sync::LazyLock<T>` — initialises a value on first access and caches it; useful for
+//    `static` regex patterns that can only be compiled at runtime; thread-safe.
+// 8. Raw strings `r"..."` / `r#"..."#` — backslashes are not escape sequences inside; use when the
+//    string itself contains backslashes (e.g. regex patterns). Add `#` pairs if the content has `"`.
+// 9. `FromStr` trait — implement `from_str(s: &str) -> Result<Self, Self::Err>` on a type
 //    to unlock `.parse::<T>()` on any `&str`; `type Err` is the associated error type returned on failure
-// 2. `tempfile::NamedTempFile` — creates a uniquely-named temp file on disk; auto-deletes when the
-//    value is dropped (RAII); use in tests instead of a fixed /tmp path to avoid parallel-test races
-// 3. `impl AsRef<std::path::Path>` — a bound that accepts any type convertible to a `Path`:
-//    `&str`, `&String`, `PathBuf`, `Path`, and `NamedTempFile::path()` all satisfy it.
-//    Prefer it over `&str` for functions that touch the filesystem — no conversion needed at call sites.
+// 10. `tempfile::NamedTempFile` — creates a uniquely-named temp file on disk; auto-deletes when the
+//     value is dropped (RAII); use in tests instead of a fixed /tmp path to avoid parallel-test races
+// 11. `impl AsRef<std::path::Path>` — a bound that accepts any type convertible to a `Path`:
+//     `&str`, `&String`, `PathBuf`, `Path`, and `NamedTempFile::path()` all satisfy it.
+//     Prefer it over `&str` for functions that touch the filesystem — no conversion needed at call sites.
 
 // Extra:
 

@@ -33,7 +33,7 @@
 //
 // - Catch-all routes — "/" acts as the lowest-priority fallback route.
 //
-// Progress:
+// Notes:
 //
 // - [x] Route matching
 // - [x] Route specificity resolution
@@ -41,12 +41,12 @@
 //
 // Extra:
 //
-// - [x] Basic API Gateway
-// - [x] Prefix-based routing
-// - [x] Request forwarding
-// - [x] Header filtering (hop-by-hop header stripping)
-// - [x] Upstream error handling (502 Bad Gateway)
-// - [x] Integration tests (echo server, proxy forwarding)
+// - [ ] Basic API Gateway
+// - [ ] Prefix-based routing
+// - [ ] Request forwarding
+// - [ ] Header filtering (hop-by-hop header stripping)
+// - [ ] Upstream error handling (502 Bad Gateway)
+// - [ ] Integration tests (echo server, proxy forwarding)
 // - [ ] Middleware pipeline (logging, authentication, authorization)
 // - [ ] OpenTelemetry tracing — propagate trace context to upstream services
 // - [ ] Retry with exponential backoff

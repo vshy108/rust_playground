@@ -17,7 +17,7 @@
 //   `Pending`, the Waker stored in `cx` is saved; when the future is ready to make progress,
 //   it calls `waker.wake()` to re-schedule itself; the executor then calls `poll` again
 
-// Progress:
+// Notes:
 
 // Extra:
 

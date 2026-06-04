@@ -14,7 +14,7 @@
 // - batching — accumulate spans/metrics in a buffer; flush when the buffer reaches a
 //   size threshold or a time deadline, whichever comes first
 
-// Progress:
+// Notes:
 
 // Extra:
 

@@ -14,7 +14,7 @@
 // - execution model — topological sort determines a valid execution order; a node is
 //   ready when all its predecessors have completed; use a queue of ready nodes
 
-// Progress:
+// Notes:
 
 // Extra:
 

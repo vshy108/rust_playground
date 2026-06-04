@@ -14,7 +14,7 @@
 // - worker pool — a fixed set of worker tasks pulls from a shared work channel; the pool
 //   size caps parallelism without spawning an unbounded number of tasks
 
-// Progress:
+// Notes:
 
 // Extra:
 

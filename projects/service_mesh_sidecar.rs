@@ -14,7 +14,7 @@
 // - observability — count bytes in/out, request latency, and error count per upstream;
 //   expose a `/metrics` endpoint for scraping
 
-// Progress:
+// Notes:
 
 // Extra:
 

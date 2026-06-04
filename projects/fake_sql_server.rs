@@ -16,7 +16,7 @@
 // - binary parsing — read fixed-width fields with `u32::from_be_bytes`; read variable-length
 //   strings as null-terminated byte sequences; use a cursor over the byte buffer
 
-// Progress:
+// Notes:
 
 // Extra:
 

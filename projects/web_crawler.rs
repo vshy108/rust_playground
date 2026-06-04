@@ -15,7 +15,7 @@
 // - async channels — `tokio::sync::mpsc` passes URLs between the discovery task and workers
 //   without blocking; the channel decouples producers from consumers
 
-// Progress:
+// Notes:
 
 // Extra:
 

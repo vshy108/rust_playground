@@ -15,7 +15,7 @@
 // - serde — `#[derive(Deserialize, Serialize)]` on structs for JSON request/response bodies
 // - State — `Arc<Mutex<T>>` shared across handlers; cloned into each via axum's `State` extractor
 
-// Progress:
+// Notes:
 
 // Extra:
 

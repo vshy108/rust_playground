@@ -7,70 +7,49 @@
 
 // Learn:
 //
-// - HashMap
-//   - HashMap<K, V> maps keys to values with O(1) average lookup.
-//   - Use .insert(k, v) to add, .get(&k) to look up (returns Option<&V>).
-//
-// - Arc<Mutex<HashMap>>: shared mutable state across handlers
-//   - A plain HashMap in main has one owner; passing it to a handler moves it,
-//     so the other handler can't use it.
-//   - Arc (shared pointer) lets both handlers point to the same HashMap in memory.
-//     When all Arc clones are dropped, the HashMap is freed.
-//   - Mutex ensures only one handler reads/writes at a time.
-//     .lock().unwrap() returns a MutexGuard — the guard releases the lock when dropped.
-//   - Together: Arc<Mutex<HashMap>> = shared ownership + safe concurrent access.
-//
-// - std::sync::Mutex vs tokio::sync::Mutex
-//   - std::sync::Mutex: blocks the OS thread while waiting for the lock.
-//     Cannot be held across .await — compiler rejects it (guard is not Send).
-//     Use when: lock, do quick sync work (insert/get), drop immediately.
-//   - tokio::sync::Mutex: async-aware — .lock().await suspends the task, not the
-//     thread, so other tasks can run while waiting. Can be held across .await.
-//     Use when: you need to do async work while holding the lock.
-//   - Rule: this project uses std::sync::Mutex because .insert() and .get() are
-//     instant sync operations — no awaiting inside the lock.
-//
-// - structs
-//   - Structs group related fields under a named type.
-//   - #[derive(Deserialize)] lets serde parse incoming JSON into a struct.
-//   - #[derive(Serialize)] lets serde turn a struct into outgoing JSON.
-//
-// - axum
-//   - A web framework built on top of tokio and hyper.
-//   - Router maps HTTP methods + paths to async handler functions.
-//   - Extractors (State, Path, Json) appear as function parameters; axum resolves them from
-//     the request automatically. State shares app-level data; Path extracts URL segments;
-//     Json deserialises the request body.
-//   - Handlers return impl IntoResponse — StatusCode, Json<T>, Redirect, and tuples of those
-//     all implement IntoResponse.
-//
-// - async / await
-//   - `async fn` returns a Future that does nothing until polled by an executor.
-//   - `.await` suspends the current task until the Future resolves, yielding the thread
-//     to other tasks instead of blocking.
-//   - `#[tokio::main]` starts the tokio async runtime and polls the top-level future.
-//   - `#[tokio::test]` does the same for each test function.
-//
-// - UUID
-//   - Uuid::new_v4() generates a random 128-bit identifier.
-//   - .to_string() gives the full 36-char hyphenated form; take the first 8 chars
-//     for a compact short code.
+// - HashMap — key-value store with O(1) average lookup; `.insert(k, v)` to add, `.get(&k)` returns `Option<&V>`
+// - Arc<Mutex<T>> — shared mutable state across handlers; Arc = shared ownership, Mutex = exclusive access
+// - std::sync::Mutex vs tokio::sync::Mutex — blocking vs async-aware lock; use std when the critical section has no `.await`
+// - serde — `#[derive(Deserialize, Serialize)]` on structs for JSON request/response bodies
+// - axum — Router maps HTTP methods to handlers; extractors (State, Path, Json) resolve from the request
+// - async / await — `async fn` returns a Future; `.await` suspends the task without blocking the thread
+// - UUID — `Uuid::new_v4()` generates a random 128-bit identifier; first 8 chars for a short code
 
-// Progress:
-// 1. POST /shorten: State(store) injects the shared Arc<Mutex<HashMap>>; Json(payload)
+// Notes:
+//
+// 1. Arc<Mutex<HashMap>> — A plain HashMap in main has one owner; passing it to a handler moves it,
+//    so the other handler can't use it. Arc lets both handlers point to the same HashMap in memory;
+//    when all Arc clones are dropped, the HashMap is freed. Mutex ensures only one handler reads/writes
+//    at a time — `.lock().unwrap()` returns a MutexGuard; the guard releases the lock when dropped.
+//
+// 2. std::sync::Mutex vs tokio::sync::Mutex — std::sync::Mutex blocks the OS thread while waiting;
+//    cannot be held across `.await` (compiler rejects it: guard is not Send). tokio::sync::Mutex is
+//    async-aware — `.lock().await` suspends the task, not the thread; can be held across `.await`.
+//    Rule: use std here because `.insert()` and `.get()` are instant sync ops — no awaiting inside the lock.
+//
+// 3. axum extractors — State, Path, Json appear as handler parameters; axum resolves them from the
+//    request automatically. State injects shared app data; Path extracts a URL segment as an owned String;
+//    Json deserialises the request body. Handlers return `impl IntoResponse` — StatusCode, Json<T>,
+//    Redirect, and tuples of those all implement IntoResponse.
+//
+// 4. async / await — `async fn` returns a Future that does nothing until polled by an executor.
+//    `.await` suspends the current task until the Future resolves, yielding the thread to other tasks.
+//    `#[tokio::main]` starts the tokio async runtime; `#[tokio::test]` does the same per test.
+//
+// 5. POST /shorten: State(store) injects the shared Arc<Mutex<HashMap>>; Json(payload)
 //    deserialises the request body. Uuid::new_v4().to_string()[..8] gives an 8-char code.
 //    .lock().unwrap() acquires the Mutex — guard is dropped at end of statement, releasing
 //    the lock immediately. Returns (StatusCode::CREATED, Json(...)) as a tuple — axum
 //    accepts tuples of (StatusCode, impl IntoResponse) as a response.
-// 2. GET /:code: Path(code) extracts the path segment as an owned String. .get(&code)
+// 6. GET /:code: Path(code) extracts the path segment as an owned String. .get(&code)
 //    returns Option<&UrlEntry>. Both match arms call .into_response() to unify the return
 //    type — Redirect and StatusCode are different types, wrapping both satisfies impl IntoResponse.
 //    axum's Redirect::to() emits 303 See Other. 303 is idiomatic for Post/Redirect/Get
 //    (forces the follow-up to GET); for a plain GET shortener, 301/302 is also conventional.
-// 3. Tests: tower::ServiceExt::oneshot() sends a Request directly into the Router without
+// 7. Tests: tower::ServiceExt::oneshot() sends a Request directly into the Router without
 //    a TCP server. Each test builds its own Store so tests are fully independent.
 //    #[tokio::test] spins up a tokio runtime per test — needed because handlers are async.
-// 4. Expiration (steps 2–3): ShortenRequest gained ttl_secs: Option<u64>. UrlEntry gained
+// 8. Expiration (steps 2–3): ShortenRequest gained ttl_secs: Option<u64>. UrlEntry gained
 //    expires_at: Option<Instant>. In shorten, payload.ttl_secs.map(|secs| Instant::now() +
 //    Duration::from_secs(secs)) computes the deadline — .map() preserves the Option shape
 //    without if/else. std::time::Instant is monotonic (never jumps) — safe for in-process

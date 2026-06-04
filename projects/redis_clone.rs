@@ -18,7 +18,7 @@
 // - state — `Arc<Mutex<HashMap<String, String>>>` shared across connection handler tasks;
 //   each task locks, reads/writes, then drops the guard immediately
 
-// Progress:
+// Notes:
 
 // Extra:
 
