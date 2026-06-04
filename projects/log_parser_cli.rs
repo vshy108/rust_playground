@@ -102,8 +102,9 @@ impl FromStr for HttpMethod {
 }
 
 #[derive(Debug)]
-// method and path are parsed and verified in tests but not consumed by the
-// aggregation functions — suppress the dead_code lint rather than removing them.
+// FIX: clippy::dead_code — method and path are only read in tests, not in any aggregation
+// function, so the compiler considers them unused. #[allow(dead_code)] suppresses the lint
+// without removing fields that are semantically meaningful and verified by tests.
 #[allow(dead_code)]
 struct LogEntry {
     ip: IpAddr,
@@ -192,8 +193,9 @@ fn top_ips(entries: &[LogEntry]) -> Vec<(IpAddr, usize)> {
     //         borrow from `counts`; those references can't outlive the local `counts`. into_iter()
     //         consumes `counts` and yields owned (IpAddr, usize) tuples with no lifetime attachment.
     let mut vec: Vec<(IpAddr, usize)> = counts.into_iter().collect();
-    // Step 3: sort descending by count. Reverse wraps the key so sort_by_key uses
-    // descending order without a manual comparator closure.
+    // FIX: clippy::unnecessary_sort_by — sort_by(|a, b| b.1.cmp(&a.1)) uses a full two-argument
+    // comparator just to reverse one field. sort_by_key with std::cmp::Reverse is cleaner:
+    // it extracts the key once per element and the Reverse wrapper flips the comparison direction.
     vec.sort_by_key(|b| std::cmp::Reverse(b.1)); // descending by count
     // Step 4: take top 5 and collect into owned Vec so there are no dangling borrows.
     // FIX 4: was `vec.into_iter().take(5)` — a lazy iterator, not a Vec; the return type promised Vec.

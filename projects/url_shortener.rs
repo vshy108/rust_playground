@@ -177,6 +177,9 @@ async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl 
             //   - Some(t)   → true if deadline t is already in the past
             // Instant subtraction is not used because it panics on underflow;
             // comparing two Instants with < is always safe.
+            // FIX: clippy::unnecessary_map_or — map_or(false, |t| pred(t)) is a verbose way to
+            // ask "does Some satisfy this predicate?". is_some_and(pred) expresses that intent
+            // directly and avoids the explicit false default.
             let expired = entry.expires_at.is_some_and(|t| t < Instant::now());
             if expired {
                 StatusCode::GONE.into_response()

@@ -148,6 +148,8 @@ impl LruCache {
             // any expired entry before evicting a still-live one.
             while cursor != HEAD {
                 let prev = self.nodes[cursor].prev;
+                // FIX: clippy::collapsible_if — nested `if let` + inner `if cond` can be
+                // collapsed into a single `if let … && cond` guard; same semantics, less indentation.
                 if let Some(expires_at) = self.nodes[cursor].expires_at
                     && expires_at <= Instant::now() {
                         let old_key = self.nodes[cursor].key;
@@ -219,6 +221,8 @@ impl LruCache {
     fn get(&mut self, key: i32) -> Option<i32> {
         let idx = self.map.get(&key).copied()?;
 
+        // FIX: clippy::collapsible_if — nested `if let` + inner `if cond` can be
+        // collapsed into a single `if let … && cond` guard; same semantics, less indentation.
         if let Some(expires_at) = self.nodes[idx].expires_at
             && expires_at <= Instant::now() {
                 // FIX: treating an expired entry as a plain miss by only returning
