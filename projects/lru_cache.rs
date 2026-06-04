@@ -6,6 +6,15 @@
 //   cache.put(key, value, ttl_secs)   insert or update; evicts LRU entry when at capacity
 //   cache.get(key)                    returns Option<i32>; promotes the entry to MRU on hit
 //
+// Learn:
+//
+// - Option<T> — null-free way to represent a value that may or may not exist; `.map()` transforms without unwrapping
+// - std::time::Instant — monotonic clock snapshot; never jumps back; `Instant::now() + Duration::from_secs(n)` is a deadline
+// - HashMap — O(1) average lookup; here maps each cache key → Vec index of its node
+// - doubly-linked list — keeps entries in recency order; head = MRU, tail = LRU; splice on every get/put
+// - Vec<Node> + usize indices — arena allocator pattern; avoids Rust's two-owner problem for linked structures
+// - &mut self on get — get promotes a node to MRU, so reads also mutate; &mut enforces exclusive access
+//
 // Notes:
 // 1. Data model: `Vec<Node>` + `usize` indices avoids Rust's two-owner problem for
 //    doubly-linked structures. `HEAD` and `TAIL` are sentinel indices, so insert/remove
@@ -30,48 +39,6 @@
 // 6. Verification: focused tests cover empty reads, round-trip, LRU eviction, promotion,
 //    update-without-growth, expired miss cleanup, non-expired reads, and reclaiming expired
 //    entries before live eviction. `cargo test --bin lru_cache` is passing.
-//
-// Learn:
-//
-// - Option<T>
-//   - Rust's null-free way to represent a value that may or may not exist.
-//   - `Some(v)` wraps a value; `None` signals absence.
-//   - `.map(|v| expr)` transforms the inner value without unwrapping; preserves the Option shape.
-//   - Used here for both the return type of `get` and for optional TTL fields.
-//
-// - std::time::Instant and Duration
-//   - Instant is a monotonic clock snapshot — it never jumps back, safe for elapsed-time checks.
-//   - Duration represents a span of time; `Instant::now() + Duration::from_secs(n)` is a deadline.
-//   - `instant.elapsed()` returns a Duration; compare with a window Duration to check expiry.
-//   - Used here to store and check per-entry TTL deadlines.
-//
-// - HashMap
-//   - HashMap<K, V> maps keys to values with O(1) average lookup.
-//   - Here the HashMap maps each key → the Vec index of its node, for O(1) lookup
-//     followed by O(1) list splice.
-//
-// - Linked structures
-//   - A doubly-linked list keeps entries in recency order: head = MRU, tail = LRU.
-//   - On every get/put, the touched node is unlinked and re-inserted at the head.
-//   - On eviction, the tail node is removed and its key used to clean the HashMap.
-//
-// - Mutability
-//   - Both put and get mutate the list (get promotes a node).
-//   - &mut self on both methods makes the borrow checker enforce exclusive access.
-//
-// Data layout — Vec<Node> + usize indices ("arena allocator" pattern):
-//   All nodes live in a Vec owned by LruCache.
-//   prev/next are usize indices into that Vec, not pointers.
-//   Two nodes "pointing" to the same node just hold the same integer — no ownership conflict.
-//   Sentinel head/tail nodes (indices 0 and 1) simplify edge cases: the real list
-//   lives between them, so insert/remove never need to special-case empty lists.
-//
-//   Memory layout:
-//     nodes[0]  = sentinel HEAD  (key/value unused)
-//     nodes[1]  = sentinel TAIL  (key/value unused)
-//     nodes[2+] = real entries
-//
-//   List invariant:  HEAD <-> [MRU] <-> ... <-> [LRU] <-> TAIL
 
 use std::{
     collections::HashMap,

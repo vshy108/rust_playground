@@ -8,23 +8,10 @@
 // ```
 
 // Learn:
-
-// - borrowing
-//   - References let you use a value without taking ownership.
-//   - &str is a borrowed string slice; String is an owned heap string.
-//   - Functions that only read data should take &str, not String.
 //
-// - iterators
-//   - Iterators are lazy: they produce values on demand, not all at once.
-//   - .lines() splits a &str into an iterator of &str lines.
-//   - .filter() keeps only items where the closure returns true.
-//   - .enumerate() pairs each item with its 0-based index.
-//   - .collect() pulls all iterator values into a Vec or other collection.
-//
-// - slices
-//   - A slice (&[T] or &str) is a view into a contiguous sequence.
-//   - args: &[String] is a slice of the collected CLI arg Vec.
-//   - Slices do not own their data; they borrow it.
+// - borrowing — `&str` is a borrowed string slice; `String` is owned; read-only functions should take `&str`
+// - iterators — lazy; `.lines()`, `.filter()`, `.enumerate()`, `.collect()` chain without intermediate allocations
+// - slices — `&[T]` / `&str` is a borrowed view into a contiguous sequence; does not own its data
 
 // Notes:
 

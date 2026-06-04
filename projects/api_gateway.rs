@@ -8,39 +8,31 @@
 // ```
 
 // Learn:
-
-// - middleware — tower `Layer`/`Service` traits; each layer wraps the inner service and can
-//   intercept requests and responses (logging, auth, rate limiting) without changing handlers
-// - resilience — retry on transient errors with exponential back-off; timeout cancels a slow
-//   upstream; rate limiting caps requests per time window per client
-
-// - API Gateway pattern — a single entry point that routes requests to internal services.
-//   Clients only know the gateway; service locations remain hidden behind it.
 //
-// - Route matching — gateway selects an upstream service based on URL prefixes.
-//   More specific routes should win over generic routes.
-//
-// - Route specificity — deeper paths are preferred over shallower paths.
-//   Example:
-//     "/users/admin" > "/users"
-//   because it provides a more precise match.
-//
-// - Parameterized routes — segments beginning with ':' match any value.
-//   Example:
-//     "/users/:id"
-//     "/users/42"
-//     "/users/alice"
-//
-// - Catch-all routes — "/" acts as the lowest-priority fallback route.
+// - API Gateway pattern — single entry point that routes requests to upstream services; clients only know the gateway
+// - Route matching — select an upstream based on URL prefix; more specific routes win over generic ones
+// - Route specificity — deeper paths beat shallower paths; static segments beat param segments at equal depth
+// - Parameterized routes — a segment starting with `:` matches any path segment value
+// - Catch-all routes — `/` has score (0, 0) so it is always the lowest-priority fallback
+// - middleware — tower `Layer`/`Service` traits; each layer wraps the inner service to intercept requests/responses
+// - resilience — retry with exponential back-off; timeout cancels a slow upstream; rate limiting caps requests per window
 //
 // Notes:
+//
+// 1. Named lifetime `'routes` — the returned `&Route` borrows from the `routes` slice, not
+//    from `path`; naming the lifetime on the slice makes this explicit and lets the compiler
+//    verify the borrow scope at each call site.
+// 2. Score tuple `(prefix_segs.len(), static_count)` — Rust tuple comparison is lexicographic,
+//    so depth dominates: a deeper route always beats a shallower one. Static count breaks ties
+//    at equal depth, so "/users/admin" beats "/users/:id" for path "/users/admin".
+// 3. `best_score >= score` guard — keeps the first configured route when two routes score
+//    identically. Changing to `>` would make the last route win instead.
+//
+// Extra:
 //
 // - [x] Route matching
 // - [x] Route specificity resolution
 // - [x] Parameterized route matching
-//
-// Extra:
-//
 // - [ ] Basic API Gateway
 // - [ ] Prefix-based routing
 // - [ ] Request forwarding

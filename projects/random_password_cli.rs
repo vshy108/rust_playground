@@ -8,12 +8,12 @@
 // ```
 
 // Learn:
-
-// - Cargo
-// - `String`
-// - `Vec`
-// - `rand`
-// - argument parsing
+//
+// - Cargo — build, run, test tool; `cargo run --bin name -- args` passes args to the binary
+// - `String` vs `&str` — `String` is heap-allocated and owned; use it for runtime-constructed values
+// - `Vec<T>` — growable array; `.collect()` pulls an iterator into one; `with_capacity` avoids reallocation
+// - `rand` — `rand::rng()` must be `mut`; each call advances internal state to produce the next value
+// - argument parsing — `std::env::args()` returns an iterator of `String`; `.next()` consumes one token at a time
 
 // Notes:
 
