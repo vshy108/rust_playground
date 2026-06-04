@@ -148,8 +148,8 @@ impl LruCache {
             // any expired entry before evicting a still-live one.
             while cursor != HEAD {
                 let prev = self.nodes[cursor].prev;
-                if let Some(expires_at) = self.nodes[cursor].expires_at {
-                    if expires_at <= Instant::now() {
+                if let Some(expires_at) = self.nodes[cursor].expires_at
+                    && expires_at <= Instant::now() {
                         let old_key = self.nodes[cursor].key;
                         // FIX: checking only TAIL.prev misses expired entries that are
                         // newer than the current LRU, which can wrongly evict a live
@@ -162,7 +162,6 @@ impl LruCache {
                         reclaimed = true;
                         break;
                     }
-                }
                 cursor = prev;
             }
             if reclaimed {
@@ -220,8 +219,8 @@ impl LruCache {
     fn get(&mut self, key: i32) -> Option<i32> {
         let idx = self.map.get(&key).copied()?;
 
-        if let Some(expires_at) = self.nodes[idx].expires_at {
-            if expires_at <= Instant::now() {
+        if let Some(expires_at) = self.nodes[idx].expires_at
+            && expires_at <= Instant::now() {
                 // FIX: treating an expired entry as a plain miss by only returning
                 // None would leave stale state behind in both the HashMap and the
                 // recency list, so the expired entry would still consume capacity.
@@ -232,7 +231,6 @@ impl LruCache {
                 self.free.push(idx);
                 return None;
             }
-        }
 
         // Read after the expiry check so we only copy a live value.
         let value = self.nodes[idx].value;

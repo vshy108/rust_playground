@@ -102,6 +102,9 @@ impl FromStr for HttpMethod {
 }
 
 #[derive(Debug)]
+// method and path are parsed and verified in tests but not consumed by the
+// aggregation functions — suppress the dead_code lint rather than removing them.
+#[allow(dead_code)]
 struct LogEntry {
     ip: IpAddr,
     method: HttpMethod,
@@ -189,8 +192,9 @@ fn top_ips(entries: &[LogEntry]) -> Vec<(IpAddr, usize)> {
     //         borrow from `counts`; those references can't outlive the local `counts`. into_iter()
     //         consumes `counts` and yields owned (IpAddr, usize) tuples with no lifetime attachment.
     let mut vec: Vec<(IpAddr, usize)> = counts.into_iter().collect();
-    // Step 3: sort descending by count. b.1.cmp(&a.1) reverses order vs a.1.cmp(&b.1).
-    vec.sort_by(|a, b| b.1.cmp(&a.1)); // b before a = descending
+    // Step 3: sort descending by count. Reverse wraps the key so sort_by_key uses
+    // descending order without a manual comparator closure.
+    vec.sort_by_key(|b| std::cmp::Reverse(b.1)); // descending by count
     // Step 4: take top 5 and collect into owned Vec so there are no dangling borrows.
     // FIX 4: was `vec.into_iter().take(5)` — a lazy iterator, not a Vec; the return type promised Vec.
     //         .collect() drives the iterator and materialises the result into the declared return type.

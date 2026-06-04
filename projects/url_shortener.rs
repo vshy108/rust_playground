@@ -177,7 +177,7 @@ async fn redirect(State(store): State<Store>, Path(code): Path<String>) -> impl 
             //   - Some(t)   → true if deadline t is already in the past
             // Instant subtraction is not used because it panics on underflow;
             // comparing two Instants with < is always safe.
-            let expired = entry.expires_at.map_or(false, |t| t < Instant::now());
+            let expired = entry.expires_at.is_some_and(|t| t < Instant::now());
             if expired {
                 StatusCode::GONE.into_response()
             } else {
