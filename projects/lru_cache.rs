@@ -151,19 +151,20 @@ impl LruCache {
                 // FIX: clippy::collapsible_if — nested `if let` + inner `if cond` can be
                 // collapsed into a single `if let … && cond` guard; same semantics, less indentation.
                 if let Some(expires_at) = self.nodes[cursor].expires_at
-                    && expires_at <= Instant::now() {
-                        let old_key = self.nodes[cursor].key;
-                        // FIX: checking only TAIL.prev misses expired entries that are
-                        // newer than the current LRU, which can wrongly evict a live
-                        // entry while a dead one still consumes capacity. Scan the
-                        // whole live list and reclaim any expired node before falling
-                        // back to normal LRU eviction.
-                        self.map.remove(&old_key);
-                        self.unlink(cursor);
-                        self.free.push(cursor);
-                        reclaimed = true;
-                        break;
-                    }
+                    && expires_at <= Instant::now()
+                {
+                    let old_key = self.nodes[cursor].key;
+                    // FIX: checking only TAIL.prev misses expired entries that are
+                    // newer than the current LRU, which can wrongly evict a live
+                    // entry while a dead one still consumes capacity. Scan the
+                    // whole live list and reclaim any expired node before falling
+                    // back to normal LRU eviction.
+                    self.map.remove(&old_key);
+                    self.unlink(cursor);
+                    self.free.push(cursor);
+                    reclaimed = true;
+                    break;
+                }
                 cursor = prev;
             }
             if reclaimed {
@@ -224,17 +225,18 @@ impl LruCache {
         // FIX: clippy::collapsible_if — nested `if let` + inner `if cond` can be
         // collapsed into a single `if let … && cond` guard; same semantics, less indentation.
         if let Some(expires_at) = self.nodes[idx].expires_at
-            && expires_at <= Instant::now() {
-                // FIX: treating an expired entry as a plain miss by only returning
-                // None would leave stale state behind in both the HashMap and the
-                // recency list, so the expired entry would still consume capacity.
-                // Remove it from both structures and recycle its slot before
-                // reporting the miss.
-                self.map.remove(&key);
-                self.unlink(idx);
-                self.free.push(idx);
-                return None;
-            }
+            && expires_at <= Instant::now()
+        {
+            // FIX: treating an expired entry as a plain miss by only returning
+            // None would leave stale state behind in both the HashMap and the
+            // recency list, so the expired entry would still consume capacity.
+            // Remove it from both structures and recycle its slot before
+            // reporting the miss.
+            self.map.remove(&key);
+            self.unlink(idx);
+            self.free.push(idx);
+            return None;
+        }
 
         // Read after the expiry check so we only copy a live value.
         let value = self.nodes[idx].value;

@@ -283,7 +283,10 @@ fn ip_stats(entries: &[LogEntry]) -> Vec<(IpAddr, usize, f64)> {
 // {mean:.2} rounds the float to two decimal places in the output (e.g. 45.67).
 // impl AsRef<std::path::Path> accepts &str, &String, PathBuf, &Path, and NamedTempFile::path()
 // without any conversion at the call site. Prefer this over &str for filesystem functions.
-fn write_csv(path: impl AsRef<std::path::Path>, stats: &[(IpAddr, usize, f64)]) -> Result<(), std::io::Error> {
+fn write_csv(
+    path: impl AsRef<std::path::Path>,
+    stats: &[(IpAddr, usize, f64)],
+) -> Result<(), std::io::Error> {
     let mut file = std::fs::File::create(path.as_ref())?;
     writeln!(file, "ip,requests,mean_latency_ms")?;
     for (ip, count, mean) in stats {
@@ -523,7 +526,7 @@ mod tests {
 
         assert_eq!(stats.len(), 2);
         assert_eq!(stats[0].0, "1.2.3.4".parse::<IpAddr>().unwrap());
-        assert_eq!(stats[0].1, 2);    // count
+        assert_eq!(stats[0].1, 2); // count
         assert_eq!(stats[0].2, 20.0); // mean latency
         assert_eq!(stats[1].0, "2.2.3.4".parse::<IpAddr>().unwrap());
         assert_eq!(stats[1].1, 1);
