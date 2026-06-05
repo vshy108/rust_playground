@@ -33,8 +33,8 @@
 // - [x] Route matching
 // - [x] Route specificity resolution
 // - [x] Parameterized route matching
-// - [ ] Basic API Gateway
-// - [ ] Prefix-based routing
+// - [] Basic API Gateway
+// - [x] Prefix-based routing
 // - [ ] Request forwarding
 // - [ ] Header filtering (hop-by-hop header stripping)
 // - [ ] Upstream error handling (502 Bad Gateway)
@@ -55,7 +55,9 @@
 // - [ ] Graceful shutdown
 // - [ ] Dynamic route configuration
 
-use axum::{Router, extract::State, http::Request, routing::any};
+use axum::{
+    Router, extract::State, http::Request, http::StatusCode, response::Response, routing::any,
+};
 use tokio::net::TcpListener;
 
 #[allow(dead_code)]
@@ -68,6 +70,7 @@ struct Route {
 #[derive(Clone)]
 struct AppState {
     routes: Vec<Route>,
+    client: reqwest::Client,
 }
 
 // Selects the best matching route for `path` using prefix matching with specificity scoring.
@@ -142,12 +145,28 @@ fn match_route<'routes>(path: &str, routes: &'routes [Route]) -> Option<&'routes
     best.map(|(_, route)| route)
 }
 
-async fn proxy_handler(State(state): State<AppState>, req: Request<axum::body::Body>) {
+async fn proxy_handler(
+    State(state): State<AppState>,
+    req: Request<axum::body::Body>,
+) -> Result<Response, axum::http::StatusCode> {
     let path = req.uri().path();
 
-    let route = match_route(path, &state.routes);
+    let route = match_route(path, &state.routes).ok_or(StatusCode::NOT_FOUND)?;
 
-    println!("matched route: {:?}", route);
+    let url = format!("{}{}", route.upstream, path);
+
+    let resp = state
+        .client
+        .request(req.method().clone(), url)
+        .send()
+        .await
+        .map_err(|_| StatusCode::BAD_GATEWAY)?;
+
+    let status = resp.status();
+    let body = resp.bytes().await.map_err(|_| StatusCode::BAD_GATEWAY)?;
+    let builder = Response::builder().status(status);
+
+    Ok(builder.body(axum::body::Body::from(body)).unwrap())
 }
 
 fn build_app(routes: Vec<Route>) -> Router {
@@ -162,7 +181,10 @@ fn build_app(routes: Vec<Route>) -> Router {
         // to swap configurations
         // not capture routes in a closure,
         // .route("/*path", any(move |req| async move {, messy if State larger
-        .with_state(AppState { routes })
+        .with_state(AppState {
+            routes,
+            client: reqwest::Client::new(),
+        })
 }
 
 #[tokio::main]

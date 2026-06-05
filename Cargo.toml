@@ -49,6 +49,16 @@ tokio = { version = "1.52.3", features = ["full"] }
 # Without the feature flag, only the type is available — generation methods are gated.
 uuid = { version = "1.23.2", features = ["v4"] }
 
+# cargo tree: check installed version
+# 0.13: rustls, 0.12 and lower: rustls-tls
+# rustls: for TLS without OpenSSL (recommended cross-platform)
+# json: JSON serialization/deserialization
+# is enabled by default. However, because Cargo features are additive, 
+# a transitive dependency could still pull in native-tls. 
+# To prevent this, explicitly turn off default features
+reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls"] }
+
+
 # [[example]] must stay [[example]] is a Cargo-defined table name
 # name should be lowercase letters/numbers with _ or -
 # path should point to the .rs file
