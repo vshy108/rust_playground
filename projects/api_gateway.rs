@@ -78,6 +78,37 @@ struct AppState {
     client: reqwest::Client,
 }
 
+struct HopByHopFilter;
+
+trait HeaderFilter {
+    fn filter(&self, headers: &HeaderMap) -> HeaderMap;
+}
+
+impl HeaderFilter for HopByHopFilter {
+    // HTTP allows repeated headers
+    // Set-Cookie: a=1
+    // Set-Cookie: b=2
+    // Internally optimized storage:
+    // ("Set-Cookie", "a=1")
+    // (None, "b=2")
+    // Meaning:
+    // “same header as previous entry”
+    // So Rust uses:
+    // Option<HeaderName> if destructure name from headers and
+    // it is not match insert signature for key
+    // HeaderMap implements FromIterator
+    fn filter(&self, headers: &HeaderMap) -> HeaderMap {
+        headers
+            // you get references
+            // no ownership transfer
+            // zero cost traversal
+            .iter()
+            .filter(|(name, _)| !is_hop_by_hop(name))
+            .map(|(name, value)| (name.clone(), value.clone()))
+            .collect()
+    }
+}
+
 // Selects the best matching route for `path` using prefix matching with specificity scoring.
 //
 // Matching rules:
@@ -165,26 +196,6 @@ fn is_hop_by_hop(name: &HeaderName) -> bool {
     )
 }
 
-fn filter_headers(input: &HeaderMap) -> HeaderMap {
-    // HTTP allows repeated headers
-    // Set-Cookie: a=1
-    // Set-Cookie: b=2
-    // Internally optimized storage:
-    // ("Set-Cookie", "a=1")
-    // (None, "b=2")
-    // Meaning:
-    // “same header as previous entry”
-    // So Rust uses:
-    // Option<HeaderName> if destructure name from headers and
-    // it is not match insert signature for key
-    // HeaderMap implements FromIterator
-    input
-        .iter()
-        .filter(|(name, _)| !is_hop_by_hop(name))
-        .map(|(name, value)| (name.clone(), value.clone()))
-        .collect()
-}
-
 async fn proxy_handler(
     State(state): State<AppState>,
     req: Request<axum::body::Body>,
@@ -192,8 +203,8 @@ async fn proxy_handler(
     let (parts, body) = req.into_parts();
 
     let method = parts.method;
-    let headers = parts.headers;
-    let forwarded_headers = filter_headers(&headers);
+    let filter = HopByHopFilter;
+    let forwarded_headers = filter.filter(&parts.headers);
 
     let uri = parts.uri;
     // let path = req.uri().path();
@@ -244,9 +255,8 @@ async fn proxy_handler(
         .body(resp_body)
         .unwrap();
 
-    let filtered = filter_headers(&resp_headers);
     // HeaderMap supports extend
-    response.headers_mut().extend(filtered);
+    response.headers_mut().extend(filter.filter(&resp_headers));
 
     Ok(response)
 }
@@ -660,7 +670,8 @@ mod tests {
         headers.insert("connection", "keep-alive".parse().unwrap());
         headers.insert("transfer-encoding", "chunked".parse().unwrap());
 
-        let filtered = filter_headers(&headers);
+        let filter = HopByHopFilter;
+        let filtered = filter.filter(&headers);
 
         assert!(filtered.get("x-ok").is_some());
         assert!(filtered.get("connection").is_none());
