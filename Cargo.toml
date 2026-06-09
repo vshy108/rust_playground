@@ -56,7 +56,7 @@ uuid = { version = "1.23.2", features = ["v4"] }
 # is enabled by default. However, because Cargo features are additive, 
 # a transitive dependency could still pull in native-tls. 
 # To prevent this, explicitly turn off default features
-reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls"] }
+reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls", "stream"] }
 
 
 # [[example]] must stay [[example]] is a Cargo-defined table name

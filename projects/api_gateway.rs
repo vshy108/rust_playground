@@ -58,6 +58,7 @@
 use axum::{
     Router, extract::State, http::Request, http::StatusCode, response::Response, routing::any,
 };
+use std::time::Duration;
 use tokio::net::TcpListener;
 
 #[allow(dead_code)]
@@ -149,42 +150,102 @@ async fn proxy_handler(
     State(state): State<AppState>,
     req: Request<axum::body::Body>,
 ) -> Result<Response, axum::http::StatusCode> {
-    let path = req.uri().path();
+    let (parts, body) = req.into_parts();
+
+    let method = parts.method;
+    let headers = parts.headers;
+    let uri = parts.uri;
+    // let path = req.uri().path();
+    let path = uri.path();
 
     let route = match_route(path, &state.routes).ok_or(StatusCode::NOT_FOUND)?;
 
-    let url = format!("{}{}", route.upstream, path);
+    let stream = body.into_data_stream();
+    // NOTE: reqwest features need to include stream
+    let reqwest_body = reqwest::Body::wrap_stream(stream);
+    // NOTE: path_and_query() no need query feature, but query() needs
+    let path_and_query = uri.path_and_query().map(|pq| pq.as_str()).unwrap_or(path);
 
+    // let url = format!("{}{}", route.upstream, path);
+    // query() expects something serializable, such as: .query(&[("foo", "bar")])
+    let url = format!("{}{}", route.upstream, path_and_query);
+
+    // forwards only method and URL but not request body, query string, headers
     let resp = state
         .client
-        .request(req.method().clone(), url)
+        .request(method, url)
+        .headers(headers)
+        .body(reqwest_body)
         .send()
         .await
         .map_err(|_| StatusCode::BAD_GATEWAY)?;
 
     let status = resp.status();
-    let body = resp.bytes().await.map_err(|_| StatusCode::BAD_GATEWAY)?;
-    let builder = Response::builder().status(status);
+    let headers = resp.headers().clone();
 
-    Ok(builder.body(axum::body::Body::from(body)).unwrap())
+    // resp.bytes_stream()
+    // resp.bytes(self) but not bytes(&self) hence it will consume the resp
+    // let body = resp.bytes().await.map_err(|_| StatusCode::BAD_GATEWAY)?;
+    let resp_stream = resp.bytes_stream();
+    // Upstream → chunk → gateway → chunk → client
+    // no more full body in RAM
+    let resp_body = axum::body::Body::from_stream(resp_stream);
+
+    // only preserve status, but missing
+    // Content-Type
+    // Content-Length
+    // Cache-Control
+    // ETag
+    // Location
+    // let builder = Response::builder().status(status);
+    let mut response = Response::builder().status(status).body(resp_body).unwrap();
+
+    // reserve all response headers
+    // if headers then it will be consumes
+    for (name, value) in &headers {
+        // read/write with headers_mut() return &mut HeaderMap
+        // HTTP allows repeated headers
+        // Set-Cookie: a=1
+        // Set-Cookie: b=2
+        // Internally optimized storage:
+        // ("Set-Cookie", "a=1")
+        // (None, "b=2")
+        // Meaning:
+        // “same header as previous entry”
+        // So Rust uses:
+        // Option<HeaderName> if destructure name from headers and 
+        // it is not match insert signature for key
+        // if still persist to use headers name then if let Some(name) = name
+        response.headers_mut().insert(name.clone(), value.clone());
+    }
+
+    Ok(response)
 }
 
 fn build_app(routes: Vec<Route>) -> Router {
+    // reqwest::Client::new() - connection pool, keep-alive support, DNS cache, HTTP/1.1 and HTTP/2 support
+    // build with protection hung upstreams, slow DNS, socket exhaustion, excessive connection creation
+    let client = reqwest::Client::builder()
+        .connect_timeout(Duration::from_secs(5))
+        .timeout(Duration::from_secs(30))
+        .pool_max_idle_per_host(32)
+        .pool_idle_timeout(Duration::from_secs(90))
+        .build()
+        .unwrap();
     Router::new()
         // gateway already has its own router hence use single catch-all route, /*path
         // Path segments must not start with `*`. For wildcard capture, use `{*wildcard}`.
         // If you meant to literally match a segment starting with an asterisk,
         // call `without_v07_checks` on the router.
         .route("/{*path}", any(proxy_handler))
+        // .layer(tower_http::trace::TraceLayer::new_for_http())
+        // .layer(tower_http::timeout::TimeoutLayer::new(Duration::from_secs(30)))
         // with_state here will pass to route handler, proxy_handler 1st argument State
         // not using global variables, harder to test, hidden dependencies, difficult
         // to swap configurations
         // not capture routes in a closure,
         // .route("/*path", any(move |req| async move {, messy if State larger
-        .with_state(AppState {
-            routes,
-            client: reqwest::Client::new(),
-        })
+        .with_state(AppState { routes, client })
 }
 
 #[tokio::main]
@@ -214,8 +275,92 @@ async fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use axum::{body::Body, http::StatusCode};
-    use tower::ServiceExt;
+    use axum::{
+        Router,
+        body::{Body, to_bytes},
+        extract::State,
+        http::{HeaderValue, Method, StatusCode},
+        routing::any,
+    };
+    use std::sync::{Arc, Mutex};
+    use tokio::{net::TcpListener, sync::oneshot};
+    // use tower::ServiceExt;
+
+    #[derive(Debug)]
+    struct SeenRequest {
+        method: Method,
+        path_and_query: String,
+        trace_id: Option<String>,
+        body: Vec<u8>,
+    }
+
+    #[derive(Clone)]
+    struct UpstreamState {
+        sender: Arc<Mutex<Option<oneshot::Sender<SeenRequest>>>>,
+    }
+
+    async fn upstream_handler(
+        State(state): State<UpstreamState>,
+        req: Request<axum::body::Body>,
+    ) -> Response {
+        let (parts, body) = req.into_parts();
+        let bytes = to_bytes(body, usize::MAX).await.unwrap();
+
+        let seen = SeenRequest {
+            method: parts.method,
+            path_and_query: parts
+                .uri
+                .path_and_query()
+                .map(|pq| pq.as_str().to_string())
+                .unwrap_or_else(|| parts.uri.path().to_string()),
+            trace_id: parts
+                .headers
+                .get("x-trace-id")
+                .and_then(|v| v.to_str().ok())
+                .map(str::to_owned),
+            body: bytes.to_vec(),
+        };
+
+        if let Some(sender) = state.sender.lock().unwrap().take() {
+            let _ = sender.send(seen);
+        }
+
+        Response::builder()
+            .status(StatusCode::CREATED)
+            .header("x-upstream", "present")
+            .header("content-type", "text/plain")
+            .body(Body::from("upstream ok"))
+            .unwrap()
+    }
+
+    async fn spawn_upstream(
+        sender: oneshot::Sender<SeenRequest>,
+    ) -> (String, tokio::task::JoinHandle<()>) {
+        let app = Router::new()
+            .route("/{*path}", any(upstream_handler))
+            .with_state(UpstreamState {
+                sender: Arc::new(Mutex::new(Some(sender))),
+            });
+
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        let handle = tokio::spawn(async move {
+            axum::serve(listener, app).await.unwrap();
+        });
+
+        (format!("http://{}", addr), handle)
+    }
+
+    async fn spawn_gateway(routes: Vec<Route>) -> (String, tokio::task::JoinHandle<()>) {
+        let app = build_app(routes);
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        let handle = tokio::spawn(async move {
+            axum::serve(listener, app).await.unwrap();
+        });
+
+        (format!("http://{}", addr), handle)
+    }
 
     fn route(prefix: &str, upstream: &str) -> Route {
         Route {
@@ -376,22 +521,73 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn users_route_is_selected() {
-        let app = build_app(vec![route("/users", "http://users")]);
+    async fn proxy_forwards_method_query_headers_body_and_response_headers() {
+        let (tx, rx) = oneshot::channel();
+        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (gateway_url, gateway_handle) =
+            spawn_gateway(vec![route("/users", &upstream_url)]).await;
 
-        let response = app
-            // Consume this Service, calling it with the provided request once it is ready.
-            .oneshot(
-                Request::builder()
-                    .uri("/users/123")
-                    .body(Body::empty())
-                    // invalid uri, header and method can make the request builder failed
-                    // hence need unwrap it from Result<>
-                    .unwrap(),
-            )
+        let response = reqwest::Client::new()
+            .post(format!("{}/users/123?expand=true", gateway_url))
+            .header("x-trace-id", "abc-123")
+            .body("hello gateway")
+            .send()
             .await
             .unwrap();
 
-        assert_eq!(response.status(), StatusCode::OK);
+        assert_eq!(response.status(), StatusCode::CREATED);
+        assert_eq!(
+            response.headers().get("x-upstream"),
+            Some(&HeaderValue::from_static("present"))
+        );
+        assert_eq!(response.text().await.unwrap(), "upstream ok");
+
+        let seen = tokio::time::timeout(std::time::Duration::from_secs(2), rx)
+            .await
+            .unwrap()
+            .unwrap();
+        assert_eq!(seen.method, Method::POST);
+        assert_eq!(seen.path_and_query, "/users/123?expand=true");
+        assert_eq!(seen.trace_id.as_deref(), Some("abc-123"));
+        assert_eq!(seen.body, b"hello gateway");
+
+        gateway_handle.abort();
+        upstream_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn proxy_returns_not_found_when_no_route_matches() {
+        let (gateway_url, gateway_handle) =
+            spawn_gateway(vec![route("/users", "http://127.0.0.1:1")]).await;
+
+        let response = reqwest::Client::new()
+            .get(format!("{}/orders/123", gateway_url))
+            .send()
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::NOT_FOUND);
+
+        gateway_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn proxy_returns_bad_gateway_when_upstream_is_unreachable() {
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        drop(listener);
+
+        let (gateway_url, gateway_handle) =
+            spawn_gateway(vec![route("/users", &format!("http://{}", addr))]).await;
+
+        let response = reqwest::Client::new()
+            .get(format!("{}/users/123", gateway_url))
+            .send()
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::BAD_GATEWAY);
+
+        gateway_handle.abort();
     }
 }
