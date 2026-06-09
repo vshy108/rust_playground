@@ -56,7 +56,11 @@
 // - [ ] Dynamic route configuration
 
 use axum::{
-    Router, extract::State, http::Request, http::StatusCode, response::Response, routing::any,
+    Router,
+    extract::State,
+    http::{HeaderMap, HeaderName, Request, StatusCode},
+    response::Response,
+    routing::any,
 };
 use std::time::Duration;
 use tokio::net::TcpListener;
@@ -146,6 +150,41 @@ fn match_route<'routes>(path: &str, routes: &'routes [Route]) -> Option<&'routes
     best.map(|(_, route)| route)
 }
 
+// RFC 9110 says these hop-by-hop headers must NOT be forwarded
+fn is_hop_by_hop(name: &HeaderName) -> bool {
+    matches!(
+        name.as_str().to_ascii_lowercase().as_str(),
+        "connection"
+            | "keep-alive"
+            | "proxy-authenticate"
+            | "proxy-authorization"
+            | "te"
+            | "trailer"
+            | "transfer-encoding"
+            | "upgrade"
+    )
+}
+
+fn filter_headers(input: &HeaderMap) -> HeaderMap {
+    // HTTP allows repeated headers
+    // Set-Cookie: a=1
+    // Set-Cookie: b=2
+    // Internally optimized storage:
+    // ("Set-Cookie", "a=1")
+    // (None, "b=2")
+    // Meaning:
+    // “same header as previous entry”
+    // So Rust uses:
+    // Option<HeaderName> if destructure name from headers and
+    // it is not match insert signature for key
+    // HeaderMap implements FromIterator
+    input
+        .iter()
+        .filter(|(name, _)| !is_hop_by_hop(name))
+        .map(|(name, value)| (name.clone(), value.clone()))
+        .collect()
+}
+
 async fn proxy_handler(
     State(state): State<AppState>,
     req: Request<axum::body::Body>,
@@ -154,6 +193,8 @@ async fn proxy_handler(
 
     let method = parts.method;
     let headers = parts.headers;
+    let forwarded_headers = filter_headers(&headers);
+
     let uri = parts.uri;
     // let path = req.uri().path();
     let path = uri.path();
@@ -174,14 +215,14 @@ async fn proxy_handler(
     let resp = state
         .client
         .request(method, url)
-        .headers(headers)
+        .headers(forwarded_headers)
         .body(reqwest_body)
         .send()
         .await
         .map_err(|_| StatusCode::BAD_GATEWAY)?;
 
-    let status = resp.status();
-    let headers = resp.headers().clone();
+    let resp_status = resp.status();
+    let resp_headers = resp.headers().clone();
 
     // resp.bytes_stream()
     // resp.bytes(self) but not bytes(&self) hence it will consume the resp
@@ -198,26 +239,14 @@ async fn proxy_handler(
     // ETag
     // Location
     // let builder = Response::builder().status(status);
-    let mut response = Response::builder().status(status).body(resp_body).unwrap();
+    let mut response = Response::builder()
+        .status(resp_status)
+        .body(resp_body)
+        .unwrap();
 
-    // reserve all response headers
-    // if headers then it will be consumes
-    for (name, value) in &headers {
-        // read/write with headers_mut() return &mut HeaderMap
-        // HTTP allows repeated headers
-        // Set-Cookie: a=1
-        // Set-Cookie: b=2
-        // Internally optimized storage:
-        // ("Set-Cookie", "a=1")
-        // (None, "b=2")
-        // Meaning:
-        // “same header as previous entry”
-        // So Rust uses:
-        // Option<HeaderName> if destructure name from headers and 
-        // it is not match insert signature for key
-        // if still persist to use headers name then if let Some(name) = name
-        response.headers_mut().insert(name.clone(), value.clone());
-    }
+    let filtered = filter_headers(&resp_headers);
+    // HeaderMap supports extend
+    response.headers_mut().extend(filtered);
 
     Ok(response)
 }
@@ -292,6 +321,7 @@ mod tests {
         path_and_query: String,
         trace_id: Option<String>,
         body: Vec<u8>,
+        headers: HeaderMap,
     }
 
     #[derive(Clone)]
@@ -319,6 +349,7 @@ mod tests {
                 .and_then(|v| v.to_str().ok())
                 .map(str::to_owned),
             body: bytes.to_vec(),
+            headers: parts.headers.clone(),
         };
 
         if let Some(sender) = state.sender.lock().unwrap().take() {
@@ -589,5 +620,50 @@ mod tests {
         assert_eq!(response.status(), StatusCode::BAD_GATEWAY);
 
         gateway_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn proxy_filters_hop_by_hop_request_headers() {
+        let (tx, rx) = oneshot::channel();
+        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+
+        let (gateway_url, gateway_handle) =
+            spawn_gateway(vec![route("/users", &upstream_url)]).await;
+
+        let _ = reqwest::Client::new()
+            .get(format!("{}/users", gateway_url))
+            .header("x-trace-id", "abc")
+            .header("connection", "keep-alive") // ❌ should be removed
+            .header("transfer-encoding", "chunked") // ❌ should be removed
+            .send()
+            .await
+            .unwrap();
+
+        let seen = rx.await.unwrap();
+
+        // ✅ allowed header
+        assert_eq!(seen.trace_id.as_deref(), Some("abc"));
+
+        // ❌ hop-by-hop headers must NOT reach upstream
+        assert!(seen.headers.get("connection").is_none());
+        assert!(seen.headers.get("transfer-encoding").is_none());
+
+        gateway_handle.abort();
+        upstream_handle.abort();
+    }
+
+    #[test]
+    fn test_filter_headers_removes_hop_by_hop() {
+        let mut headers = HeaderMap::new();
+
+        headers.insert("x-ok", "1".parse().unwrap());
+        headers.insert("connection", "keep-alive".parse().unwrap());
+        headers.insert("transfer-encoding", "chunked".parse().unwrap());
+
+        let filtered = filter_headers(&headers);
+
+        assert!(filtered.get("x-ok").is_some());
+        assert!(filtered.get("connection").is_none());
+        assert!(filtered.get("transfer-encoding").is_none());
     }
 }
