@@ -74,8 +74,7 @@ use tower::{Layer, Service};
 use tower_governor::{
     GovernorLayer, governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor,
 };
-use tower_http::timeout::TimeoutLayer;
-use tower_http::trace::TraceLayer;
+use tower_http::{timeout::TimeoutLayer, trace::TraceLayer};
 
 #[derive(Clone, Copy)]
 enum Env {
@@ -366,12 +365,23 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         // .route("/*path", any(move |req| async move {, messy if State larger
         .with_state(AppState { routes, client });
 
-    let router = router.layer(TraceLayer::new_for_http());
     let router = if enable_auth {
         router.layer(AuthLayer)
     } else {
         router
     };
+
+    // trace includes auth decision context after AuthLayer
+    let trace_layer = TraceLayer::new_for_http()
+        // install tracing for &tracing
+        .on_request(|req: &axum::http::Request<_>, _span: &tracing::Span| {
+            tracing::info!(
+                method = %req.method(),
+                uri = %req.uri(),
+                "incoming request"
+            );
+        });
+    let router = router.layer(trace_layer);
 
     // NOTE: test might use same identifier and burst request in short duration
     let router = match env {
@@ -417,6 +427,10 @@ async fn main() {
     ];
 
     let app = build_app(routes, true, Env::Prod);
+
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::INFO)
+        .init();
 
     // Bind IPv6 only: rely on dual-stack support Simple, but OS-dependent
     // *   Trying [::1]:8080...
