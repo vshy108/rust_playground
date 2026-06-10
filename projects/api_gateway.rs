@@ -5,6 +5,7 @@
 
 // ```bash
 // cargo run --bin api_gateway
+// curl -v http://localhost:8080/orders --header "authorization: ABC" --header "X-Forwarded-For: 1.1.1.1"
 // ```
 
 // Learn:
@@ -63,7 +64,25 @@ use axum::{
     routing::any,
 };
 use std::time::Duration;
+use std::{
+    future::Future,
+    pin::Pin,
+    task::{Context, Poll},
+};
 use tokio::net::TcpListener;
+use tower::{Layer, Service};
+use tower_governor::{
+    GovernorLayer, governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor,
+};
+use tower_http::timeout::TimeoutLayer;
+use tower_http::trace::TraceLayer;
+
+#[derive(Clone, Copy)]
+enum Env {
+    #[allow(unused)]
+    Test,
+    Prod,
+}
 
 #[allow(dead_code)]
 #[derive(Clone, Debug)]
@@ -106,6 +125,65 @@ impl HeaderFilter for HopByHopFilter {
             .filter(|(name, _)| !is_hop_by_hop(name))
             .map(|(name, value)| (name.clone(), value.clone()))
             .collect()
+    }
+}
+
+#[derive(Clone)]
+pub struct AuthService<S> {
+    inner: S,
+}
+
+impl<S, B> Service<Request<B>> for AuthService<S>
+where
+    S: Service<Request<B>, Response = Response<axum::body::Body>> + Clone + Send + 'static,
+    S::Future: Send + 'static,
+    B: Send + 'static,
+{
+    type Response = Response<axum::body::Body>;
+    type Error = S::Error;
+
+    type Future = Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>> + Send>>;
+
+    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+        self.inner.poll_ready(cx)
+    }
+
+    fn call(&mut self, req: Request<B>) -> Self::Future {
+        let mut inner = self.inner.clone();
+
+        Box::pin(async move {
+            // 🔐 auth check
+            if req.headers().get("authorization").is_none() {
+                return Ok(Response::builder()
+                    .status(StatusCode::UNAUTHORIZED)
+                    .body(axum::body::Body::empty())
+                    .unwrap());
+            }
+
+            // forward request
+            inner.call(req).await
+        })
+    }
+}
+
+// AuthLayer (Authentication / Authorization)
+// Purpose
+
+// Blocks unauthenticated requests early.
+
+// Typical responsibilities
+// Validate JWT / API key
+// Extract user identity
+// Attach claims to request extensions
+// Reject unauthorized requests with 401/403
+#[derive(Clone)]
+pub struct AuthLayer;
+
+impl<S> Layer<S> for AuthLayer {
+    type Service = AuthService<S>;
+
+    fn layer(&self, inner: S) -> Self::Service {
+        AuthService { inner }
     }
 }
 
@@ -209,6 +287,7 @@ async fn proxy_handler(
     let uri = parts.uri;
     // let path = req.uri().path();
     let path = uri.path();
+    println!("Incoming path: {}", path);
 
     let route = match_route(path, &state.routes).ok_or(StatusCode::NOT_FOUND)?;
 
@@ -221,6 +300,7 @@ async fn proxy_handler(
     // let url = format!("{}{}", route.upstream, path);
     // query() expects something serializable, such as: .query(&[("foo", "bar")])
     let url = format!("{}{}", route.upstream, path_and_query);
+    println!("Redirect path and query: {}", url);
 
     // forwards only method and URL but not request body, query string, headers
     let resp = state
@@ -261,7 +341,7 @@ async fn proxy_handler(
     Ok(response)
 }
 
-fn build_app(routes: Vec<Route>) -> Router {
+fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
     // reqwest::Client::new() - connection pool, keep-alive support, DNS cache, HTTP/1.1 and HTTP/2 support
     // build with protection hung upstreams, slow DNS, socket exhaustion, excessive connection creation
     let client = reqwest::Client::builder()
@@ -271,7 +351,7 @@ fn build_app(routes: Vec<Route>) -> Router {
         .pool_idle_timeout(Duration::from_secs(90))
         .build()
         .unwrap();
-    Router::new()
+    let router = Router::new()
         // gateway already has its own router hence use single catch-all route, /*path
         // Path segments must not start with `*`. For wildcard capture, use `{*wildcard}`.
         // If you meant to literally match a segment starting with an asterisk,
@@ -284,7 +364,43 @@ fn build_app(routes: Vec<Route>) -> Router {
         // to swap configurations
         // not capture routes in a closure,
         // .route("/*path", any(move |req| async move {, messy if State larger
-        .with_state(AppState { routes, client })
+        .with_state(AppState { routes, client });
+
+    let router = router.layer(TraceLayer::new_for_http());
+    let router = if enable_auth {
+        router.layer(AuthLayer)
+    } else {
+        router
+    };
+
+    // NOTE: test might use same identifier and burst request in short duration
+    let router = match env {
+        Env::Test => router, // ❌ no rate limit
+        _ => {
+            // TODO: ERROR:  Unable To Extract Key!
+            // default PeerIpKeyExtractor
+            // cannot use tower::limit::RateLimitLayer; because it has no Clone needed by router.layer
+            let governor_conf = GovernorConfigBuilder::default()
+                // SmartIpKeyExtractor tries, in order:
+                // X-Forwarded-For
+                // X-Real-IP
+                // Forwarded
+                // Peer socket IP
+                .key_extractor(SmartIpKeyExtractor)
+                .per_second(100)
+                .burst_size(200)
+                .finish()
+                .unwrap();
+
+            let governor_layer = GovernorLayer::new(governor_conf);
+            router.layer(governor_layer)
+        }
+    };
+
+    router.layer(TimeoutLayer::with_status_code(
+        StatusCode::GATEWAY_TIMEOUT,
+        Duration::from_secs(30),
+    ))
 }
 
 #[tokio::main]
@@ -300,7 +416,7 @@ async fn main() {
         },
     ];
 
-    let app = build_app(routes);
+    let app = build_app(routes, true, Env::Prod);
 
     // Bind IPv6 only: rely on dual-stack support Simple, but OS-dependent
     // *   Trying [::1]:8080...
@@ -392,8 +508,11 @@ mod tests {
         (format!("http://{}", addr), handle)
     }
 
-    async fn spawn_gateway(routes: Vec<Route>) -> (String, tokio::task::JoinHandle<()>) {
-        let app = build_app(routes);
+    async fn spawn_gateway(
+        routes: Vec<Route>,
+        enable_auth: bool,
+    ) -> (String, tokio::task::JoinHandle<()>) {
+        let app = build_app(routes, enable_auth, Env::Test);
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let addr = listener.local_addr().unwrap();
         let handle = tokio::spawn(async move {
@@ -566,7 +685,7 @@ mod tests {
         let (tx, rx) = oneshot::channel();
         let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
         let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", &upstream_url)]).await;
+            spawn_gateway(vec![route("/users", &upstream_url)], false).await;
 
         let response = reqwest::Client::new()
             .post(format!("{}/users/123?expand=true", gateway_url))
@@ -599,7 +718,7 @@ mod tests {
     #[tokio::test]
     async fn proxy_returns_not_found_when_no_route_matches() {
         let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", "http://127.0.0.1:1")]).await;
+            spawn_gateway(vec![route("/users", "http://127.0.0.1:1")], false).await;
 
         let response = reqwest::Client::new()
             .get(format!("{}/orders/123", gateway_url))
@@ -619,7 +738,7 @@ mod tests {
         drop(listener);
 
         let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", &format!("http://{}", addr))]).await;
+            spawn_gateway(vec![route("/users", &format!("http://{}", addr))], false).await;
 
         let response = reqwest::Client::new()
             .get(format!("{}/users/123", gateway_url))
@@ -638,7 +757,7 @@ mod tests {
         let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
 
         let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", &upstream_url)]).await;
+            spawn_gateway(vec![route("/users", &upstream_url)], false).await;
 
         let _ = reqwest::Client::new()
             .get(format!("{}/users", gateway_url))

@@ -58,6 +58,13 @@ uuid = { version = "1.23.2", features = ["v4"] }
 # To prevent this, explicitly turn off default features
 reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls", "stream"] }
 
+# .layer(TraceLayer::new_for_http())
+tower-http = { version = "0.6", features = ["trace", "timeout"] }
+
+# networking clients and servers.
+tower = "0.5"
+
+tower_governor = "0.8"
 
 # [[example]] must stay [[example]] is a Cargo-defined table name
 # name should be lowercase letters/numbers with _ or -
