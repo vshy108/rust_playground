@@ -74,7 +74,7 @@ use tower::{Layer, Service};
 use tower_governor::{
     GovernorLayer, governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor,
 };
-use tower_http::{timeout::TimeoutLayer, trace::TraceLayer};
+use tower_http::{classify::ServerErrorsFailureClass, timeout::TimeoutLayer, trace::TraceLayer};
 
 #[derive(Clone, Copy)]
 enum Env {
@@ -286,7 +286,6 @@ async fn proxy_handler(
     let uri = parts.uri;
     // let path = req.uri().path();
     let path = uri.path();
-    println!("Incoming path: {}", path);
 
     let route = match_route(path, &state.routes).ok_or(StatusCode::NOT_FOUND)?;
 
@@ -365,23 +364,16 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         // .route("/*path", any(move |req| async move {, messy if State larger
         .with_state(AppState { routes, client });
 
+    // Why This Order
+    // TimeoutLayer Outermost Kills the whole request if anything below hangs — including slow auth or slow upstreams
+    // TraceLayer 2nd Logs only rate-limit-passed traffic; on_failure catches timeouts from above too
+    // GovernorLayer 3rd Drops floods cheaply before auth JWT verification (crypto = expensive)
+    // AuthLayer Innermost Only runs on legitimate, rate-limited traffic
     let router = if enable_auth {
         router.layer(AuthLayer)
     } else {
         router
     };
-
-    // trace includes auth decision context after AuthLayer
-    let trace_layer = TraceLayer::new_for_http()
-        // install tracing for &tracing
-        .on_request(|req: &axum::http::Request<_>, _span: &tracing::Span| {
-            tracing::info!(
-                method = %req.method(),
-                uri = %req.uri(),
-                "incoming request"
-            );
-        });
-    let router = router.layer(trace_layer);
 
     // NOTE: test might use same identifier and burst request in short duration
     let router = match env {
@@ -406,6 +398,30 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
             router.layer(governor_layer)
         }
     };
+
+    let trace_layer = TraceLayer::new_for_http()
+        // install tracing for &tracing
+        .on_request(|req: &axum::http::Request<_>, _span: &tracing::Span| {
+            tracing::info!(
+                method = %req.method(),
+                uri = %req.uri(),
+                "incoming request"
+            );
+        })
+        .on_response(
+            |response: &axum::http::Response<axum::body::Body>,
+             latency: Duration,
+             _span: &tracing::Span| {
+                tracing::info!("response: {} {:?}", response.status(), latency)
+            },
+        )
+        .on_failure(
+            |error: ServerErrorsFailureClass, _latency: Duration, _span: &tracing::Span| {
+                tracing::error!("error: {}", error)
+            },
+        );
+
+    let router = router.layer(trace_layer);
 
     router.layer(TimeoutLayer::with_status_code(
         StatusCode::GATEWAY_TIMEOUT,
