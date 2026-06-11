@@ -61,7 +61,7 @@ use axum::{
     extract::State,
     http::{HeaderMap, HeaderName, Request, StatusCode},
     response::Response,
-    routing::any,
+    routing::{any, get},
 };
 use std::time::Duration;
 use std::{
@@ -340,6 +340,14 @@ async fn proxy_handler(
     Ok(response)
 }
 
+async fn health() -> &'static str {
+    "OK"
+}
+
+async fn ready() -> StatusCode {
+    StatusCode::OK
+}
+
 fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
     // reqwest::Client::new() - connection pool, keep-alive support, DNS cache, HTTP/1.1 and HTTP/2 support
     // build with protection hung upstreams, slow DNS, socket exhaustion, excessive connection creation
@@ -351,6 +359,8 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         .build()
         .unwrap();
     let router = Router::new()
+        .route("/health", get(health))
+        .route("/ready", get(ready))
         // gateway already has its own router hence use single catch-all route, /*path
         // Path segments must not start with `*`. For wildcard capture, use `{*wildcard}`.
         // If you meant to literally match a segment starting with an asterisk,
@@ -841,5 +851,43 @@ mod tests {
         assert!(filtered.get("x-ok").is_some());
         assert!(filtered.get("connection").is_none());
         assert!(filtered.get("transfer-encoding").is_none());
+    }
+
+    #[tokio::test]
+    async fn health_returns_200() {
+        use tower::ServiceExt;
+
+        let app = build_app(vec![], false, Env::Test);
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/health")
+                    .body(axum::body::Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn ready_returns_200() {
+        use tower::ServiceExt;
+
+        let app = build_app(vec![], false, Env::Test);
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/ready")
+                    .body(axum::body::Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
     }
 }
