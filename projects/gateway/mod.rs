@@ -1,6 +1,10 @@
+pub mod handlers;
 pub mod headers;
 pub mod proxy;
+pub mod route_matcher;
 pub mod router;
+pub mod state;
+pub mod types;
 
 use axum::{
     extract::State,
@@ -8,9 +12,9 @@ use axum::{
     response::Response,
 };
 
-use crate::AppState;
 use proxy::forward_request;
-use router::match_route;
+use route_matcher::match_route;
+use state::AppState;
 
 pub async fn proxy_handler(
     State(state): State<AppState>,

@@ -81,29 +81,11 @@ use tower_http::{classify::ServerErrorsFailureClass, timeout::TimeoutLayer, trac
 mod gateway;
 #[allow(unused_imports)]
 use gateway::headers::HopByHopFilter;
-use gateway::proxy_handler;
 #[allow(unused_imports)]
-use gateway::router::match_route;
-
-#[derive(Clone, Copy)]
-enum Env {
-    #[allow(unused)]
-    Test,
-    Prod,
-}
-
-#[allow(dead_code)]
-#[derive(Clone, Debug)]
-struct Route {
-    prefix: String,
-    upstream: String,
-}
-
-#[derive(Clone)]
-struct AppState {
-    routes: Vec<Route>,
-    client: reqwest::Client,
-}
+use gateway::route_matcher::match_route;
+use gateway::router::build_router;
+use gateway::state::AppState;
+use gateway::types::{Env, Route};
 
 #[derive(Clone)]
 pub struct AuthService<S> {
@@ -164,14 +146,6 @@ impl<S> Layer<S> for AuthLayer {
     }
 }
 
-async fn health() -> &'static str {
-    "OK"
-}
-
-async fn ready() -> StatusCode {
-    StatusCode::OK
-}
-
 fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration) -> Router {
     // reqwest::Client::new() - connection pool, keep-alive support, DNS cache, HTTP/1.1 and HTTP/2 support
     // build with protection hung upstreams, slow DNS, socket exhaustion, excessive connection creation
@@ -182,22 +156,8 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration)
         .pool_idle_timeout(Duration::from_secs(90))
         .build()
         .unwrap();
-    let router = Router::new()
-        .route("/health", get(health))
-        .route("/ready", get(ready))
-        // gateway already has its own router hence use single catch-all route, /*path
-        // Path segments must not start with `*`. For wildcard capture, use `{*wildcard}`.
-        // If you meant to literally match a segment starting with an asterisk,
-        // call `without_v07_checks` on the router.
-        .route("/{*path}", any(proxy_handler))
-        // .layer(tower_http::trace::TraceLayer::new_for_http())
-        // .layer(tower_http::timeout::TimeoutLayer::new(Duration::from_secs(30)))
-        // with_state here will pass to route handler, proxy_handler 1st argument State
-        // not using global variables, harder to test, hidden dependencies, difficult
-        // to swap configurations
-        // not capture routes in a closure,
-        // .route("/*path", any(move |req| async move {, messy if State larger
-        .with_state(AppState { routes, client });
+    let state = AppState { routes, client };
+    let router = build_router(state);
 
     // Why This Order
     // TraceLayer Outermost Logs all traffic;
