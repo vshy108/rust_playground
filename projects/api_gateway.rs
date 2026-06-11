@@ -322,20 +322,28 @@ async fn proxy_handler(
     // no more full body in RAM
     let resp_body = axum::body::Body::from_stream(resp_stream);
 
-    // only preserve status, but missing
+    // Response headers:
     // Content-Type
     // Content-Length
     // Cache-Control
     // ETag
     // Location
-    // let builder = Response::builder().status(status);
-    let mut response = Response::builder()
-        .status(resp_status)
-        .body(resp_body)
-        .unwrap();
+    // Ensures headers are inserted at build-time
+    // Avoids unsafe mutation after body creation
+    // Prevents silent header drop bugs
+    let filtered_headers = filter.filter(&resp_headers);
 
-    // HeaderMap supports extend
-    response.headers_mut().extend(filter.filter(&resp_headers));
+    let mut builder = Response::builder().status(resp_status);
+
+    // extend headers_mut is somehow unsafe
+    let headers = builder.headers_mut().unwrap();
+    for (k, v) in filtered_headers.iter() {
+        headers.insert(k, v.clone());
+    }
+
+    let response = builder
+        .body(resp_body)
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     Ok(response)
 }
