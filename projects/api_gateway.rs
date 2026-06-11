@@ -435,6 +435,13 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         .layer(PropagateRequestIdLayer::x_request_id())
 }
 
+// graceful shutdown
+async fn shutdown_signal() {
+    tokio::signal::ctrl_c()
+        .await
+        .expect("failed to install Ctrl+C handler");
+}
+
 #[tokio::main]
 async fn main() {
     let routes = vec![
@@ -460,7 +467,10 @@ async fn main() {
     // IPv4 0.0.0.0:8080
     let listener = TcpListener::bind("[::]:8080").await.unwrap();
 
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
+        .await
+        .unwrap();
 }
 
 #[cfg(test)]
