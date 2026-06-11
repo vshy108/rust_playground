@@ -365,8 +365,8 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         .with_state(AppState { routes, client });
 
     // Why This Order
-    // TimeoutLayer Outermost Kills the whole request if anything below hangs — including slow auth or slow upstreams
-    // TraceLayer 2nd Logs only rate-limit-passed traffic; on_failure catches timeouts from above too
+    // TraceLayer Outermost Logs all traffic;
+    // TimeoutLayer 2nd Kills the whole request if anything below hangs — including slow auth or slow upstreams
     // GovernorLayer 3rd Drops floods cheaply before auth JWT verification (crypto = expensive)
     // AuthLayer Innermost Only runs on legitimate, rate-limited traffic
     let router = if enable_auth {
@@ -399,6 +399,11 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         }
     };
 
+    let router = router.layer(TimeoutLayer::with_status_code(
+        StatusCode::GATEWAY_TIMEOUT,
+        Duration::from_secs(30),
+    ));
+
     let trace_layer = TraceLayer::new_for_http()
         // install tracing for &tracing
         .on_request(|req: &axum::http::Request<_>, _span: &tracing::Span| {
@@ -421,12 +426,7 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
             },
         );
 
-    let router = router.layer(trace_layer);
-
-    router.layer(TimeoutLayer::with_status_code(
-        StatusCode::GATEWAY_TIMEOUT,
-        Duration::from_secs(30),
-    ))
+    router.layer(trace_layer)
 }
 
 #[tokio::main]
