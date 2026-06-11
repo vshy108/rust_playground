@@ -341,6 +341,11 @@ async fn proxy_handler(
         headers.insert(k, v.clone());
     }
 
+    // NOTE: proxy server not pass back x-request-id in response
+    if let Some(id) = parts.headers.get("x-request-id") {
+        headers.insert("x-request-id", id.clone());
+    }
+
     let response = builder
         .body(resp_body)
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
@@ -356,7 +361,7 @@ async fn ready() -> StatusCode {
     StatusCode::OK
 }
 
-fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
+fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration) -> Router {
     // reqwest::Client::new() - connection pool, keep-alive support, DNS cache, HTTP/1.1 and HTTP/2 support
     // build with protection hung upstreams, slow DNS, socket exhaustion, excessive connection creation
     let client = reqwest::Client::builder()
@@ -420,7 +425,7 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
 
     let router = router.layer(TimeoutLayer::with_status_code(
         StatusCode::GATEWAY_TIMEOUT,
-        Duration::from_secs(30),
+        timeout,
     ));
 
     let trace_layer = TraceLayer::new_for_http()
@@ -473,7 +478,7 @@ async fn main() {
         },
     ];
 
-    let app = build_app(routes, true, Env::Prod);
+    let app = build_app(routes, true, Env::Prod, Duration::from_secs(15));
 
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
@@ -499,6 +504,7 @@ mod tests {
         body::{Body, to_bytes},
         extract::State,
         http::{HeaderValue, Method, StatusCode},
+        response::IntoResponse,
         routing::any,
     };
     use std::sync::{Arc, Mutex};
@@ -575,8 +581,9 @@ mod tests {
     async fn spawn_gateway(
         routes: Vec<Route>,
         enable_auth: bool,
+        timeout: Duration,
     ) -> (String, tokio::task::JoinHandle<()>) {
-        let app = build_app(routes, enable_auth, Env::Test);
+        let app = build_app(routes, enable_auth, Env::Test, timeout);
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let addr = listener.local_addr().unwrap();
         let handle = tokio::spawn(async move {
@@ -600,6 +607,35 @@ mod tests {
             route("/users/admin", "http://admin-svc"),
             route("/orders", "http://orders-svc"),
         ]
+    }
+
+    async fn spawn_slow_upstream() -> (String, tokio::task::JoinHandle<()>) {
+        let app = Router::new().route("/{*path}", any(slow_upstream_handler));
+
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+
+        let handle = tokio::spawn(async move {
+            axum::serve(listener, app).await.unwrap();
+        });
+
+        (format!("http://{}", addr), handle)
+    }
+
+    async fn slow_upstream_handler(req: Request<Body>) -> impl IntoResponse {
+        let ms = req
+            .headers()
+            .get("x-test-sleep-ms")
+            .and_then(|v| v.to_str().ok())
+            .and_then(|v| v.parse::<u64>().ok())
+            .unwrap_or(0);
+
+        if ms > 0 {
+            tracing::info!("injecting artificial delay: {}ms", ms);
+            tokio::time::sleep(Duration::from_millis(ms)).await;
+        }
+
+        (axum::http::StatusCode::OK, "ok")
     }
 
     #[test]
@@ -748,8 +784,12 @@ mod tests {
     async fn proxy_forwards_method_query_headers_body_and_response_headers() {
         let (tx, rx) = oneshot::channel();
         let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
-        let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", &upstream_url)], false).await;
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &upstream_url)],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
 
         let response = reqwest::Client::new()
             .post(format!("{}/users/123?expand=true", gateway_url))
@@ -781,8 +821,12 @@ mod tests {
 
     #[tokio::test]
     async fn proxy_returns_not_found_when_no_route_matches() {
-        let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", "http://127.0.0.1:1")], false).await;
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", "http://127.0.0.1:1")],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
 
         let response = reqwest::Client::new()
             .get(format!("{}/orders/123", gateway_url))
@@ -801,8 +845,12 @@ mod tests {
         let addr = listener.local_addr().unwrap();
         drop(listener);
 
-        let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", &format!("http://{}", addr))], false).await;
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &format!("http://{}", addr))],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
 
         let response = reqwest::Client::new()
             .get(format!("{}/users/123", gateway_url))
@@ -820,8 +868,12 @@ mod tests {
         let (tx, rx) = oneshot::channel();
         let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
 
-        let (gateway_url, gateway_handle) =
-            spawn_gateway(vec![route("/users", &upstream_url)], false).await;
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &upstream_url)],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
 
         let _ = reqwest::Client::new()
             .get(format!("{}/users", gateway_url))
@@ -865,7 +917,7 @@ mod tests {
     async fn health_returns_200() {
         use tower::ServiceExt;
 
-        let app = build_app(vec![], false, Env::Test);
+        let app = build_app(vec![], false, Env::Test, Duration::from_secs(15));
 
         let response = app
             .oneshot(
@@ -884,7 +936,7 @@ mod tests {
     async fn ready_returns_200() {
         use tower::ServiceExt;
 
-        let app = build_app(vec![], false, Env::Test);
+        let app = build_app(vec![], false, Env::Test, Duration::from_secs(15));
 
         let response = app
             .oneshot(
@@ -897,5 +949,243 @@ mod tests {
             .unwrap();
 
         assert_eq!(response.status(), StatusCode::OK);
+    }
+
+    #[tokio::test]
+    async fn auth_returns_401_without_authorization_header() {
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", "http://127.0.0.1:1")],
+            true,
+            Duration::from_secs(15),
+        )
+        .await;
+
+        let response = reqwest::Client::new()
+            .get(format!("{}/users/123", gateway_url))
+            .send()
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::UNAUTHORIZED);
+
+        gateway_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn auth_allows_request_with_authorization_header() {
+        let (tx, rx) = oneshot::channel();
+
+        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &upstream_url)],
+            true,
+            Duration::from_secs(15),
+        )
+        .await;
+
+        let response = reqwest::Client::new()
+            .get(format!("{}/users/123", gateway_url))
+            .header("authorization", "Bearer test-token")
+            .send()
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::CREATED);
+
+        let seen = rx.await.unwrap();
+
+        assert_eq!(seen.path_and_query, "/users/123");
+
+        gateway_handle.abort();
+        upstream_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn health_returns_ok_body() {
+        use tower::ServiceExt;
+
+        let app = build_app(vec![], false, Env::Test, Duration::from_secs(15));
+
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/health")
+                    .body(axum::body::Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        assert_eq!(response.status(), StatusCode::OK);
+
+        let body = to_bytes(response.into_body(), usize::MAX).await.unwrap();
+
+        assert_eq!(&body[..], b"OK");
+    }
+
+    #[tokio::test]
+    async fn request_id_is_generated_for_upstream_request() {
+        let (tx, rx) = oneshot::channel();
+
+        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &upstream_url)],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
+
+        reqwest::Client::new()
+            .get(format!("{}/users/123", gateway_url))
+            .send()
+            .await
+            .unwrap();
+
+        let seen = rx.await.unwrap();
+
+        println!("{:#?}", seen.headers);
+
+        assert!(seen.headers.get("x-request-id").is_some());
+
+        gateway_handle.abort();
+        upstream_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn request_id_is_generated_and_forwarded() {
+        let (tx, rx) = oneshot::channel();
+
+        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &upstream_url)],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
+
+        let response = reqwest::Client::new()
+            .get(format!("{}/users/123", gateway_url))
+            .send()
+            .await
+            .unwrap();
+
+        assert!(response.headers().get("x-request-id").is_some());
+
+        let seen = rx.await.unwrap();
+
+        assert!(seen.headers.get("x-request-id").is_some());
+
+        gateway_handle.abort();
+        upstream_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn request_id_is_preserved_when_supplied() {
+        let (tx, rx) = oneshot::channel();
+
+        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &upstream_url)],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
+
+        let response = reqwest::Client::new()
+            .get(format!("{}/users/123", gateway_url))
+            .header("x-request-id", "my-request-id")
+            .send()
+            .await
+            .unwrap();
+
+        assert_eq!(
+            response
+                .headers()
+                .get("x-request-id")
+                .unwrap()
+                .to_str()
+                .unwrap(),
+            "my-request-id"
+        );
+
+        let seen = rx.await.unwrap();
+
+        assert_eq!(
+            seen.headers.get("x-request-id").unwrap().to_str().unwrap(),
+            "my-request-id"
+        );
+
+        gateway_handle.abort();
+        upstream_handle.abort();
+    }
+
+    #[test]
+    fn test_filter_headers_removes_all_hop_by_hop_headers() {
+        let mut headers = HeaderMap::new();
+
+        headers.insert("connection", "x".parse().unwrap());
+        headers.insert("keep-alive", "x".parse().unwrap());
+        headers.insert("proxy-authenticate", "x".parse().unwrap());
+        headers.insert("proxy-authorization", "x".parse().unwrap());
+        headers.insert("te", "x".parse().unwrap());
+        headers.insert("trailer", "x".parse().unwrap());
+        headers.insert("transfer-encoding", "x".parse().unwrap());
+        headers.insert("upgrade", "x".parse().unwrap());
+
+        headers.insert("x-ok", "1".parse().unwrap());
+
+        let filtered = HopByHopFilter.filter(&headers);
+
+        assert!(filtered.get("connection").is_none());
+        assert!(filtered.get("keep-alive").is_none());
+        assert!(filtered.get("proxy-authenticate").is_none());
+        assert!(filtered.get("proxy-authorization").is_none());
+        assert!(filtered.get("te").is_none());
+        assert!(filtered.get("trailer").is_none());
+        assert!(filtered.get("transfer-encoding").is_none());
+        assert!(filtered.get("upgrade").is_none());
+
+        assert!(filtered.get("x-ok").is_some());
+    }
+
+    #[tokio::test]
+    async fn gateway_timeout_via_header_injection() {
+        use axum::body::Body;
+        use axum::http::Request;
+        use std::time::Duration;
+        use tower::ServiceExt;
+
+        // 1. start controlled upstream
+        let (upstream_url, upstream_handle) = spawn_slow_upstream().await;
+
+        // 2. build gateway with timeout smaller than injected delay
+        const DELAY: u64 = 100;
+        let app = build_app(
+            vec![route("/users", &upstream_url)],
+            false,
+            Env::Test,
+            Duration::from_millis(DELAY - 1),
+        );
+
+        // 3. call gateway WITH trigger header
+        let response = app
+            .oneshot(
+                Request::builder()
+                    .uri("/users/123")
+                    .header("x-test-sleep-ms", DELAY.to_string()) // 👈 triggers upstream delay
+                    .body(Body::empty())
+                    .unwrap(),
+            )
+            .await
+            .unwrap();
+
+        // 4. assert timeout happened
+        assert_eq!(response.status(), StatusCode::GATEWAY_TIMEOUT);
+
+        upstream_handle.abort();
     }
 }
