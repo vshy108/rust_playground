@@ -74,6 +74,7 @@ use tower::{Layer, Service};
 use tower_governor::{
     GovernorLayer, governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor,
 };
+use tower_http::request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer};
 use tower_http::{classify::ServerErrorsFailureClass, timeout::TimeoutLayer, trace::TraceLayer};
 
 #[derive(Clone, Copy)]
@@ -408,6 +409,7 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
         // install tracing for &tracing
         .on_request(|req: &axum::http::Request<_>, _span: &tracing::Span| {
             tracing::info!(
+                request_id = ?req.headers().get("x-request-id"),
                 method = %req.method(),
                 uri = %req.uri(),
                 "incoming request"
@@ -426,7 +428,11 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env) -> Router {
             },
         );
 
-    router.layer(trace_layer)
+    let router = router.layer(trace_layer);
+
+    router
+        .layer(SetRequestIdLayer::x_request_id(MakeRequestUuid))
+        .layer(PropagateRequestIdLayer::x_request_id())
 }
 
 #[tokio::main]
