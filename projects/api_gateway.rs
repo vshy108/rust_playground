@@ -73,12 +73,12 @@ use axum::{
     response::Response,
     routing::{any, get},
 };
-use std::time::Duration;
 use std::{
     future::Future,
     pin::Pin,
     task::{Context, Poll},
 };
+use std::{sync::Arc, time::Duration};
 use tokio::net::TcpListener;
 use tower::{Layer, Service};
 use tower_governor::{
@@ -91,6 +91,7 @@ use tower_http::{classify::ServerErrorsFailureClass, timeout::TimeoutLayer, trac
 mod gateway;
 #[allow(unused_imports)]
 use gateway::headers::HopByHopFilter;
+use gateway::round_robin::LoadBalancer;
 #[allow(unused_imports)]
 use gateway::route_matcher::match_route;
 use gateway::router::build_router;
@@ -157,8 +158,8 @@ impl<S> Layer<S> for AuthLayer {
 }
 
 fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration) -> Router {
-    // reqwest::Client::new() - connection pool, keep-alive support, DNS cache, HTTP/1.1 and HTTP/2 support
-    // build with protection hung upstreams, slow DNS, socket exhaustion, excessive connection creation
+    // reqwest::Client::builder() configures shared pooling, keep-alive, and timeouts for upstream calls.
+    // These limits protect the gateway from slow DNS, hung upstreams, and excessive connection churn.
     let client = reqwest::Client::builder()
         .connect_timeout(Duration::from_secs(5))
         .timeout(Duration::from_secs(30))
@@ -166,14 +167,14 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration)
         .pool_idle_timeout(Duration::from_secs(90))
         .build()
         .unwrap();
-    let state = AppState { routes, client };
+    let state = AppState {
+        routes,
+        client,
+        lb: Arc::new(LoadBalancer::new()),
+    };
     let router = build_router(state);
 
-    // Why This Order
-    // TraceLayer Outermost Logs all traffic;
-    // TimeoutLayer 2nd Kills the whole request if anything below hangs — including slow auth or slow upstreams
-    // GovernorLayer 3rd Drops floods cheaply before auth JWT verification (crypto = expensive)
-    // AuthLayer Innermost Only runs on legitimate, rate-limited traffic
+    // Auth is layered closest to the handler so later layers can short-circuit before it when needed.
     let router = if enable_auth {
         router.layer(AuthLayer)
     } else {
@@ -184,6 +185,7 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration)
     let router = match env {
         Env::Test => router, // ❌ no rate limit
         _ => {
+            // SmartIpKeyExtractor uses forwarded headers first and falls back to the peer socket IP.
             // TODO: ERROR:  Unable To Extract Key!
             // default PeerIpKeyExtractor
             // cannot use tower::limit::RateLimitLayer; because it has no Clone needed by router.layer
@@ -211,6 +213,7 @@ fn build_app(routes: Vec<Route>, enable_auth: bool, env: Env, timeout: Duration)
 
     let trace_layer = TraceLayer::new_for_http()
         // install tracing for &tracing
+        // Record request metadata on the tracing span.
         .on_request(|req: &axum::http::Request<_>, _span: &tracing::Span| {
             tracing::info!(
                 request_id = ?req.headers().get("x-request-id"),
@@ -248,17 +251,27 @@ async fn shutdown_signal() {
 
 #[tokio::main]
 async fn main() {
+    // Static demo route table; each route can fan out to multiple upstream instances.
     let routes = vec![
         Route {
+            // Incoming paths beginning with /users are proxied to this upstream pool.
             prefix: "/users".into(),
-            upstream: "http://localhost:3001".into(),
+            upstreams: vec![
+                "http://localhost:3001".into(),
+                "http://localhost:3003".into(),
+            ],
         },
         Route {
+            // Incoming paths beginning with /orders are proxied to this upstream pool.
             prefix: "/orders".into(),
-            upstream: "http://localhost:3002".into(),
+            upstreams: vec![
+                "http://localhost:3002".into(),
+                "http://localhost:3004".into(),
+            ],
         },
     ];
 
+    // Build production middleware stack over the configured routes.
     let app = build_app(routes, true, Env::Prod, Duration::from_secs(15));
 
     tracing_subscriber::fmt()
@@ -303,7 +316,10 @@ mod tests {
 
     #[derive(Clone)]
     struct UpstreamState {
+        // One-shot channel used by tests to inspect exactly one observed request.
         sender: Arc<Mutex<Option<oneshot::Sender<SeenRequest>>>>,
+        // Stable upstream identifier returned in the x-upstream response header.
+        id: &'static str,
     }
 
     async fn upstream_handler(
@@ -335,19 +351,23 @@ mod tests {
 
         Response::builder()
             .status(StatusCode::CREATED)
-            .header("x-upstream", "present")
+            .header("x-upstream", state.id)
             .header("content-type", "text/plain")
             .body(Body::from("upstream ok"))
             .unwrap()
     }
 
     async fn spawn_upstream(
+        // Human-readable upstream identity used by assertions.
+        id: &'static str,
+        // Channel used to report the captured request back to the test.
         sender: oneshot::Sender<SeenRequest>,
     ) -> (String, tokio::task::JoinHandle<()>) {
         let app = Router::new()
             .route("/{*path}", any(upstream_handler))
             .with_state(UpstreamState {
                 sender: Arc::new(Mutex::new(Some(sender))),
+                id,
             });
 
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
@@ -374,19 +394,21 @@ mod tests {
         (format!("http://{}", addr), handle)
     }
 
-    fn route(prefix: &str, upstream: &str) -> Route {
+    fn route(prefix: &str, upstreams: &[&str]) -> Route {
         Route {
+            // Prefix match key used by match_route.
             prefix: prefix.to_string(),
-            upstream: upstream.to_string(),
+            // Convert borrowed test literals into owned String upstream URLs.
+            upstreams: upstreams.iter().map(|s| s.to_string()).collect(),
         }
     }
 
     fn table() -> Vec<Route> {
         vec![
-            route("/", "http://root"),
-            route("/users", "http://users-svc"),
-            route("/users/admin", "http://admin-svc"),
-            route("/orders", "http://orders-svc"),
+            route("/", &["http://root"]),
+            route("/users", &["http://users-svc", "http://users-svc-2"]),
+            route("/users/admin", &["http://admin-svc"]),
+            route("/orders", &["http://orders-svc"]),
         ]
     }
 
@@ -422,8 +444,9 @@ mod tests {
     #[test]
     fn exact_match() {
         let routes = table();
+
         assert_eq!(
-            match_route("/orders", &routes).map(|r| r.upstream.as_str()),
+            match_route("/orders", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://orders-svc")
         );
     }
@@ -433,7 +456,8 @@ mod tests {
         // "/users/admin/1" matches both "/users" and "/users/admin"; the longer one must win.
         let routes = table();
         assert_eq!(
-            match_route("/users/admin/1", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/admin/1", &routes)
+                .and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://admin-svc")
         );
     }
@@ -443,7 +467,7 @@ mod tests {
         // "/users/42" matches "/users" but not "/users/admin".
         let routes = table();
         assert_eq!(
-            match_route("/users/42", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/42", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users-svc")
         );
     }
@@ -453,14 +477,15 @@ mod tests {
         // "/unknown" only matches "/".
         let routes = table();
         assert_eq!(
-            match_route("/unknown", &routes).map(|r| r.upstream.as_str()),
+            match_route("/unknown", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://root")
         );
     }
 
     #[test]
     fn no_match_returns_none() {
-        let routes = vec![route("/api", "http://api")];
+        let routes = vec![route("/api", &["http://api"])];
+
         assert!(match_route("/other", &routes).is_none());
     }
 
@@ -470,21 +495,23 @@ mod tests {
         // a complete segment — the next char is 'i', not '/'. Must fall back to "/users".
         let routes = table();
         assert_eq!(
-            match_route("/users/administrator", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/administrator", &routes)
+                .and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users-svc")
         );
     }
 
     #[test]
     fn param_segment_matches_any_value() {
-        let routes = vec![route("/users/:id", "http://users-svc")];
+        let routes = vec![route("/users/:id", &["http://users-svc"])];
 
         assert_eq!(
-            match_route("/users/42", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/42", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users-svc")
         );
         assert_eq!(
-            match_route("/users/abc", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/abc", &routes)
+                .and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users-svc")
         );
         assert!(match_route("/users", &routes).is_none());
@@ -493,16 +520,17 @@ mod tests {
     #[test]
     fn static_beats_param_at_same_depth() {
         let routes = vec![
-            route("/users/:id", "http://users-svc"),
-            route("/users/admin", "http://admin-svc"),
+            route("/users/:id", &["http://users-svc"]),
+            route("/users/admin", &["http://admin-svc"]),
         ];
 
         assert_eq!(
-            match_route("/users/admin", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/admin", &routes)
+                .and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://admin-svc")
         );
         assert_eq!(
-            match_route("/users/42", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/42", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users-svc")
         );
     }
@@ -510,40 +538,41 @@ mod tests {
     #[test]
     fn equal_specificity_keeps_first_configured_route() {
         let routes = vec![
-            route("/users/:id", "http://users-by-id"),
-            route("/users/:name", "http://users-by-name"),
+            route("/users/:id", &["http://users-by-id"]),
+            route("/users/:name", &["http://users-by-name"]),
         ];
 
         assert_eq!(
-            match_route("/users/alice", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/alice", &routes)
+                .and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users-by-id")
         );
     }
 
     #[test]
     fn trailing_slash_matches() {
-        let routes = vec![route("/users", "http://users")];
+        let routes = vec![route("/users", &["http://users"])];
 
         // /users/ same to /users
         assert_eq!(
-            match_route("/users/", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://users")
         );
     }
 
     #[test]
     fn root_matches_root() {
-        let routes = vec![route("/", "http://root")];
+        let routes = vec![route("/", &["http://root"])];
 
         assert_eq!(
-            match_route("/", &routes).map(|r| r.upstream.as_str()),
+            match_route("/", &routes).and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://root")
         );
     }
 
     #[test]
     fn multiple_params_match() {
-        let routes = vec![route("/users/:id/orders/:order_id", "http://svc")];
+        let routes = vec![route("/users/:id/orders/:order_id", &["http://svc"])];
 
         assert!(match_route("/users/123/orders/456", &routes).is_some());
     }
@@ -551,12 +580,13 @@ mod tests {
     #[test]
     fn static_beats_param_deeply() {
         let routes = vec![
-            route("/users/:id/orders", "http://param"),
-            route("/users/admin/orders", "http://admin"),
+            route("/users/:id/orders", &["http://param"]),
+            route("/users/admin/orders", &["http://admin"]),
         ];
 
         assert_eq!(
-            match_route("/users/admin/orders", &routes).map(|r| r.upstream.as_str()),
+            match_route("/users/admin/orders", &routes)
+                .and_then(|r| r.upstreams.first().map(|u| u.as_str())),
             Some("http://admin")
         );
     }
@@ -564,9 +594,9 @@ mod tests {
     #[tokio::test]
     async fn proxy_forwards_method_query_headers_body_and_response_headers() {
         let (tx, rx) = oneshot::channel();
-        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (upstream_url, upstream_handle) = spawn_upstream("u1", tx).await;
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             false,
             Duration::from_secs(15),
         )
@@ -583,7 +613,7 @@ mod tests {
         assert_eq!(response.status(), StatusCode::CREATED);
         assert_eq!(
             response.headers().get("x-upstream"),
-            Some(&HeaderValue::from_static("present"))
+            Some(&HeaderValue::from_static("u1"))
         );
         assert_eq!(response.text().await.unwrap(), "upstream ok");
 
@@ -603,7 +633,7 @@ mod tests {
     #[tokio::test]
     async fn proxy_returns_not_found_when_no_route_matches() {
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", "http://127.0.0.1:1")],
+            vec![route("/users", &["http://127.0.0.1:1"])],
             false,
             Duration::from_secs(15),
         )
@@ -626,8 +656,10 @@ mod tests {
         let addr = listener.local_addr().unwrap();
         drop(listener);
 
+        let upstream = format!("http://{}", addr);
+
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &format!("http://{}", addr))],
+            vec![route("/users", &[upstream.as_str()])],
             false,
             Duration::from_secs(15),
         )
@@ -647,10 +679,10 @@ mod tests {
     #[tokio::test]
     async fn proxy_filters_hop_by_hop_request_headers() {
         let (tx, rx) = oneshot::channel();
-        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (upstream_url, upstream_handle) = spawn_upstream("u1", tx).await;
 
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             false,
             Duration::from_secs(15),
         )
@@ -735,7 +767,7 @@ mod tests {
     #[tokio::test]
     async fn auth_returns_401_without_authorization_header() {
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", "http://127.0.0.1:1")],
+            vec![route("/users", &["http://127.0.0.1:1"])],
             true,
             Duration::from_secs(15),
         )
@@ -756,10 +788,10 @@ mod tests {
     async fn auth_allows_request_with_authorization_header() {
         let (tx, rx) = oneshot::channel();
 
-        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (upstream_url, upstream_handle) = spawn_upstream("u1", tx).await;
 
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             true,
             Duration::from_secs(15),
         )
@@ -809,10 +841,10 @@ mod tests {
     async fn request_id_is_generated_for_upstream_request() {
         let (tx, rx) = oneshot::channel();
 
-        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (upstream_url, upstream_handle) = spawn_upstream("u1", tx).await;
 
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             false,
             Duration::from_secs(15),
         )
@@ -838,10 +870,10 @@ mod tests {
     async fn request_id_is_generated_and_forwarded() {
         let (tx, rx) = oneshot::channel();
 
-        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (upstream_url, upstream_handle) = spawn_upstream("u1", tx).await;
 
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             false,
             Duration::from_secs(15),
         )
@@ -867,10 +899,10 @@ mod tests {
     async fn request_id_is_preserved_when_supplied() {
         let (tx, rx) = oneshot::channel();
 
-        let (upstream_url, upstream_handle) = spawn_upstream(tx).await;
+        let (upstream_url, upstream_handle) = spawn_upstream("u1", tx).await;
 
         let (gateway_url, gateway_handle) = spawn_gateway(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             false,
             Duration::from_secs(15),
         )
@@ -946,7 +978,7 @@ mod tests {
         // 2. build gateway with timeout smaller than injected delay
         const DELAY: u64 = 100;
         let app = build_app(
-            vec![route("/users", &upstream_url)],
+            vec![route("/users", &[upstream_url.as_str()])],
             false,
             Env::Test,
             Duration::from_millis(DELAY - 1),
@@ -968,5 +1000,51 @@ mod tests {
         assert_eq!(response.status(), StatusCode::GATEWAY_TIMEOUT);
 
         upstream_handle.abort();
+    }
+
+    #[tokio::test]
+    async fn round_robin_distributes_requests() {
+        // Separate observation channels so each upstream can report one request.
+        let (tx1, rx1) = oneshot::channel();
+        let (tx2, rx2) = oneshot::channel();
+
+        // Distinct IDs let us assert exact upstream selection order.
+        const STREAM_ID_1: &str = "upstream-1";
+        const STREAM_ID_2: &str = "upstream-2";
+        let (u1, h1) = spawn_upstream(STREAM_ID_1, tx1).await;
+        let (u2, h2) = spawn_upstream(STREAM_ID_2, tx2).await;
+
+        // Route /users traffic to both upstreams to exercise round-robin selection.
+        let (gateway_url, gateway_handle) = spawn_gateway(
+            vec![route("/users", &[u1.as_str(), u2.as_str()])],
+            false,
+            Duration::from_secs(15),
+        )
+        .await;
+
+        // First request should hit upstream-1.
+        let response1 = reqwest::get(format!("{}/users/1", gateway_url))
+            .await
+            .unwrap();
+        // Second request should hit upstream-2.
+        let response2 = reqwest::get(format!("{}/users/2", gateway_url))
+            .await
+            .unwrap();
+
+        // Assert upstream identity from response headers.
+        assert_eq!(response1.headers().get("x-upstream").unwrap(), STREAM_ID_1);
+        assert_eq!(response2.headers().get("x-upstream").unwrap(), STREAM_ID_2);
+
+        // Pull captured requests from each upstream observer.
+        let seen1 = rx1.await.unwrap();
+        let seen2 = rx2.await.unwrap();
+
+        // Ensure each upstream observed the expected URL path.
+        assert_eq!(seen1.path_and_query, "/users/1");
+        assert_eq!(seen2.path_and_query, "/users/2");
+
+        gateway_handle.abort();
+        h1.abort();
+        h2.abort();
     }
 }

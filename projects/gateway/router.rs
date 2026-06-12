@@ -11,19 +11,37 @@ use crate::gateway::{
 
 pub fn build_router(state: AppState) -> Router {
     Router::new()
+        // -----------------------------
+        // System health endpoints
+        // -----------------------------
+        // Basic liveness endpoint.
         .route("/health", get(health))
+        // Readiness endpoint for orchestrators.
         .route("/ready", get(ready))
-        // gateway already has its own router hence use single catch-all route, /*path
-        // Path segments must not start with `*`. For wildcard capture, use `{*wildcard}`.
-        // If you meant to literally match a segment starting with an asterisk,
-        // call `without_v07_checks` on the router.
+        // -----------------------------
+        // Catch-all gateway proxy route
+        // -----------------------------
+        // Matches ALL paths not explicitly defined above.
+        // Example:
+        //   /users
+        //   /orders/123
+        //   /anything/else
+        //
+        // IMPORTANT:
+        // - This must be last because Axum evaluates routes top-down.
+        // - Wildcard captures full remaining path.
+        // All unmatched traffic enters proxy_handler.
         .route("/{*path}", any(proxy_handler))
-        // .layer(tower_http::trace::TraceLayer::new_for_http())
-        // .layer(tower_http::timeout::TimeoutLayer::new(Duration::from_secs(30)))
-        // with_state here will pass to route handler, proxy_handler 1st argument State
-        // not using global variables, harder to test, hidden dependencies, difficult
-        // to swap configurations
-        // not capture routes in a closure,
-        // .route("/*path", any(move |req| async move {, messy if State larger
+        // -----------------------------
+        // Shared application state
+        // -----------------------------
+        // Injects AppState into all handlers via axum extractor:
+        //   State<AppState>
+        //
+        // Avoids global variables:
+        // - improves testability
+        // - enables dependency swapping (mock clients, test routes)
+        // - isolates runtime configuration
+        // All handlers read the same cloned AppState instance.
         .with_state(state)
 }
