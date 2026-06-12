@@ -31,30 +31,40 @@
 //
 // Extra:
 //
+// Core Gateway
 // - [x] Route matching
 // - [x] Route specificity resolution
 // - [x] Parameterized route matching
-// - [] Basic API Gateway
+// - [x] Basic API Gateway
 // - [x] Prefix-based routing
-// - [ ] Request forwarding
-// - [ ] Header filtering (hop-by-hop header stripping)
-// - [ ] Upstream error handling (502 Bad Gateway)
-// - [ ] Integration tests (echo server, proxy forwarding)
-// - [ ] Middleware pipeline (logging, authentication, authorization)
+// - [x] Request forwarding
+// - [x] Header filtering (hop-by-hop header stripping)
+// - [x] Upstream error handling (502 Bad Gateway)
+// - [x] Integration tests (echo server, proxy forwarding)
+//
+// Middleware & Platform
+// - [x] Middleware pipeline (logging, authentication, authorization)
+// - [ ] JWT authentication
+// - [x] Request timeout
+// - [x] Rate limiting
+// - [x] Request ID generation & propagation
+// - [x] Graceful shutdown
+// - [x] Health checks
 // - [ ] OpenTelemetry tracing — propagate trace context to upstream services
+// - [ ] Distributed tracing (Jaeger/Tempo)
+// - [ ] Request/response metrics (Prometheus)
+//
+// Resilience
 // - [ ] Retry with exponential backoff
 // - [ ] Circuit breaker
-// - [ ] Request timeout
-// - [ ] Rate limiting
 // - [ ] Load balancing across multiple upstream instances
+//
+// Service Discovery & Configuration
 // - [ ] Service discovery (Consul, Eureka, Kubernetes)
-// - [ ] Response caching
-// - [ ] JWT authentication
-// - [ ] Request/response metrics (Prometheus)
-// - [ ] Distributed tracing (Jaeger/Tempo)
-// - [ ] Health checks
-// - [ ] Graceful shutdown
 // - [ ] Dynamic route configuration
+//
+// Performance
+// - [ ] Response caching
 
 #[allow(unused_imports)]
 use axum::{
