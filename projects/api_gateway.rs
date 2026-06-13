@@ -29,42 +29,66 @@
 // 3. `best_score >= score` guard — keeps the first configured route when two routes score
 //    identically. Changing to `>` would make the last route win instead.
 //
+//
 // Extra:
 //
 // Core Gateway
-// - [x] Route matching
-// - [x] Route specificity resolution
+// - [x] Route matching (prefix + param + specificity resolution)
+// - [x] Deterministic route scoring (depth + static priority)
 // - [x] Parameterized route matching
-// - [x] Basic API Gateway
-// - [x] Prefix-based routing
-// - [x] Request forwarding
-// - [x] Header filtering (hop-by-hop header stripping)
+// - [x] Catch-all route support
+// - [x] Request forwarding (streaming, zero-buffer)
+// - [x] Header filtering (hop-by-hop compliance)
+// - [x] Response header propagation
 // - [x] Upstream error handling (502 Bad Gateway)
-// - [x] Integration tests (echo server, proxy forwarding)
+// - [x] Upstream timeout handling (gateway-level enforcement)
+// - [x] Load balancing (round-robin across upstream pools)
+// - [x] Integration tests (routing, proxy, resilience, auth, timeout)
 //
 // Middleware & Platform
-// - [x] Middleware pipeline (logging, authentication, authorization)
-// - [ ] JWT authentication
-// - [x] Request timeout
-// - [x] Rate limiting
-// - [x] Request ID generation & propagation
-// - [x] Graceful shutdown
-// - [x] Health checks
-// - [ ] OpenTelemetry tracing — propagate trace context to upstream services
-// - [ ] Distributed tracing (Jaeger/Tempo)
-// - [ ] Request/response metrics (Prometheus)
+// - [x] Middleware pipeline (Tower-based layering)
+// - [x] Authentication middleware (header-based auth gate)
+// - [x] Rate limiting (tower_governor, IP-based)
+// - [x] Request timeout (Tower TimeoutLayer)
+// - [x] Request ID generation + propagation
+// - [x] Structured logging (TraceLayer)
+// - [x] Graceful shutdown (Ctrl+C signal handling)
+// - [x] Health & readiness endpoints
+//
+// Observability
+// - [x] Request tracing (TraceLayer hooks)
+// - [ ] Metrics export (Prometheus / OpenMetrics)
+// - [ ] Distributed tracing (OpenTelemetry propagation)
+// - [ ] Log correlation across upstream hops
 //
 // Resilience
-// - [ ] Retry with exponential backoff
-// - [ ] Circuit breaker
-// - [ ] Load balancing across multiple upstream instances
+// - [ ] Retry with exponential backoff (client-side)
+// - [ ] Circuit breaker per upstream (failure tracking)
+// - [x] Load balancing across upstream instances
+// - [ ] Bulkhead isolation (per-route concurrency limits)
 //
 // Service Discovery & Configuration
-// - [ ] Service discovery (Consul, Eureka, Kubernetes)
-// - [ ] Dynamic route configuration
+// - [ ] Static route config only (current state)
+// - [ ] Dynamic config reload (hot reload / watch file / config server)
+// - [ ] Service discovery integration (Kubernetes / Consul / Eureka)
 //
 // Performance
-// - [ ] Response caching
+// - [x] Streaming proxy (no full-body buffering)
+// - [x] Connection pooling (reqwest client reuse)
+// - [ ] Response caching layer (edge / in-memory)
+// - [ ] HTTP/2 upstream multiplexing optimization
+//
+// Security
+// - [x] Authorization header validation (basic gate)
+// - [ ] JWT validation (claims-based auth)
+// - [ ] mTLS upstream communication
+// - [ ] Request sanitization hardening
+//
+// Testing
+// - [x] Unit tests (route matching, header filtering)
+// - [x] Integration tests (proxy correctness, auth, timeout, round-robin)
+// - [x] E2E tests (upstream simulation + failure injection)
+// - [ ] Chaos testing (latency jitter, packet drop simulation)
 
 #[allow(unused_imports)]
 use axum::{
