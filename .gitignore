@@ -1,1 +1,4 @@
 /target
+
+# macOS cache 
+.DS_Store
