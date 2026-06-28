@@ -6,13 +6,13 @@
 # watch current directory
 cargo run --bin watchdir
 
-# watch a specific directory
-cargo run --bin watchdir -- /tmp/testdir
+# watch the fixtures directory
+cargo run --bin watchdir -- fixtures/
 
 # manual smoke checks used so far:
 touch .watchdir_smoke && rm .watchdir_smoke
-touch /tmp/testdir/abc
-echo hi >> /tmp/testdir/abc
+touch fixtures/smoke_test && rm fixtures/smoke_test
+echo hi >> fixtures/sample.txt
 rm /tmp/testdir/abc
 ```
 

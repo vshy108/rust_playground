@@ -6,7 +6,16 @@
 //   cache.put(key, value, ttl_secs)   insert or update; evicts LRU entry when at capacity
 //   cache.get(key)                    returns Option<i32>; promotes the entry to MRU on hit
 //
-// Progress:
+// Learn:
+//
+// - Option<T> — null-free way to represent a value that may or may not exist; `.map()` transforms without unwrapping
+// - std::time::Instant — monotonic clock snapshot; never jumps back; `Instant::now() + Duration::from_secs(n)` is a deadline
+// - HashMap — O(1) average lookup; here maps each cache key → Vec index of its node
+// - doubly-linked list — keeps entries in recency order; head = MRU, tail = LRU; splice on every get/put
+// - Vec<Node> + usize indices — arena allocator pattern; avoids Rust's two-owner problem for linked structures
+// - &mut self on get — get promotes a node to MRU, so reads also mutate; &mut enforces exclusive access
+//
+// Notes:
 // 1. Data model: `Vec<Node>` + `usize` indices avoids Rust's two-owner problem for
 //    doubly-linked structures. `HEAD` and `TAIL` are sentinel indices, so insert/remove
 //    never need empty-list special cases. `map: HashMap<i32, usize>` gives O(1) average
@@ -30,36 +39,6 @@
 // 6. Verification: focused tests cover empty reads, round-trip, LRU eviction, promotion,
 //    update-without-growth, expired miss cleanup, non-expired reads, and reclaiming expired
 //    entries before live eviction. `cargo test --bin lru_cache` is passing.
-//
-// Learn:
-//
-// - HashMap
-//   - HashMap<K, V> maps keys to values with O(1) average lookup.
-//   - Here the HashMap maps each key → the Vec index of its node, for O(1) lookup
-//     followed by O(1) list splice.
-//
-// - Linked structures
-//   - A doubly-linked list keeps entries in recency order: head = MRU, tail = LRU.
-//   - On every get/put, the touched node is unlinked and re-inserted at the head.
-//   - On eviction, the tail node is removed and its key used to clean the HashMap.
-//
-// - Mutability
-//   - Both put and get mutate the list (get promotes a node).
-//   - &mut self on both methods makes the borrow checker enforce exclusive access.
-//
-// Data layout — Vec<Node> + usize indices ("arena allocator" pattern):
-//   All nodes live in a Vec owned by LruCache.
-//   prev/next are usize indices into that Vec, not pointers.
-//   Two nodes "pointing" to the same node just hold the same integer — no ownership conflict.
-//   Sentinel head/tail nodes (indices 0 and 1) simplify edge cases: the real list
-//   lives between them, so insert/remove never need to special-case empty lists.
-//
-//   Memory layout:
-//     nodes[0]  = sentinel HEAD  (key/value unused)
-//     nodes[1]  = sentinel TAIL  (key/value unused)
-//     nodes[2+] = real entries
-//
-//   List invariant:  HEAD <-> [MRU] <-> ... <-> [LRU] <-> TAIL
 
 use std::{
     collections::HashMap,
@@ -169,20 +148,22 @@ impl LruCache {
             // any expired entry before evicting a still-live one.
             while cursor != HEAD {
                 let prev = self.nodes[cursor].prev;
-                if let Some(expires_at) = self.nodes[cursor].expires_at {
-                    if expires_at <= Instant::now() {
-                        let old_key = self.nodes[cursor].key;
-                        // FIX: checking only TAIL.prev misses expired entries that are
-                        // newer than the current LRU, which can wrongly evict a live
-                        // entry while a dead one still consumes capacity. Scan the
-                        // whole live list and reclaim any expired node before falling
-                        // back to normal LRU eviction.
-                        self.map.remove(&old_key);
-                        self.unlink(cursor);
-                        self.free.push(cursor);
-                        reclaimed = true;
-                        break;
-                    }
+                // FIX: clippy::collapsible_if — nested `if let` + inner `if cond` can be
+                // collapsed into a single `if let … && cond` guard; same semantics, less indentation.
+                if let Some(expires_at) = self.nodes[cursor].expires_at
+                    && expires_at <= Instant::now()
+                {
+                    let old_key = self.nodes[cursor].key;
+                    // FIX: checking only TAIL.prev misses expired entries that are
+                    // newer than the current LRU, which can wrongly evict a live
+                    // entry while a dead one still consumes capacity. Scan the
+                    // whole live list and reclaim any expired node before falling
+                    // back to normal LRU eviction.
+                    self.map.remove(&old_key);
+                    self.unlink(cursor);
+                    self.free.push(cursor);
+                    reclaimed = true;
+                    break;
                 }
                 cursor = prev;
             }
@@ -241,18 +222,20 @@ impl LruCache {
     fn get(&mut self, key: i32) -> Option<i32> {
         let idx = self.map.get(&key).copied()?;
 
-        if let Some(expires_at) = self.nodes[idx].expires_at {
-            if expires_at <= Instant::now() {
-                // FIX: treating an expired entry as a plain miss by only returning
-                // None would leave stale state behind in both the HashMap and the
-                // recency list, so the expired entry would still consume capacity.
-                // Remove it from both structures and recycle its slot before
-                // reporting the miss.
-                self.map.remove(&key);
-                self.unlink(idx);
-                self.free.push(idx);
-                return None;
-            }
+        // FIX: clippy::collapsible_if — nested `if let` + inner `if cond` can be
+        // collapsed into a single `if let … && cond` guard; same semantics, less indentation.
+        if let Some(expires_at) = self.nodes[idx].expires_at
+            && expires_at <= Instant::now()
+        {
+            // FIX: treating an expired entry as a plain miss by only returning
+            // None would leave stale state behind in both the HashMap and the
+            // recency list, so the expired entry would still consume capacity.
+            // Remove it from both structures and recycle its slot before
+            // reporting the miss.
+            self.map.remove(&key);
+            self.unlink(idx);
+            self.free.push(idx);
+            return None;
         }
 
         // Read after the expiry check so we only copy a live value.

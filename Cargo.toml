@@ -49,6 +49,29 @@ tokio = { version = "1.52.3", features = ["full"] }
 # Without the feature flag, only the type is available — generation methods are gated.
 uuid = { version = "1.23.2", features = ["v4"] }
 
+# cargo tree: check installed version
+# 0.13: rustls, 0.12 and lower: rustls-tls
+# rustls: for TLS without OpenSSL (recommended cross-platform)
+# json: JSON serialization/deserialization
+# is enabled by default. However, because Cargo features are additive, 
+# a transitive dependency could still pull in native-tls. 
+# To prevent this, explicitly turn off default features
+reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls", "stream"] }
+
+# .layer(TraceLayer::new_for_http())
+tower-http = { version = "0.6", features = ["trace", "timeout", "util", "request-id"] }
+
+# networking clients and servers.
+tower = "0.5"
+
+# rate limiting
+tower_governor = "0.8"
+
+# show tracing log
+tracing = "0.1.44"
+tracing-subscriber = "0.3.23"
+http = "1.4.2"
+
 # [[example]] must stay [[example]] is a Cargo-defined table name
 # name should be lowercase letters/numbers with _ or -
 # path should point to the .rs file
@@ -60,6 +83,7 @@ uuid = { version = "1.23.2", features = ["v4"] }
 # cargo run --bin genpass -- --length 20
 # cargo install --path .
 [dev-dependencies]
+tempfile = "3.27.0"
 # cargo add tower --dev --features util
 # ServiceExt adds .oneshot() which sends a single request to a Router in tests.
 tower = { version = "0.5", features = ["util"] }
@@ -87,3 +111,55 @@ path = "projects/lru_cache.rs"
 [[bin]]
 name = "watchdir"
 path = "projects/file_watcher_cli.rs"
+
+[[bin]]
+name = "logparse"
+path = "projects/log_parser_cli.rs"
+
+[[bin]]
+name = "rest_api"
+path = "projects/rest_api.rs"
+
+[[bin]]
+name = "crawler"
+path = "projects/web_crawler.rs"
+
+[[bin]]
+name = "redis_clone"
+path = "projects/redis_clone.rs"
+
+[[bin]]
+name = "metrics_collector"
+path = "projects/metrics_collector.rs"
+
+[[bin]]
+name = "api_gateway"
+path = "projects/api_gateway.rs"
+
+[[bin]]
+name = "kafka_consumer"
+path = "projects/kafka_consumer.rs"
+
+[[bin]]
+name = "workflow_engine"
+path = "projects/workflow_engine.rs"
+
+[[bin]]
+name = "otel_collector"
+path = "projects/otel_collector.rs"
+
+[[bin]]
+name = "fake_sql_server"
+path = "projects/fake_sql_server.rs"
+
+[[bin]]
+name = "sidecar"
+path = "projects/service_mesh_sidecar.rs"
+
+[[bin]]
+name = "dist_cache"
+path = "projects/dist_cache.rs"
+
+[[bin]]
+name = "mini_runtime"
+path = "projects/mini_runtime.rs"

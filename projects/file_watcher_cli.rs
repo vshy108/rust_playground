@@ -4,41 +4,44 @@
 // Build:
 
 // ```bash
-// cargo run --bin watchdir -- /tmp/testdir
+// cargo run --bin watchdir -- fixtures/
 // ```
 
 // Learn:
+//
+// - `notify` — cross-platform filesystem watcher crate; `recommended_watcher` picks the best backend per OS
+// - `ctrlc` — installs a Ctrl+C signal handler; sends a message through the channel for graceful shutdown
+// - `std::sync::mpsc` — multi-producer single-consumer channel; sender can be cloned across threads
+// - `recv_timeout` — blocks for at most a duration; returns `Timeout` on quiet ticks so the loop can flush
+// - HashMap<PathBuf, V> — O(1) debounce buffer; path is the key, latest pending event is the value
+// - debounce — collapse noisy event bursts into one logical update per path per time window
+// - match guards — `Ok(x) if cond` falls through to the next arm when `cond` is false
+// - loop as expression — `loop { ... break value }` evaluates to `value`; no trailing `return` needed
+// - FnMut — closure trait for callables that may mutate captured state; enables injectable output in tests
 
-// - `notify` — cross-platform filesystem watcher crate
-// - `std::sync::mpsc` — multi-producer single-consumer channel
-// - `recv_timeout` — receive with a deadline so quiet ticks can trigger a flush
-// - debounce — collapse noisy event bursts into one logical update per path
-// - match guards — `Ok(x) if cond` falls through to the next arm when `cond` fails
-// - loop as expression — `loop { ... break value }` makes the loop itself evaluate to `value`
-//   - `break Expr` exits the loop and uses `Expr` as the loop expression's result
-//   - the function return type must match every `break` value type
-//   - cleaner than a trailing `return` because the compiler knows `loop {}` is exhaustive;
-//     no unreachable trailing expression warning
-// - FnMut — a closure trait for callables that may mutate captured state
-//   - `impl FnMut(T)` as a parameter accepts any closure that takes T and may mutate
-//   - the binding needs `mut` (e.g. `mut output`) because calling FnMut requires `&mut self`
-//   - pass `&mut output` to helpers so they borrow the closure instead of consuming it
-//   - use FnMut when you call the closure more than once and it accumulates state
-//   - hierarchy: Fn ⊂ FnMut ⊂ FnOnce — FnMut accepts anything Fn also accepts
-
-// Design:
+// Notes:
+//
 //   watcher callback -> mpsc channel -> run_loop -> output closure -> println!
 //
-//   - `notify::recommended_watcher` sends `Result<Event>` into `mpsc::channel`.
-//   - Both the watcher callback and the Ctrl+C handler share a cloned `tx`;
-//     the Ctrl+C handler sends `WatchMessage::Shutdown` to unblock the loop.
-//   - `run_loop` uses `recv_timeout(debounce_window)` so it can flush buffered
-//     events even when no new events arrive (a `Timeout` tick triggers the flush).
-//   - Debounce: single-path events are stored in `HashMap<PathBuf, PendingEvent>`;
-//     a newer event for the same path replaces the older one. Entries are flushed
-//     once `last_seen.elapsed() >= debounce_window` (default 100ms).
-//   - `run_loop` accepts an `output: impl FnMut(String)` closure so tests can
-//     collect log lines without touching stdout.
+// 1. Channel design: both the `notify` callback and the Ctrl+C handler share a cloned `tx`;
+//    the Ctrl+C handler sends `WatchMessage::Shutdown` to unblock the receive loop gracefully.
+// 2. Debounce: `HashMap<PathBuf, PendingEvent>` is the buffer; a newer event for the same path
+//    replaces the older one; entries flush once `last_seen.elapsed() >= debounce_window` (100ms).
+//    Can't remove while iterating an active borrow — collect keys into a Vec first, then remove.
+// 3. `run_loop` accepts `output: impl FnMut(String)` so tests collect log lines without touching stdout.
+// 4. loop-as-expression: `run_loop` breaks with a `LoopExit` value so `main` can distinguish
+//    `Shutdown` (Ctrl+C) from `Disconnected` (unexpected channel close).
+// 5. FnMut binding: `mut output` is required because calling FnMut requires `&mut self`;
+//    pass `&mut output` to helpers so they borrow the closure instead of consuming it.
+
+// Extra:
+//
+// - [x] filesystem watching (notify::recommended_watcher, recursive mode)
+// - [x] event logging (path, kind, Unix timestamp ms, event number)
+// - [x] graceful Ctrl+C shutdown
+// - [x] debounce (collapse event bursts; 100ms window per path)
+// - [x] injectable output closure (impl FnMut(String) for testability)
+// - [x] focused tests
 
 use notify::{RecursiveMode, Watcher, recommended_watcher};
 use std::collections::HashMap;

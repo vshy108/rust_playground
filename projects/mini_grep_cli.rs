@@ -4,29 +4,16 @@
 // Build:
 
 // ```bash
-// rgrep "hello" logs.txt
+// rgrep hello fixtures/sample.txt
 // ```
 
 // Learn:
-
-// - borrowing
-//   - References let you use a value without taking ownership.
-//   - &str is a borrowed string slice; String is an owned heap string.
-//   - Functions that only read data should take &str, not String.
 //
-// - iterators
-//   - Iterators are lazy: they produce values on demand, not all at once.
-//   - .lines() splits a &str into an iterator of &str lines.
-//   - .filter() keeps only items where the closure returns true.
-//   - .enumerate() pairs each item with its 0-based index.
-//   - .collect() pulls all iterator values into a Vec or other collection.
-//
-// - slices
-//   - A slice (&[T] or &str) is a view into a contiguous sequence.
-//   - args: &[String] is a slice of the collected CLI arg Vec.
-//   - Slices do not own their data; they borrow it.
+// - borrowing — `&str` is a borrowed string slice; `String` is owned; read-only functions should take `&str`
+// - iterators — lazy; `.lines()`, `.filter()`, `.enumerate()`, `.collect()` chain without intermediate allocations
+// - slices — `&[T]` / `&str` is a borrowed view into a contiguous sequence; does not own its data
 
-// Progress:
+// Notes:
 
 // 1. Result<Config, String>: parse_args returns Ok(Config) or Err(message).
 //    `if let Ok(...) = ...` cannot bind Err — use `match` to handle both arms.
@@ -54,8 +41,10 @@
 //    sidestepping the lifetime issue entirely and making it compile in any edition.
 // 8. Lifetime elision in sink functions: functions returning () don't need to
 //    propagate lifetimes to callers, but `impl Trait` associated types containing
-//    &references still require an explicit lifetime in stable Rust.
-//    '_ inside impl Trait associated types is not yet stable (E0658) — use <'a>.
+//    &references in parameter position need an explicit lifetime in older editions.
+//    '_ in function parameters follows normal elision: each '_ is a fresh named lifetime.
+//    In return-position impl Trait, anonymous lifetimes were once rejected (E0658) but
+//    that restriction was stabilized in Rust 1.79. Using <'a> is still clear and portable.
 //    The named 'a only annotates the input; nothing in the output borrows from it.
 // 9. Option::zip: `a.zip(b)` combines two Options into Option<(A, B)>, returning
 //    None if either is None. Paired with .map() and .ok_or_else() it replaces

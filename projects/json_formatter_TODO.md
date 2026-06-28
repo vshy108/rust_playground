@@ -3,10 +3,9 @@
 ## Usage
 
 ```bash
-echo '{"b":2,"a":1}' > /tmp/test.json
-cargo run --bin jsonfmt -- /tmp/test.json        # pretty-print file
-cargo run --bin jsonfmt                          # read from stdin
-cargo run --bin jsonfmt -- --check /tmp/test.json  # validate only
+cargo run --bin jsonfmt -- fixtures/compact.json        # pretty-print file
+cargo run --bin jsonfmt                                 # read from stdin
+cargo run --bin jsonfmt -- --check fixtures/compact.json  # validate only
 cargo run --bin jsonfmt -- --help
 cargo test --bin jsonfmt
 ```
@@ -22,12 +21,10 @@ cargo test --bin jsonfmt
 Acceptance checks:
 
 ```bash
-echo '{"b":2,"a":1}' > /tmp/test.json
-cargo run --bin jsonfmt -- /tmp/test.json
+cargo run --bin jsonfmt -- fixtures/compact.json
 # expected: pretty-printed JSON with indentation
 
-echo 'not json' > /tmp/bad.json
-cargo run --bin jsonfmt -- /tmp/bad.json
+cargo run --bin jsonfmt -- fixtures/bad.json
 # expected: error message, non-zero exit
 ```
 

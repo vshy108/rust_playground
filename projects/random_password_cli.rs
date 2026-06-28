@@ -8,14 +8,14 @@
 // ```
 
 // Learn:
+//
+// - Cargo — build, run, test tool; `cargo run --bin name -- args` passes args to the binary
+// - `String` vs `&str` — `String` is heap-allocated and owned; use it for runtime-constructed values
+// - `Vec<T>` — growable array; `.collect()` pulls an iterator into one; `with_capacity` avoids reallocation
+// - `rand` — `rand::rng()` must be `mut`; each call advances internal state to produce the next value
+// - argument parsing — `std::env::args()` returns an iterator of `String`; `.next()` consumes one token at a time
 
-// - Cargo
-// - `String`
-// - `Vec`
-// - `rand`
-// - argument parsing
-
-// Progress:
+// Notes:
 
 // 1. Cargo — build, run, test with `cargo`
 // 2. `String` vs `&str` — use `String` for runtime-constructed values (e.g. error messages)
@@ -49,12 +49,25 @@
 
 use rand::Rng;
 
+/// Parsed CLI options for password generation.
+///
+/// `length` controls output size and `has_symbols` toggles whether non-alphanumeric
+/// printable ASCII characters are allowed in the generated password.
 #[derive(Debug, PartialEq)]
 struct Config {
     length: usize,
     has_symbols: bool,
 }
 
+/// Parses command-line arguments into [`Config`].
+///
+/// Supported flags:
+/// - `--length <n>` where `n > 0`
+/// - `--symbols`
+///
+/// # Errors
+/// Returns an error string when a flag is unknown, a value is missing, a value
+/// is invalid, or `--length` is provided more than once.
 // Returns Ok(Config { length, has_symbols }) or Err(message).
 // Uses a mut iterator so flags can appear in any order.
 // Err holds a String (not &str): some messages are built at runtime with format!.
@@ -103,6 +116,10 @@ fn parse_args(args: &[String]) -> Result<Config, String> {
     })
 }
 
+/// Builds the character set used by password generation.
+///
+/// When `with_symbols` is `true`, this includes printable ASCII `!` through `~`.
+/// Otherwise, this includes only ASCII digits and letters.
 fn build_charset(with_symbols: bool) -> Vec<char> {
     // with_symbols=true:  full printable ASCII bytes 33–126 (94 chars)
     // with_symbols=false: alphanumeric only — 0-9 (48–57) + A-Z (65–90) + a-z (97–122) = 62 chars
@@ -127,6 +144,14 @@ fn build_charset(with_symbols: bool) -> Vec<char> {
     }
 }
 
+/// Generates a random password using characters returned by [`build_charset`].
+///
+/// # Arguments
+/// - `length`: Number of characters to generate.
+/// - `with_symbols`: Whether to include non-alphanumeric printable ASCII symbols.
+///
+/// # Returns
+/// A password string with exactly `length` characters.
 // Function definitions can appear before or after main — Rust resolves names across the whole file.
 fn generate_password(length: usize, with_symbols: bool) -> String {
     let chars = build_charset(with_symbols);
@@ -145,7 +170,10 @@ fn generate_password(length: usize, with_symbols: bool) -> String {
     password
 }
 
-// Run: cargo run --bin genpass -- --length 20
+/// CLI entry point.
+///
+/// Example:
+/// `cargo run --bin genpass -- --length 20 --symbols`
 fn main() {
     // std::env::args() is lazy — .collect() materialises it into Vec<String>.
     // Type must be explicit: the compiler can't infer Vec<String> from collect() alone.
