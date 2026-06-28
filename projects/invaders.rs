@@ -6,7 +6,7 @@ use crossterm::{ExecutableCommand, cursor::{Hide, Show}, event::{self, Event, Ke
 
 use rusty_audio::Audio;
 
-use crate::rusty::{frame::{self, Drawable, new_frame}, player::Player, render};
+use crate::rusty::{frame::{self, Drawable, new_frame}, invaders::{self, Invaders}, player::Player, render};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut audio = Audio::new();
@@ -46,6 +46,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Game Loop
     let mut player = Player::new();
     let mut instant = Instant::now();
+    let mut invaders = Invaders::new();
     'gameloop: loop {
         // Per-frame init
         let delta = instant.elapsed();
@@ -75,12 +76,21 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         // Updates
         player.update(delta);
+        if invaders.update(delta) {
+            audio.play("move");
+        }
 
         // Draw & render
         // trait `Drawable` which provides `draw` is implemented but not in scope;
         // use crate::rusty::Drawable
         // &mut curr_frame first curr_frame needs let mut
-        player.draw(&mut curr_frame);
+        // Replace below with &dyn Drawable Generic
+        // player.draw(&mut curr_frame);
+        // invaders.draw(&mut curr_frame);
+        let drawables : Vec<&dyn Drawable> = vec![&player, &invaders];
+        for drawable in drawables {
+            drawable.draw(&mut curr_frame);
+        }
         let _ = render_tx.send(curr_frame);
         thread::sleep(Duration::from_millis(1));
     }
