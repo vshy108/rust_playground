@@ -3,8 +3,7 @@ use std::{cmp::max, time::Duration};
 use rusty_time::Timer;
 
 use crate::rusty::{
-    NUM_COLS, NUM_ROWS,
-    frame::{Drawable, Frame},
+    NUM_COLS, NUM_ROWS, frame::{Drawable, Frame}, invaders,
 };
 
 pub struct Invader {
@@ -55,6 +54,10 @@ impl Invaders {
             if downwards {
                 let new_duration = max(self.move_timer.duration().as_millis() - 250, 250);
                 self.move_timer = Timer::new(Duration::from_millis(new_duration as u64));
+                // update invader y when downwards
+                for invader in self.army.iter_mut() {
+                    invader.y += 1;
+                }
             } else {
                 for invader in self.army.iter_mut() {
                     // NOTE: when invader.x = 0, self.direction = -1 then become big number
@@ -69,6 +72,24 @@ impl Invaders {
             return true;
         }
         false
+    }
+    pub fn all_killed(&self) -> bool {
+        self.army.is_empty()
+    }
+    pub fn reached_bottom(&self) -> bool {
+        self.army.iter().map(|invader| invader.y).max().unwrap_or(0) >= NUM_ROWS - 1
+    }
+    pub fn kill_invader_at(&mut self, x: usize, y: usize) -> bool {
+        if let Some(idx) = self
+            .army
+            .iter()
+            .position(|invader| (invader.x == x) && (invader.y == y))
+        {
+            self.army.remove(idx);
+            true
+        } else {
+            false
+        }
     }
 }
 
