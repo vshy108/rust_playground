@@ -26,8 +26,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Hide cursor
     stdout.execute(Hide)?;
 
-    // Render loop in a separate thread
-    let (render_tx, render_rx) = mpsc::channel();
+    // Render loop in a separate thread.
+    // FIX: Use a bounded channel to prevent stale-frame backlog and input lag.
+    // OLD: let (render_tx, render_rx) = mpsc::channel();
+    let (render_tx, render_rx) = mpsc::sync_channel(1);
     let render_handle = thread::spawn(move || {
         let mut last_frame= frame::new_frame();
         // NOTE: remember to have () or not, else closure assigned

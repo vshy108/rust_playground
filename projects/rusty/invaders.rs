@@ -3,7 +3,7 @@ use std::{cmp::max, time::Duration};
 use rusty_time::Timer;
 
 use crate::rusty::{
-    NUM_COLS, NUM_ROWS, frame::{Drawable, Frame}, invaders,
+    NUM_COLS, NUM_ROWS, frame::{Drawable, Frame},
 };
 
 pub struct Invader {
