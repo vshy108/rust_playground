@@ -24,6 +24,24 @@ The difficulty rating in the TODO title must match the project rating in [PLAN.m
 
 If a project's difficulty changes in [PLAN.md](PLAN.md), update the matching TODO title as part of the same change.
 
+## Completion Tracking
+
+A project is considered completed when its TODO guide has no remaining unchecked
+`- [ ]` items.
+
+When a project reaches that state:
+
+- add an explicit completion marker to the TODO guide
+- update the completed-project summary in [PLAN.md](PLAN.md) as part of the same change
+
+Preferred completion marker format:
+
+```md
+## Status
+
+Completed
+```
+
 ## File Naming
 
 Project TODO guides should use this file naming pattern:
@@ -45,3 +63,4 @@ projects/raft_consensus_TODO.md
 - keeps difficulty visible when opening a TODO file directly
 - keeps TODO guides consistent with the learning path in [PLAN.md](PLAN.md)
 - makes bulk maintenance and review easier
+- makes project completion visible without scanning every checkbox manually

@@ -278,3 +278,107 @@ path = "projects/iot_simulator.rs"
 [[bin]]
 name = "raft_consensus"
 path = "projects/raft_consensus.rs"
+
+[[bin]]
+name = "sqlite_clone"
+path = "projects/sqlite_clone.rs"
+
+[[bin]]
+name = "ray_tracer"
+path = "projects/ray_tracer.rs"
+
+[[bin]]
+name = "wasm_runtime"
+path = "projects/wasm_runtime.rs"
+
+[[bin]]
+name = "container_runtime"
+path = "projects/container_runtime.rs"
+
+[[bin]]
+name = "wasm_game_of_life"
+path = "projects/wasm_game_of_life.rs"
+
+[[bin]]
+name = "spell_checker"
+path = "projects/spell_checker.rs"
+
+[[bin]]
+name = "terminal_emulator"
+path = "projects/terminal_emulator.rs"
+
+[[bin]]
+name = "nes_emulator"
+path = "projects/nes_emulator.rs"
+
+[[bin]]
+name = "memory_allocator"
+path = "projects/memory_allocator.rs"
+
+[[bin]]
+name = "physics_engine"
+path = "projects/physics_engine.rs"
+
+[[bin]]
+name = "fuse_fs"
+path = "projects/fuse_fs.rs"
+
+[[bin]]
+name = "os_kernel"
+path = "projects/os_kernel.rs"
+
+[[bin]]
+name = "ci_system"
+path = "projects/ci_system.rs"
+
+[[bin]]
+name = "vpn_tunnel"
+path = "projects/vpn_tunnel.rs"
+
+[[bin]]
+name = "toy_debugger"
+path = "projects/toy_debugger.rs"
+
+[[bin]]
+name = "markdown_parser"
+path = "projects/markdown_parser.rs"
+
+[[bin]]
+name = "auth_service"
+path = "projects/auth_service.rs"
+
+[[bin]]
+name = "image_codec"
+path = "projects/image_codec.rs"
+
+[[bin]]
+name = "search_engine"
+path = "projects/search_engine.rs"
+
+[[bin]]
+name = "package_manager"
+path = "projects/package_manager.rs"
+
+[[bin]]
+name = "graph_database"
+path = "projects/graph_database.rs"
+
+[[bin]]
+name = "message_queue"
+path = "projects/message_queue.rs"
+
+[[bin]]
+name = "build_system"
+path = "projects/build_system.rs"
+
+[[bin]]
+name = "secret_scanner"
+path = "projects/secret_scanner.rs"
+
+[[bin]]
+name = "ebpf_monitor"
+path = "projects/ebpf_monitor.rs"
+
+[[bin]]
+name = "blockchain_node"
+path = "projects/blockchain_node.rs"

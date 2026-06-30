@@ -1,5 +1,9 @@
 # TODO: mini_grep (⭐ 2/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash

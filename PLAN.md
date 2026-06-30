@@ -35,6 +35,21 @@ Definition of done for each milestone:
 - error path is tested
 - CLI or API contract is documented in the project TODO
 
+## Completed Projects
+
+The following projects currently have no unchecked items left in their TODO guides.
+
+| Binary | TODO Guide |
+|--------|------------|
+| `genpass` | [random_password_TODO.md](projects/random_password_TODO.md) |
+| `jsonfmt` | [json_formatter_TODO.md](projects/json_formatter_TODO.md) |
+| `rgrep` | [mini_grep_TODO.md](projects/mini_grep_TODO.md) |
+| `url_shortener` | [url_shortener_TODO.md](projects/url_shortener_TODO.md) |
+| `lru_cache` | [lru_cache_TODO.md](projects/lru_cache_TODO.md) |
+| `watchdir` | [file_watcher_TODO.md](projects/file_watcher_TODO.md) |
+| `logparse` | [log_parser_TODO.md](projects/log_parser_TODO.md) |
+| `api_gateway` | [api_gateway_TODO.md](projects/api_gateway_TODO.md) |
+
 | # | Rating | Binary | Source | Goal |
 |---|--------|--------|--------|------|
 | 1 | ⭐ 1/10 | `genpass` | [random_password_cli.rs](projects/random_password_cli.rs) | Rust basics |
@@ -74,14 +89,41 @@ Definition of done for each milestone:
 | 35 | ⭐ 9/10 | `bittorrent` | [bittorrent.rs](projects/bittorrent.rs) | P2P protocols + piece scheduling |
 | 36 | ⭐ 7/10 | `tcp_stack` | [tcp_stack.rs](projects/tcp_stack.rs) | Network stack internals |
 | 37 | ⭐ 7/10 | `mqtt_broker` | [mqtt_broker.rs](projects/mqtt_broker.rs) | Pub/sub protocol server design |
-| 38 | ⭐ 7/10 | `chip8` | [chip8.rs](projects/chip8.rs) | Emulator architecture |
-| 39 | ⭐ 8/10 | `browser_engine` | [browser_engine.rs](projects/browser_engine.rs) | Parsing + layout + rendering pipeline |
-| 40 | ⭐ 8/10 | `bytecode_vm` | [bytecode_vm.rs](projects/bytecode_vm.rs) | Interpreter internals |
-| 41 | ⭐ 8/10 | `mini_compiler` | [mini_compiler.rs](projects/mini_compiler.rs) | Language design + codegen |
-| 42 | ⭐ 8/10 | `packet_sniffer` | [packet_sniffer.rs](projects/packet_sniffer.rs) | Packet parsing + traffic analysis |
-| 43 | ⭐ 8/10 | `static_site_gen` | [static_site_gen.rs](projects/static_site_gen.rs) | Build pipeline + content generation |
-| 44 | ⭐ 9/10 | `iot_simulator` | [iot_simulator.rs](projects/iot_simulator.rs) | Distributed device simulation |
-| 45 | ⭐ 10/10 | `raft_consensus` | [raft_consensus.rs](projects/raft_consensus.rs) | Consensus algorithm implementation |
+| 38 | ⭐ 6/10 | `invaders` | [invaders.rs](projects/invaders.rs) | Terminal game loop + rendering |
+| 39 | ⭐ 7/10 | `chip8` | [chip8.rs](projects/chip8.rs) | Emulator architecture |
+| 40 | ⭐ 8/10 | `browser_engine` | [browser_engine.rs](projects/browser_engine.rs) | Parsing + layout + rendering pipeline |
+| 41 | ⭐ 8/10 | `bytecode_vm` | [bytecode_vm.rs](projects/bytecode_vm.rs) | Interpreter internals |
+| 42 | ⭐ 8/10 | `mini_compiler` | [mini_compiler.rs](projects/mini_compiler.rs) | Language design + codegen |
+| 43 | ⭐ 8/10 | `packet_sniffer` | [packet_sniffer.rs](projects/packet_sniffer.rs) | Packet parsing + traffic analysis |
+| 44 | ⭐ 8/10 | `static_site_gen` | [static_site_gen.rs](projects/static_site_gen.rs) | Build pipeline + content generation |
+| 45 | ⭐ 9/10 | `iot_simulator` | [iot_simulator.rs](projects/iot_simulator.rs) | Distributed device simulation |
+| 46 | ⭐ 10/10 | `raft_consensus` | [raft_consensus.rs](projects/raft_consensus.rs) | Consensus algorithm implementation |
+| 47 | ⭐ 5/10 | `markdown_parser` | [markdown_parser.rs](projects/markdown_parser.rs) | Text format parsing |
+| 48 | ⭐ 6/10 | `auth_service` | [auth_service.rs](projects/auth_service.rs) | Authentication and session design |
+| 49 | ⭐ 7/10 | `ray_tracer` | [ray_tracer.rs](projects/ray_tracer.rs) | Graphics math + rendering |
+| 50 | ⭐ 7/10 | `image_codec` | [image_codec.rs](projects/image_codec.rs) | Binary file formats |
+| 51 | ⭐ 8/10 | `toy_debugger` | [toy_debugger.rs](projects/toy_debugger.rs) | Process introspection + breakpoints |
+| 52 | ⭐ 9/10 | `sqlite_clone` | [sqlite_clone.rs](projects/sqlite_clone.rs) | SQL engine + B-tree storage |
+| 53 | ⭐ 9/10 | `wasm_runtime` | [wasm_runtime.rs](projects/wasm_runtime.rs) | WebAssembly decoding + execution |
+| 54 | ⭐ 9/10 | `container_runtime` | [container_runtime.rs](projects/container_runtime.rs) | Isolation primitives + resource control |
+| 55 | ⭐ 6/10 | `wasm_game_of_life` | [wasm_game_of_life.rs](projects/wasm_game_of_life.rs) | Rust + WebAssembly UI loop |
+| 56 | ⭐ 5/10 | `spell_checker` | [spell_checker.rs](projects/spell_checker.rs) | String processing + suggestion ranking |
+| 57 | ⭐ 7/10 | `terminal_emulator` | [terminal_emulator.rs](projects/terminal_emulator.rs) | PTY handling + ANSI parsing |
+| 58 | ⭐ 8/10 | `nes_emulator` | [nes_emulator.rs](projects/nes_emulator.rs) | Hardware emulation + timing |
+| 59 | ⭐ 8/10 | `memory_allocator` | [memory_allocator.rs](projects/memory_allocator.rs) | Allocation strategies + invariants |
+| 60 | ⭐ 8/10 | `physics_engine` | [physics_engine.rs](projects/physics_engine.rs) | Simulation + collision resolution |
+| 61 | ⭐ 8/10 | `fuse_fs` | [fuse_fs.rs](projects/fuse_fs.rs) | Filesystem semantics + inode modeling |
+| 62 | ⭐ 10/10 | `os_kernel` | [os_kernel.rs](projects/os_kernel.rs) | Bare-metal systems programming |
+| 63 | ⭐ 7/10 | `ci_system` | [ci_system.rs](projects/ci_system.rs) | Pipeline orchestration + workers |
+| 64 | ⭐ 9/10 | `vpn_tunnel` | [vpn_tunnel.rs](projects/vpn_tunnel.rs) | Secure tunneling + peer state |
+| 65 | ⭐ 8/10 | `search_engine` | [search_engine.rs](projects/search_engine.rs) | Indexing + relevance ranking |
+| 66 | ⭐ 8/10 | `package_manager` | [package_manager.rs](projects/package_manager.rs) | Dependency resolution + artifact lifecycle |
+| 67 | ⭐ 9/10 | `graph_database` | [graph_database.rs](projects/graph_database.rs) | Property graph storage + query execution |
+| 68 | ⭐ 8/10 | `message_queue` | [message_queue.rs](projects/message_queue.rs) | Durable pub/sub + consumer groups |
+| 69 | ⭐ 7/10 | `build_system` | [build_system.rs](projects/build_system.rs) | DAG execution + incremental builds |
+| 70 | ⭐ 7/10 | `secret_scanner` | [secret_scanner.rs](projects/secret_scanner.rs) | Credential detection + risk reporting |
+| 71 | ⭐ 9/10 | `ebpf_monitor` | [ebpf_monitor.rs](projects/ebpf_monitor.rs) | Kernel telemetry pipeline design |
+| 72 | ⭐ 9/10 | `blockchain_node` | [blockchain_node.rs](projects/blockchain_node.rs) | Ledger validation + peer protocol |
 
 ---
 
@@ -1136,3 +1178,624 @@ Learn:
 Guide:
 
 - [raft_consensus_TODO.md](projects/raft_consensus_TODO.md)
+
+---
+
+## ⭐ 5/10 — Markdown Parser
+
+Goal: Text format parsing
+
+Build:
+
+```bash
+cargo run --bin markdown_parser
+```
+
+Learn:
+
+- block and inline parsing
+- AST design
+- HTML rendering
+- snapshot-driven parser testing
+
+Guide:
+
+- [markdown_parser_TODO.md](projects/markdown_parser_TODO.md)
+
+---
+
+## ⭐ 6/10 — Auth Service
+
+Goal: Authentication and session design
+
+Build:
+
+```bash
+cargo run --bin auth_service
+```
+
+Learn:
+
+- request validation
+- password hashing and secret handling
+- session or token lifecycle
+- middleware-based access control
+
+Guide:
+
+- [auth_service_TODO.md](projects/auth_service_TODO.md)
+
+---
+
+## ⭐ 7/10 — Ray Tracer
+
+Goal: Graphics math + rendering
+
+Build:
+
+```bash
+cargo run --bin ray_tracer > image.ppm
+```
+
+Learn:
+
+- vector and ray math
+- camera and sampling models
+- geometry intersections
+- material and shading models
+
+Guide:
+
+- [ray_tracer_TODO.md](projects/ray_tracer_TODO.md)
+
+---
+
+## ⭐ 7/10 — Image Codec
+
+Goal: Binary file formats
+
+Build:
+
+```bash
+cargo run --bin image_codec
+```
+
+Learn:
+
+- chunked binary parsing
+- encode/decode symmetry
+- checksums and validation
+- streaming IO patterns
+
+Guide:
+
+- [image_codec_TODO.md](projects/image_codec_TODO.md)
+
+---
+
+## ⭐ 8/10 — Toy Debugger
+
+Goal: Process introspection + breakpoints
+
+Build:
+
+```bash
+cargo run --bin toy_debugger
+```
+
+Learn:
+
+- breakpoint management
+- register and memory inspection
+- stepping and continue flow
+- source mapping basics
+
+Guide:
+
+- [toy_debugger_TODO.md](projects/toy_debugger_TODO.md)
+
+---
+
+## ⭐ 9/10 — SQLite Clone
+
+Goal: SQL engine + B-tree storage
+
+Build:
+
+```bash
+cargo run --bin sqlite_clone
+```
+
+Learn:
+
+- REPL and statement parsing
+- row and page layout
+- cursor abstraction
+- B-tree search and persistence
+
+Guide:
+
+- [sqlite_clone_TODO.md](projects/sqlite_clone_TODO.md)
+
+---
+
+## ⭐ 9/10 — WASM Runtime
+
+Goal: WebAssembly decoding + execution
+
+Build:
+
+```bash
+cargo run --bin wasm_runtime
+```
+
+Learn:
+
+- binary module decoding
+- validation and typing rules
+- stack machine execution
+- host embedding surface design
+
+Guide:
+
+- [wasm_runtime_TODO.md](projects/wasm_runtime_TODO.md)
+
+---
+
+## ⭐ 9/10 — Container Runtime
+
+Goal: Isolation primitives + resource control
+
+Build:
+
+```bash
+cargo run --bin container_runtime
+```
+
+Learn:
+
+- namespace setup
+- rootfs and mount isolation
+- cgroup and rlimit control
+- syscall and capability restriction
+
+Guide:
+
+- [container_runtime_TODO.md](projects/container_runtime_TODO.md)
+
+---
+
+## ⭐ 6/10 — WASM Game of Life
+
+Goal: Rust + WebAssembly UI loop
+
+Build:
+
+```bash
+cargo run --bin wasm_game_of_life
+```
+
+Learn:
+
+- wasm boundary API design
+- grid simulation rules
+- browser rendering integration
+- profiling update and draw cost
+
+Guide:
+
+- [wasm_game_of_life_TODO.md](projects/wasm_game_of_life_TODO.md)
+
+---
+
+## ⭐ 5/10 — Spell Checker
+
+Goal: String processing + suggestion ranking
+
+Build:
+
+```bash
+cargo run --bin spell_checker
+```
+
+Learn:
+
+- text normalization
+- approximate matching
+- ranking heuristics
+- dictionary-backed CLI design
+
+Guide:
+
+- [spell_checker_TODO.md](projects/spell_checker_TODO.md)
+
+---
+
+## ⭐ 7/10 — Terminal Emulator
+
+Goal: PTY handling + ANSI parsing
+
+Build:
+
+```bash
+cargo run --bin terminal_emulator
+```
+
+Learn:
+
+- ANSI escape parsing
+- screen buffer modeling
+- PTY subprocess management
+- keyboard and rendering behavior
+
+Guide:
+
+- [terminal_emulator_TODO.md](projects/terminal_emulator_TODO.md)
+
+---
+
+## ⭐ 8/10 — NES Emulator
+
+Goal: Hardware emulation + timing
+
+Build:
+
+```bash
+cargo run --bin nes_emulator
+```
+
+Learn:
+
+- ROM and bus design
+- CPU instruction emulation
+- timing-sensitive subsystem coordination
+- graphics/input integration
+
+Guide:
+
+- [nes_emulator_TODO.md](projects/nes_emulator_TODO.md)
+
+---
+
+## ⭐ 8/10 — Memory Allocator
+
+Goal: Allocation strategies + invariants
+
+Build:
+
+```bash
+cargo run --bin memory_allocator
+```
+
+Learn:
+
+- bump and free-list designs
+- alignment guarantees
+- fragmentation behavior
+- allocator trait integration
+
+Guide:
+
+- [memory_allocator_TODO.md](projects/memory_allocator_TODO.md)
+
+---
+
+## ⭐ 8/10 — Physics Engine
+
+Goal: Simulation + collision resolution
+
+Build:
+
+```bash
+cargo run --bin physics_engine
+```
+
+Learn:
+
+- rigid body modeling
+- broad and narrow collision phases
+- impulse resolution
+- deterministic fixed-step simulation
+
+Guide:
+
+- [physics_engine_TODO.md](projects/physics_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — FUSE Filesystem
+
+Goal: Filesystem semantics + inode modeling
+
+Build:
+
+```bash
+cargo run --bin fuse_fs
+```
+
+Learn:
+
+- path and inode resolution
+- file and directory operation mapping
+- metadata and persistence design
+- interface boundary testing
+
+Guide:
+
+- [fuse_fs_TODO.md](projects/fuse_fs_TODO.md)
+
+---
+
+## ⭐ 10/10 — OS Kernel
+
+Goal: Bare-metal systems programming
+
+Build:
+
+```bash
+cargo run --bin os_kernel
+```
+
+Learn:
+
+- freestanding Rust binaries
+- interrupts and low-level output
+- paging and memory management
+- allocator and executor internals
+
+Guide:
+
+- [os_kernel_TODO.md](projects/os_kernel_TODO.md)
+
+---
+
+## ⭐ 7/10 — CI System
+
+Goal: Pipeline orchestration + workers
+
+Build:
+
+```bash
+cargo run --bin ci_system
+```
+
+Learn:
+
+- DAG job scheduling
+- worker execution and logs
+- retry and timeout behavior
+- artifacts and workspace propagation
+
+Guide:
+
+- [ci_system_TODO.md](projects/ci_system_TODO.md)
+
+---
+
+## ⭐ 9/10 — VPN Tunnel
+
+Goal: Secure tunneling + peer state
+
+Build:
+
+```bash
+cargo run --bin vpn_tunnel
+```
+
+Learn:
+
+- encapsulation and packet flow
+- handshake and session lifecycle
+- replay protection and rekeying
+- virtual interface and routing model
+
+Guide:
+
+- [vpn_tunnel_TODO.md](projects/vpn_tunnel_TODO.md)
+
+---
+
+## ⭐ 8/10 — Search Engine
+
+Goal: Indexing + relevance ranking
+
+Build:
+
+```bash
+cargo run --bin search_engine
+```
+
+Learn:
+
+- tokenization and normalization pipeline design
+- inverted index and posting list structures
+- BM25-style scoring and ranking behavior
+- segment merge and incremental indexing workflow
+
+Guide:
+
+- [search_engine_TODO.md](projects/search_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — Package Manager
+
+Goal: Dependency resolution + artifact lifecycle
+
+Build:
+
+```bash
+cargo run --bin package_manager
+```
+
+Learn:
+
+- semantic version constraint solving
+- lockfile determinism and reproducibility
+- package cache layout and integrity checks
+- install/update/remove lifecycle operations
+
+Guide:
+
+- [package_manager_TODO.md](projects/package_manager_TODO.md)
+
+---
+
+## ⭐ 9/10 — Graph Database
+
+Goal: Property graph storage + query execution
+
+Build:
+
+```bash
+cargo run --bin graph_database
+```
+
+Learn:
+
+- node/edge storage and property indexing
+- graph pattern query planning basics
+- traversal execution with filtering and projection
+- snapshot and recovery design
+
+Guide:
+
+- [graph_database_TODO.md](projects/graph_database_TODO.md)
+
+---
+
+## ⭐ 6/10 — Invaders
+
+Goal: Terminal game loop + rendering
+
+Build:
+
+```bash
+cargo run --bin invaders
+```
+
+Learn:
+
+- realtime input loop and frame timing
+- terminal rendering with double-buffer style updates
+- collision checks between player shots and enemies
+- audio cues and alternate-screen cleanup
+
+Guide:
+
+- [invaders_TODO.md](projects/invaders_TODO.md)
+
+---
+
+## ⭐ 8/10 — Message Queue
+
+Goal: Durable pub/sub + consumer groups
+
+Build:
+
+```bash
+cargo run --bin message_queue
+```
+
+Learn:
+
+- topic partitioning and append-only logs
+- producer ordering and consumer offset tracking
+- redelivery semantics and failure recovery
+- retention policy and segment cleanup
+
+Guide:
+
+- [message_queue_TODO.md](projects/message_queue_TODO.md)
+
+---
+
+## ⭐ 7/10 — Build System
+
+Goal: DAG execution + incremental builds
+
+Build:
+
+```bash
+cargo run --bin build_system
+```
+
+Learn:
+
+- target graph construction and cycle detection
+- topological scheduling with parallel workers
+- content-hash-based cache invalidation
+- artifact cache reuse and reproducibility
+
+Guide:
+
+- [build_system_TODO.md](projects/build_system_TODO.md)
+
+---
+
+## ⭐ 7/10 — Secret Scanner
+
+Goal: Credential detection + risk reporting
+
+Build:
+
+```bash
+cargo run --bin secret_scanner
+```
+
+Learn:
+
+- repository traversal with ignore semantics
+- signature-based and entropy-based detectors
+- finding triage with severity and confidence
+- baseline and suppressions workflow
+
+Guide:
+
+- [secret_scanner_TODO.md](projects/secret_scanner_TODO.md)
+
+---
+
+## ⭐ 9/10 — eBPF Monitor
+
+Goal: Kernel telemetry pipeline design
+
+Build:
+
+```bash
+cargo run --bin ebpf_monitor
+```
+
+Learn:
+
+- event schema design across process and network signals
+- ring buffer style event transport to userspace
+- attach/detach lifecycle and safe fallback behavior
+- overload handling with bounded queues and drop metrics
+
+Guide:
+
+- [ebpf_monitor_TODO.md](projects/ebpf_monitor_TODO.md)
+
+---
+
+## ⭐ 9/10 — Blockchain Node
+
+Goal: Ledger validation + peer protocol
+
+Build:
+
+```bash
+cargo run --bin blockchain_node
+```
+
+Learn:
+
+- transaction and block validation rules
+- mempool management and block assembly
+- peer gossip and fork-choice handling
+- durable chain state and crash recovery
+
+Guide:
+
+- [blockchain_node_TODO.md](projects/blockchain_node_TODO.md)

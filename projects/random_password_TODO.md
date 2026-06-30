@@ -1,5 +1,9 @@
 # TODO: random_password (⭐ 1/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash

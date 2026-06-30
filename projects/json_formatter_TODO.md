@@ -1,5 +1,9 @@
 # TODO: json_formatter (⭐ 2/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash

@@ -1,5 +1,9 @@
 # TODO: url_shortener (⭐ 3/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash

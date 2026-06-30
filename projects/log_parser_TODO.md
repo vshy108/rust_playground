@@ -1,5 +1,9 @@
 # TODO: log_parser (⭐ 4/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash

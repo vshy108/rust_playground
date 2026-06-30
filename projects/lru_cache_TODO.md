@@ -1,5 +1,9 @@
 # TODO: lru_cache (⭐ 3/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash

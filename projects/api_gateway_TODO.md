@@ -1,5 +1,9 @@
 # TODO: api_gateway (⭐ 7/10)
 
+## Status
+
+Completed
+
 ---
 
 ````md

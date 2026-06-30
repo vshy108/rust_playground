@@ -1,5 +1,9 @@
 # TODO: file_watcher (⭐ 4/10)
 
+## Status
+
+Completed
+
 ## Usage
 
 ```bash
