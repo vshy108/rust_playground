@@ -244,6 +244,30 @@ The following projects currently have no unchecked items left in their TODO guid
 | 190 | ⭐ 5/10 | `synthetic_probe` | [synthetic_probe.rs](projects/synthetic_probe.rs) | Run scheduled probes and health checks |
 | 191 | ⭐ 8/10 | `threat_feed_aggregator` | [threat_feed_aggregator.rs](projects/threat_feed_aggregator.rs) | Aggregate and score threat intelligence feeds |
 | 192 | ⭐ 7/10 | `tenant_provisioner` | [tenant_provisioner.rs](projects/tenant_provisioner.rs) | Provision tenant resources with rollback safety |
+| 193 | ⭐ 6/10 | `release_train` | [release_train.rs](projects/release_train.rs) | Coordinate gated release train promotions |
+| 194 | ⭐ 5/10 | `incident_timeline` | [incident_timeline.rs](projects/incident_timeline.rs) | Build incident timelines from event streams |
+| 195 | ⭐ 6/10 | `policy_simulator` | [policy_simulator.rs](projects/policy_simulator.rs) | Dry-run policy changes with explain traces |
+| 196 | ⭐ 7/10 | `dependency_auditor` | [dependency_auditor.rs](projects/dependency_auditor.rs) | Audit dependency graphs against policy |
+| 197 | ⭐ 7/10 | `traffic_replayer` | [traffic_replayer.rs](projects/traffic_replayer.rs) | Replay production-like request traffic safely |
+| 198 | ⭐ 8/10 | `failover_coordinator` | [failover_coordinator.rs](projects/failover_coordinator.rs) | Orchestrate failover and safe failback decisions |
+| 199 | ⭐ 6/10 | `tenant_billing_meter` | [tenant_billing_meter.rs](projects/tenant_billing_meter.rs) | Meter tenant usage for billing pipelines |
+| 200 | ⭐ 5/10 | `runtime_profiler` | [runtime_profiler.rs](projects/runtime_profiler.rs) | Summarize runtime hotspots and regressions |
+| 201 | ⭐ 6/10 | `service_catalog` | [service_catalog.rs](projects/service_catalog.rs) | Maintain service metadata and dependencies |
+| 202 | ⭐ 5/10 | `incident_postmortem` | [incident_postmortem.rs](projects/incident_postmortem.rs) | Generate postmortems from incident records |
+| 203 | ⭐ 7/10 | `access_review_engine` | [access_review_engine.rs](projects/access_review_engine.rs) | Run periodic entitlement access reviews |
+| 204 | ⭐ 7/10 | `secret_rotation_service` | [secret_rotation_service.rs](projects/secret_rotation_service.rs) | Coordinate scheduled secret rotations safely |
+| 205 | ⭐ 6/10 | `capacity_planner` | [capacity_planner.rs](projects/capacity_planner.rs) | Forecast capacity and recommend scaling actions |
+| 206 | ⭐ 5/10 | `uptime_sla_tracker` | [uptime_sla_tracker.rs](projects/uptime_sla_tracker.rs) | Measure SLA compliance and error budgets |
+| 207 | ⭐ 6/10 | `config_diff_auditor` | [config_diff_auditor.rs](projects/config_diff_auditor.rs) | Audit semantic configuration changes |
+| 208 | ⭐ 7/10 | `api_replay_harness` | [api_replay_harness.rs](projects/api_replay_harness.rs) | Replay API sessions and compare baselines |
+| 209 | ⭐ 7/10 | `change_approval_engine` | [change_approval_engine.rs](projects/change_approval_engine.rs) | Evaluate and route change approvals |
+| 210 | ⭐ 6/10 | `log_redaction_gateway` | [log_redaction_gateway.rs](projects/log_redaction_gateway.rs) | Redact sensitive fields from log streams |
+| 211 | ⭐ 8/10 | `schema_migration_planner` | [schema_migration_planner.rs](projects/schema_migration_planner.rs) | Plan safe schema migrations with rollbacks |
+| 212 | ⭐ 6/10 | `incident_simulator` | [incident_simulator.rs](projects/incident_simulator.rs) | Simulate incident scenarios and response timings |
+| 213 | ⭐ 5/10 | `api_deprecation_tracker` | [api_deprecation_tracker.rs](projects/api_deprecation_tracker.rs) | Track API sunset timelines and usage risk |
+| 214 | ⭐ 6/10 | `workload_forecaster` | [workload_forecaster.rs](projects/workload_forecaster.rs) | Forecast workload demand and variance |
+| 215 | ⭐ 6/10 | `credential_inventory` | [credential_inventory.rs](projects/credential_inventory.rs) | Inventory credentials and detect stale access |
+| 216 | ⭐ 7/10 | `delivery_slo_guard` | [delivery_slo_guard.rs](projects/delivery_slo_guard.rs) | Guard delivery SLOs with burn-rate signals |
 
 ---
 
@@ -4679,3 +4703,555 @@ Learn:
 Guide:
 
 - [tenant_provisioner_TODO.md](projects/tenant_provisioner_TODO.md)
+
+---
+
+## ⭐ 6/10 — Release Train
+
+Goal: Coordinate gated release train promotions
+
+Build:
+
+```bash
+cargo run --bin release_train
+```
+
+Learn:
+
+- release window and cutoff modeling
+- promotion gate orchestration
+- checkpointed rollout and rollback flow
+- tests for gate failure handling
+
+Guide:
+
+- [release_train_TODO.md](projects/release_train_TODO.md)
+
+---
+
+## ⭐ 5/10 — Incident Timeline
+
+Goal: Build incident timelines from event streams
+
+Build:
+
+```bash
+cargo run --bin incident_timeline
+```
+
+Learn:
+
+- event normalization and ordering
+- merge rules across event sources
+- timeline rendering strategies
+- tests for ordering and dedup behavior
+
+Guide:
+
+- [incident_timeline_TODO.md](projects/incident_timeline_TODO.md)
+
+---
+
+## ⭐ 6/10 — Policy Simulator
+
+Goal: Dry-run policy changes with explain traces
+
+Build:
+
+```bash
+cargo run --bin policy_simulator
+```
+
+Learn:
+
+- policy parse and evaluation split
+- dry-run decision paths
+- explain trace construction
+- tests for rule matching correctness
+
+Guide:
+
+- [policy_simulator_TODO.md](projects/policy_simulator_TODO.md)
+
+---
+
+## ⭐ 7/10 — Dependency Auditor
+
+Goal: Audit dependency graphs against policy
+
+Build:
+
+```bash
+cargo run --bin dependency_auditor
+```
+
+Learn:
+
+- graph extraction from manifests
+- vulnerability/license/trust checks
+- report shaping for remediation
+- tests for traversal and policy matching
+
+Guide:
+
+- [dependency_auditor_TODO.md](projects/dependency_auditor_TODO.md)
+
+---
+
+## ⭐ 7/10 — Traffic Replayer
+
+Goal: Replay production-like request traffic safely
+
+Build:
+
+```bash
+cargo run --bin traffic_replayer
+```
+
+Learn:
+
+- capture format and schedule fidelity
+- concurrency and pacing controls
+- endpoint mapping and mutation hooks
+- tests for deterministic replay behavior
+
+Guide:
+
+- [traffic_replayer_TODO.md](projects/traffic_replayer_TODO.md)
+
+---
+
+## ⭐ 8/10 — Failover Coordinator
+
+Goal: Orchestrate failover and safe failback decisions
+
+Build:
+
+```bash
+cargo run --bin failover_coordinator
+```
+
+Learn:
+
+- topology and health policy modeling
+- decision hysteresis to avoid flapping
+- persisted transition history
+- tests for split-brain scenarios
+
+Guide:
+
+- [failover_coordinator_TODO.md](projects/failover_coordinator_TODO.md)
+
+---
+
+## ⭐ 6/10 — Tenant Billing Meter
+
+Goal: Meter tenant usage for billing pipelines
+
+Build:
+
+```bash
+cargo run --bin tenant_billing_meter
+```
+
+Learn:
+
+- usage event schema and aggregation
+- pricing tier rule application
+- invoice-ready summary modeling
+- tests for threshold and rounding behavior
+
+Guide:
+
+- [tenant_billing_meter_TODO.md](projects/tenant_billing_meter_TODO.md)
+
+---
+
+## ⭐ 5/10 — Runtime Profiler
+
+Goal: Summarize runtime hotspots and regressions
+
+Build:
+
+```bash
+cargo run --bin runtime_profiler
+```
+
+Learn:
+
+- sampling and span attribution
+- hotspot ranking and percentile math
+- regression threshold alerts
+- tests for aggregate metric correctness
+
+Guide:
+
+- [runtime_profiler_TODO.md](projects/runtime_profiler_TODO.md)
+
+---
+
+## ⭐ 6/10 — Service Catalog
+
+Goal: Maintain service metadata and dependencies
+
+Build:
+
+```bash
+cargo run --bin service_catalog
+```
+
+Learn:
+
+- service identity and ownership modeling
+- dependency graph representation
+- query and search index tradeoffs
+- tests for relationship integrity
+
+Guide:
+
+- [service_catalog_TODO.md](projects/service_catalog_TODO.md)
+
+---
+
+## ⭐ 5/10 — Incident Postmortem
+
+Goal: Generate postmortems from incident records
+
+Build:
+
+```bash
+cargo run --bin incident_postmortem
+```
+
+Learn:
+
+- postmortem schema and template rendering
+- timeline and factor ingestion flow
+- action-item ownership modeling
+- tests for required section completeness
+
+Guide:
+
+- [incident_postmortem_TODO.md](projects/incident_postmortem_TODO.md)
+
+---
+
+## ⭐ 7/10 — Access Review Engine
+
+Goal: Run periodic entitlement access reviews
+
+Build:
+
+```bash
+cargo run --bin access_review_engine
+```
+
+Learn:
+
+- entitlement graph modeling
+- review campaign lifecycle
+- decision evidence and escalation flow
+- tests for revoke/approve rules
+
+Guide:
+
+- [access_review_engine_TODO.md](projects/access_review_engine_TODO.md)
+
+---
+
+## ⭐ 7/10 — Secret Rotation Service
+
+Goal: Coordinate scheduled secret rotations safely
+
+Build:
+
+```bash
+cargo run --bin secret_rotation_service
+```
+
+Learn:
+
+- versioned secret lifecycle
+- rotation scheduling and rollout orchestration
+- rollback and grace-period handling
+- tests for version promotion safety
+
+Guide:
+
+- [secret_rotation_service_TODO.md](projects/secret_rotation_service_TODO.md)
+
+---
+
+## ⭐ 6/10 — Capacity Planner
+
+Goal: Forecast capacity and recommend scaling actions
+
+Build:
+
+```bash
+cargo run --bin capacity_planner
+```
+
+Learn:
+
+- workload signal aggregation
+- forecast and saturation heuristics
+- scenario analysis modeling
+- tests for threshold behavior
+
+Guide:
+
+- [capacity_planner_TODO.md](projects/capacity_planner_TODO.md)
+
+---
+
+## ⭐ 5/10 — Uptime SLA Tracker
+
+Goal: Measure SLA compliance and error budgets
+
+Build:
+
+```bash
+cargo run --bin uptime_sla_tracker
+```
+
+Learn:
+
+- objective and window definitions
+- downtime interval accounting
+- breach and burn-rate signals
+- tests for boundary calculations
+
+Guide:
+
+- [uptime_sla_tracker_TODO.md](projects/uptime_sla_tracker_TODO.md)
+
+---
+
+## ⭐ 6/10 — Config Diff Auditor
+
+Goal: Audit semantic configuration changes
+
+Build:
+
+```bash
+cargo run --bin config_diff_auditor
+```
+
+Learn:
+
+- typed config parsing
+- semantic diff and ignore rules
+- risk classification policies
+- tests for nested diff behavior
+
+Guide:
+
+- [config_diff_auditor_TODO.md](projects/config_diff_auditor_TODO.md)
+
+---
+
+## ⭐ 7/10 — API Replay Harness
+
+Goal: Replay API sessions and compare baselines
+
+Build:
+
+```bash
+cargo run --bin api_replay_harness
+```
+
+Learn:
+
+- session capture and ordering constraints
+- deterministic replay scheduling
+- response diff and masking logic
+- tests for stable comparison output
+
+Guide:
+
+- [api_replay_harness_TODO.md](projects/api_replay_harness_TODO.md)
+
+---
+
+## ⭐ 7/10 — Change Approval Engine
+
+Goal: Evaluate and route change approvals
+
+Build:
+
+```bash
+cargo run --bin change_approval_engine
+```
+
+Learn:
+
+- risk-aware approval modeling
+- reviewer quorum and escalation flow
+- immutable decision trails
+- tests for timeout and escalation logic
+
+Guide:
+
+- [change_approval_engine_TODO.md](projects/change_approval_engine_TODO.md)
+
+---
+
+## ⭐ 6/10 — Log Redaction Gateway
+
+Goal: Redact sensitive fields from log streams
+
+Build:
+
+```bash
+cargo run --bin log_redaction_gateway
+```
+
+Learn:
+
+- redaction rule pipelines
+- deterministic masking strategies
+- context preservation for observability
+- tests for redaction safety
+
+Guide:
+
+- [log_redaction_gateway_TODO.md](projects/log_redaction_gateway_TODO.md)
+
+---
+
+## ⭐ 8/10 — Schema Migration Planner
+
+Goal: Plan safe schema migrations with rollbacks
+
+Build:
+
+```bash
+cargo run --bin schema_migration_planner
+```
+
+Learn:
+
+- versioned schema evolution modeling
+- compatibility analysis gates
+- ordered migration planning
+- tests for dependency and rollback behavior
+
+Guide:
+
+- [schema_migration_planner_TODO.md](projects/schema_migration_planner_TODO.md)
+
+---
+
+## ⭐ 6/10 — Incident Simulator
+
+Goal: Simulate incident scenarios and response timings
+
+Build:
+
+```bash
+cargo run --bin incident_simulator
+```
+
+Learn:
+
+- scenario template modeling
+- seeded simulation reproducibility
+- detection/mitigation latency metrics
+- tests for deterministic execution
+
+Guide:
+
+- [incident_simulator_TODO.md](projects/incident_simulator_TODO.md)
+
+---
+
+## ⭐ 5/10 — API Deprecation Tracker
+
+Goal: Track API sunset timelines and usage risk
+
+Build:
+
+```bash
+cargo run --bin api_deprecation_tracker
+```
+
+Learn:
+
+- deprecation window modeling
+- usage ingestion and risk scoring
+- deadline notification mechanics
+- tests for date boundary logic
+
+Guide:
+
+- [api_deprecation_tracker_TODO.md](projects/api_deprecation_tracker_TODO.md)
+
+---
+
+## ⭐ 6/10 — Workload Forecaster
+
+Goal: Forecast workload demand and variance
+
+Build:
+
+```bash
+cargo run --bin workload_forecaster
+```
+
+Learn:
+
+- trend/seasonality forecast basics
+- confidence interval estimation
+- forecast export contracts
+- tests for anomaly resilience
+
+Guide:
+
+- [workload_forecaster_TODO.md](projects/workload_forecaster_TODO.md)
+
+---
+
+## ⭐ 6/10 — Credential Inventory
+
+Goal: Inventory credentials and detect stale access
+
+Build:
+
+```bash
+cargo run --bin credential_inventory
+```
+
+Learn:
+
+- metadata-only credential cataloging
+- stale/orphan detection rules
+- remediation queue generation
+- tests for ownership logic
+
+Guide:
+
+- [credential_inventory_TODO.md](projects/credential_inventory_TODO.md)
+
+---
+
+## ⭐ 7/10 — Delivery SLO Guard
+
+Goal: Guard delivery SLOs with burn-rate signals
+
+Build:
+
+```bash
+cargo run --bin delivery_slo_guard
+```
+
+Learn:
+
+- windowed SLO compliance calculations
+- burn-rate thresholding
+- mitigation recommendation flows
+- tests for time-window math
+
+Guide:
+
+- [delivery_slo_guard_TODO.md](projects/delivery_slo_guard_TODO.md)

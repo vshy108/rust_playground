@@ -862,3 +862,99 @@ path = "projects/threat_feed_aggregator.rs"
 [[bin]]
 name = "tenant_provisioner"
 path = "projects/tenant_provisioner.rs"
+
+[[bin]]
+name = "release_train"
+path = "projects/release_train.rs"
+
+[[bin]]
+name = "incident_timeline"
+path = "projects/incident_timeline.rs"
+
+[[bin]]
+name = "policy_simulator"
+path = "projects/policy_simulator.rs"
+
+[[bin]]
+name = "dependency_auditor"
+path = "projects/dependency_auditor.rs"
+
+[[bin]]
+name = "traffic_replayer"
+path = "projects/traffic_replayer.rs"
+
+[[bin]]
+name = "failover_coordinator"
+path = "projects/failover_coordinator.rs"
+
+[[bin]]
+name = "tenant_billing_meter"
+path = "projects/tenant_billing_meter.rs"
+
+[[bin]]
+name = "runtime_profiler"
+path = "projects/runtime_profiler.rs"
+
+[[bin]]
+name = "service_catalog"
+path = "projects/service_catalog.rs"
+
+[[bin]]
+name = "incident_postmortem"
+path = "projects/incident_postmortem.rs"
+
+[[bin]]
+name = "access_review_engine"
+path = "projects/access_review_engine.rs"
+
+[[bin]]
+name = "secret_rotation_service"
+path = "projects/secret_rotation_service.rs"
+
+[[bin]]
+name = "capacity_planner"
+path = "projects/capacity_planner.rs"
+
+[[bin]]
+name = "uptime_sla_tracker"
+path = "projects/uptime_sla_tracker.rs"
+
+[[bin]]
+name = "config_diff_auditor"
+path = "projects/config_diff_auditor.rs"
+
+[[bin]]
+name = "api_replay_harness"
+path = "projects/api_replay_harness.rs"
+
+[[bin]]
+name = "change_approval_engine"
+path = "projects/change_approval_engine.rs"
+
+[[bin]]
+name = "log_redaction_gateway"
+path = "projects/log_redaction_gateway.rs"
+
+[[bin]]
+name = "schema_migration_planner"
+path = "projects/schema_migration_planner.rs"
+
+[[bin]]
+name = "incident_simulator"
+path = "projects/incident_simulator.rs"
+
+[[bin]]
+name = "api_deprecation_tracker"
+path = "projects/api_deprecation_tracker.rs"
+
+[[bin]]
+name = "workload_forecaster"
+path = "projects/workload_forecaster.rs"
+
+[[bin]]
+name = "credential_inventory"
+path = "projects/credential_inventory.rs"
+
+[[bin]]
+name = "delivery_slo_guard"
+path = "projects/delivery_slo_guard.rs"
