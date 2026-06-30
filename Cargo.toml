@@ -958,3 +958,35 @@ path = "projects/credential_inventory.rs"
 [[bin]]
 name = "delivery_slo_guard"
 path = "projects/delivery_slo_guard.rs"
+
+[[bin]]
+name = "blast_radius_analyzer"
+path = "projects/blast_radius_analyzer.rs"
+
+[[bin]]
+name = "runbook_recommender"
+path = "projects/runbook_recommender.rs"
+
+[[bin]]
+name = "maintenance_window_manager"
+path = "projects/maintenance_window_manager.rs"
+
+[[bin]]
+name = "latency_budget_planner"
+path = "projects/latency_budget_planner.rs"
+
+[[bin]]
+name = "release_guardrail"
+path = "projects/release_guardrail.rs"
+
+[[bin]]
+name = "dependency_risk_heatmap"
+path = "projects/dependency_risk_heatmap.rs"
+
+[[bin]]
+name = "authz_drift_detector"
+path = "projects/authz_drift_detector.rs"
+
+[[bin]]
+name = "incident_comms_broker"
+path = "projects/incident_comms_broker.rs"

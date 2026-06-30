@@ -268,6 +268,14 @@ The following projects currently have no unchecked items left in their TODO guid
 | 214 | ⭐ 6/10 | `workload_forecaster` | [workload_forecaster.rs](projects/workload_forecaster.rs) | Forecast workload demand and variance |
 | 215 | ⭐ 6/10 | `credential_inventory` | [credential_inventory.rs](projects/credential_inventory.rs) | Inventory credentials and detect stale access |
 | 216 | ⭐ 7/10 | `delivery_slo_guard` | [delivery_slo_guard.rs](projects/delivery_slo_guard.rs) | Guard delivery SLOs with burn-rate signals |
+| 217 | ⭐ 7/10 | `blast_radius_analyzer` | [blast_radius_analyzer.rs](projects/blast_radius_analyzer.rs) | Estimate impact scope from dependency graphs |
+| 218 | ⭐ 6/10 | `runbook_recommender` | [runbook_recommender.rs](projects/runbook_recommender.rs) | Recommend operational runbooks for incidents |
+| 219 | ⭐ 5/10 | `maintenance_window_manager` | [maintenance_window_manager.rs](projects/maintenance_window_manager.rs) | Plan and validate maintenance windows |
+| 220 | ⭐ 6/10 | `latency_budget_planner` | [latency_budget_planner.rs](projects/latency_budget_planner.rs) | Allocate and track end-to-end latency budgets |
+| 221 | ⭐ 7/10 | `release_guardrail` | [release_guardrail.rs](projects/release_guardrail.rs) | Enforce release readiness guard checks |
+| 222 | ⭐ 6/10 | `dependency_risk_heatmap` | [dependency_risk_heatmap.rs](projects/dependency_risk_heatmap.rs) | Visualize dependency risk concentration |
+| 223 | ⭐ 8/10 | `authz_drift_detector` | [authz_drift_detector.rs](projects/authz_drift_detector.rs) | Detect authorization drift from desired state |
+| 224 | ⭐ 6/10 | `incident_comms_broker` | [incident_comms_broker.rs](projects/incident_comms_broker.rs) | Broker incident updates across channels |
 
 ---
 
@@ -5255,3 +5263,187 @@ Learn:
 Guide:
 
 - [delivery_slo_guard_TODO.md](projects/delivery_slo_guard_TODO.md)
+
+---
+
+## ⭐ 7/10 — Blast Radius Analyzer
+
+Goal: Estimate impact scope from dependency graphs
+
+Build:
+
+```bash
+cargo run --bin blast_radius_analyzer
+```
+
+Learn:
+
+- dependency graph normalization
+- impact traversal and scoring
+- confidence estimation for partial data
+- tests for traversal determinism
+
+Guide:
+
+- [blast_radius_analyzer_TODO.md](projects/blast_radius_analyzer_TODO.md)
+
+---
+
+## ⭐ 6/10 — Runbook Recommender
+
+Goal: Recommend operational runbooks for incidents
+
+Build:
+
+```bash
+cargo run --bin runbook_recommender
+```
+
+Learn:
+
+- runbook retrieval strategies
+- ranking with feedback loops
+- failure-mode to runbook mapping
+- tests for ranking consistency
+
+Guide:
+
+- [runbook_recommender_TODO.md](projects/runbook_recommender_TODO.md)
+
+---
+
+## ⭐ 5/10 — Maintenance Window Manager
+
+Goal: Plan and validate maintenance windows
+
+Build:
+
+```bash
+cargo run --bin maintenance_window_manager
+```
+
+Learn:
+
+- recurrence and overlap rules
+- timezone-safe schedule math
+- policy checks for blackout periods
+- tests for boundary conditions
+
+Guide:
+
+- [maintenance_window_manager_TODO.md](projects/maintenance_window_manager_TODO.md)
+
+---
+
+## ⭐ 6/10 — Latency Budget Planner
+
+Goal: Allocate and track end-to-end latency budgets
+
+Build:
+
+```bash
+cargo run --bin latency_budget_planner
+```
+
+Learn:
+
+- per-hop budget allocation
+- percentile-aware budget accounting
+- bottleneck detection heuristics
+- tests for budget propagation logic
+
+Guide:
+
+- [latency_budget_planner_TODO.md](projects/latency_budget_planner_TODO.md)
+
+---
+
+## ⭐ 7/10 — Release Guardrail
+
+Goal: Enforce release readiness guard checks
+
+Build:
+
+```bash
+cargo run --bin release_guardrail
+```
+
+Learn:
+
+- composable release gates
+- health/error/saturation check design
+- pause and block decision semantics
+- tests for gate ordering and failure behavior
+
+Guide:
+
+- [release_guardrail_TODO.md](projects/release_guardrail_TODO.md)
+
+---
+
+## ⭐ 6/10 — Dependency Risk Heatmap
+
+Goal: Visualize dependency risk concentration
+
+Build:
+
+```bash
+cargo run --bin dependency_risk_heatmap
+```
+
+Learn:
+
+- graph centrality with risk scoring
+- ownership-based grouping views
+- heatmap output shaping
+- tests for scoring stability
+
+Guide:
+
+- [dependency_risk_heatmap_TODO.md](projects/dependency_risk_heatmap_TODO.md)
+
+---
+
+## ⭐ 8/10 — Authz Drift Detector
+
+Goal: Detect authorization drift from desired state
+
+Build:
+
+```bash
+cargo run --bin authz_drift_detector
+```
+
+Learn:
+
+- desired vs observed policy graph diffing
+- severity classification by resource sensitivity
+- remediation planning workflow
+- tests for deterministic drift detection
+
+Guide:
+
+- [authz_drift_detector_TODO.md](projects/authz_drift_detector_TODO.md)
+
+---
+
+## ⭐ 6/10 — Incident Comms Broker
+
+Goal: Broker incident updates across channels
+
+Build:
+
+```bash
+cargo run --bin incident_comms_broker
+```
+
+Learn:
+
+- channel routing and subscriber policies
+- ordered fan-out delivery
+- idempotency and retry handling
+- tests for dedup and delivery semantics
+
+Guide:
+
+- [incident_comms_broker_TODO.md](projects/incident_comms_broker_TODO.md)
