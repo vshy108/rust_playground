@@ -212,6 +212,38 @@ The following projects currently have no unchecked items left in their TODO guid
 | 158 | ⭐ 2/10 | `url_codec` | [url_codec.rs](projects/url_codec.rs) | Encode and decode URL components |
 | 159 | ⭐ 4/10 | `ini_inspector` | [ini_inspector.rs](projects/ini_inspector.rs) | Inspect and query INI files |
 | 160 | ⭐ 4/10 | `date_calculator` | [date_calculator.rs](projects/date_calculator.rs) | Perform simple date arithmetic |
+| 161 | ⭐ 6/10 | `feature_flag_service` | [feature_flag_service.rs](projects/feature_flag_service.rs) | Evaluate feature flags over an API |
+| 162 | ⭐ 5/10 | `cron_scheduler` | [cron_scheduler.rs](projects/cron_scheduler.rs) | Run jobs on cron-like schedules |
+| 163 | ⭐ 5/10 | `api_mock_server` | [api_mock_server.rs](projects/api_mock_server.rs) | Serve configurable mock API responses |
+| 164 | ⭐ 6/10 | `backup_tool` | [backup_tool.rs](projects/backup_tool.rs) | Create and restore filesystem snapshots |
+| 165 | ⭐ 7/10 | `notebook_sync_engine` | [notebook_sync_engine.rs](projects/notebook_sync_engine.rs) | Sync notebooks and detect conflicts |
+| 166 | ⭐ 7/10 | `search_indexer` | [search_indexer.rs](projects/search_indexer.rs) | Build and query an inverted search index |
+| 167 | ⭐ 7/10 | `media_library_server` | [media_library_server.rs](projects/media_library_server.rs) | Catalog and browse a media library |
+| 168 | ⭐ 8/10 | `package_registry` | [package_registry.rs](projects/package_registry.rs) | Publish and fetch package artifacts |
+| 169 | ⭐ 7/10 | `ci_runner` | [ci_runner.rs](projects/ci_runner.rs) | Execute CI jobs with isolated steps |
+| 170 | ⭐ 6/10 | `metrics_dashboard` | [metrics_dashboard.rs](projects/metrics_dashboard.rs) | Aggregate and visualize runtime metrics |
+| 171 | ⭐ 8/10 | `plugin_runtime` | [plugin_runtime.rs](projects/plugin_runtime.rs) | Load and run sandboxed plugins |
+| 172 | ⭐ 5/10 | `notification_hub` | [notification_hub.rs](projects/notification_hub.rs) | Route notifications to multiple sinks |
+| 173 | ⭐ 6/10 | `config_deployer` | [config_deployer.rs](projects/config_deployer.rs) | Validate and roll out configuration changes |
+| 174 | ⭐ 5/10 | `artifact_signer` | [artifact_signer.rs](projects/artifact_signer.rs) | Sign and verify build artifacts |
+| 175 | ⭐ 7/10 | `job_queue_server` | [job_queue_server.rs](projects/job_queue_server.rs) | Manage durable queues and worker leases |
+| 176 | ⭐ 6/10 | `webhook_dispatcher` | [webhook_dispatcher.rs](projects/webhook_dispatcher.rs) | Deliver webhooks with retry/backoff |
+| 177 | ⭐ 6/10 | `incident_router` | [incident_router.rs](projects/incident_router.rs) | Route incidents with escalation policies |
+| 178 | ⭐ 7/10 | `sbom_scanner` | [sbom_scanner.rs](projects/sbom_scanner.rs) | Build SBOM reports and risk summaries |
+| 179 | ⭐ 6/10 | `edge_cache` | [edge_cache.rs](projects/edge_cache.rs) | Cache and revalidate edge responses |
+| 180 | ⭐ 8/10 | `canary_controller` | [canary_controller.rs](projects/canary_controller.rs) | Automate canary promotion and rollback |
+| 181 | ⭐ 5/10 | `quota_service` | [quota_service.rs](projects/quota_service.rs) | Enforce tenant and endpoint quotas |
+| 182 | ⭐ 6/10 | `audit_trail_store` | [audit_trail_store.rs](projects/audit_trail_store.rs) | Append-only audit event storage |
+| 183 | ⭐ 7/10 | `rollout_manager` | [rollout_manager.rs](projects/rollout_manager.rs) | Execute staged feature rollouts safely |
+| 184 | ⭐ 7/10 | `dependency_mirror` | [dependency_mirror.rs](projects/dependency_mirror.rs) | Mirror dependency metadata and artifacts |
+| 185 | ⭐ 8/10 | `chaos_orchestrator` | [chaos_orchestrator.rs](projects/chaos_orchestrator.rs) | Run controlled fault injection experiments |
+| 186 | ⭐ 5/10 | `session_store` | [session_store.rs](projects/session_store.rs) | Manage expiring user sessions safely |
+| 187 | ⭐ 6/10 | `api_contract_tester` | [api_contract_tester.rs](projects/api_contract_tester.rs) | Validate APIs against contract expectations |
+| 188 | ⭐ 6/10 | `cache_invalidator` | [cache_invalidator.rs](projects/cache_invalidator.rs) | Coordinate distributed cache invalidation |
+| 189 | ⭐ 7/10 | `compliance_checker` | [compliance_checker.rs](projects/compliance_checker.rs) | Evaluate resources against policy controls |
+| 190 | ⭐ 5/10 | `synthetic_probe` | [synthetic_probe.rs](projects/synthetic_probe.rs) | Run scheduled probes and health checks |
+| 191 | ⭐ 8/10 | `threat_feed_aggregator` | [threat_feed_aggregator.rs](projects/threat_feed_aggregator.rs) | Aggregate and score threat intelligence feeds |
+| 192 | ⭐ 7/10 | `tenant_provisioner` | [tenant_provisioner.rs](projects/tenant_provisioner.rs) | Provision tenant resources with rollback safety |
 
 ---
 
@@ -3911,3 +3943,739 @@ Learn:
 Guide:
 
 - [date_calculator_TODO.md](projects/date_calculator_TODO.md)
+
+---
+
+## ⭐ 6/10 — Feature Flag Service
+
+Goal: Evaluate feature flags over an API
+
+Build:
+
+```bash
+cargo run --bin feature_flag_service
+```
+
+Learn:
+
+- rule-based flag evaluation
+- percentage rollout strategies
+- environment and targeting models
+- deterministic evaluation tests
+
+Guide:
+
+- [feature_flag_service_TODO.md](projects/feature_flag_service_TODO.md)
+
+---
+
+## ⭐ 5/10 — Cron Scheduler
+
+Goal: Run jobs on cron-like schedules
+
+Build:
+
+```bash
+cargo run --bin cron_scheduler
+```
+
+Learn:
+
+- cron-expression parsing basics
+- next-run time calculation
+- graceful shutdown for long-lived workers
+- schedule boundary testing
+
+Guide:
+
+- [cron_scheduler_TODO.md](projects/cron_scheduler_TODO.md)
+
+---
+
+## ⭐ 5/10 — API Mock Server
+
+Goal: Serve configurable mock API responses
+
+Build:
+
+```bash
+cargo run --bin api_mock_server
+```
+
+Learn:
+
+- config-driven route definitions
+- method and path matching
+- fixture-backed response rendering
+- response-behavior tests
+
+Guide:
+
+- [api_mock_server_TODO.md](projects/api_mock_server_TODO.md)
+
+---
+
+## ⭐ 6/10 — Backup Tool
+
+Goal: Create and restore filesystem snapshots
+
+Build:
+
+```bash
+cargo run --bin backup_tool
+```
+
+Learn:
+
+- snapshot layout design
+- unchanged-file detection
+- restore-path safety
+- exclusion and manifest testing
+
+Guide:
+
+- [backup_tool_TODO.md](projects/backup_tool_TODO.md)
+
+---
+
+## ⭐ 7/10 — Notebook Sync Engine
+
+Goal: Sync notebooks and detect conflicts
+
+Build:
+
+```bash
+cargo run --bin notebook_sync_engine
+```
+
+Learn:
+
+- change-set modeling
+- conflict detection between divergent edits
+- merge-marker or reconciliation strategies
+- sync-checkpoint testing
+
+Guide:
+
+- [notebook_sync_engine_TODO.md](projects/notebook_sync_engine_TODO.md)
+
+---
+
+## ⭐ 7/10 — Search Indexer
+
+Goal: Build and query an inverted search index
+
+Build:
+
+```bash
+cargo run --bin search_indexer
+```
+
+Learn:
+
+- tokenization and document crawling
+- inverted-index data structures
+- simple query parsing and ranking
+- indexing and retrieval tests
+
+Guide:
+
+- [search_indexer_TODO.md](projects/search_indexer_TODO.md)
+
+---
+
+## ⭐ 7/10 — Media Library Server
+
+Goal: Catalog and browse a media library
+
+Build:
+
+```bash
+cargo run --bin media_library_server
+```
+
+Learn:
+
+- metadata extraction flow
+- normalized catalog design
+- browse and search endpoints
+- scan-result fixture testing
+
+Guide:
+
+- [media_library_server_TODO.md](projects/media_library_server_TODO.md)
+
+---
+
+## ⭐ 8/10 — Package Registry
+
+Goal: Publish and fetch package artifacts
+
+Build:
+
+```bash
+cargo run --bin package_registry
+```
+
+Learn:
+
+- package/version metadata modeling
+- immutable artifact rules
+- upload and download API design
+- conflict and authorization testing
+
+Guide:
+
+- [package_registry_TODO.md](projects/package_registry_TODO.md)
+
+---
+
+## ⭐ 7/10 — CI Runner
+
+Goal: Execute CI jobs with isolated steps
+
+Build:
+
+```bash
+cargo run --bin ci_runner
+```
+
+Learn:
+
+- job and step modeling
+- workspace and artifact lifecycle design
+- failure propagation and retries
+- deterministic test harnesses for pipelines
+
+Guide:
+
+- [ci_runner_TODO.md](projects/ci_runner_TODO.md)
+
+---
+
+## ⭐ 6/10 — Metrics Dashboard
+
+Goal: Aggregate and visualize runtime metrics
+
+Build:
+
+```bash
+cargo run --bin metrics_dashboard
+```
+
+Learn:
+
+- timeseries aggregation basics
+- panel and query abstractions
+- threshold and alert primitives
+- fixture-driven dashboard tests
+
+Guide:
+
+- [metrics_dashboard_TODO.md](projects/metrics_dashboard_TODO.md)
+
+---
+
+## ⭐ 8/10 — Plugin Runtime
+
+Goal: Load and run sandboxed plugins
+
+Build:
+
+```bash
+cargo run --bin plugin_runtime
+```
+
+Learn:
+
+- plugin ABI boundary modeling
+- capability-based isolation patterns
+- lifecycle hooks and resource controls
+- integration tests for host-plugin contracts
+
+Guide:
+
+- [plugin_runtime_TODO.md](projects/plugin_runtime_TODO.md)
+
+---
+
+## ⭐ 5/10 — Notification Hub
+
+Goal: Route notifications to multiple sinks
+
+Build:
+
+```bash
+cargo run --bin notification_hub
+```
+
+Learn:
+
+- event envelope design
+- routing by severity or topic
+- sink abstraction and retries
+- tests for delivery behavior
+
+Guide:
+
+- [notification_hub_TODO.md](projects/notification_hub_TODO.md)
+
+---
+
+## ⭐ 6/10 — Config Deployer
+
+Goal: Validate and roll out configuration changes
+
+Build:
+
+```bash
+cargo run --bin config_deployer
+```
+
+Learn:
+
+- config schema and validation flow
+- staged rollout with rollback hooks
+- drift detection and reconciliation basics
+- tests for safe deployment gates
+
+Guide:
+
+- [config_deployer_TODO.md](projects/config_deployer_TODO.md)
+
+---
+
+## ⭐ 5/10 — Artifact Signer
+
+Goal: Sign and verify build artifacts
+
+Build:
+
+```bash
+cargo run --bin artifact_signer
+```
+
+Learn:
+
+- digest and signature pipeline design
+- key abstraction boundaries
+- verification and trust policy checks
+- tests for tamper and mismatch cases
+
+Guide:
+
+- [artifact_signer_TODO.md](projects/artifact_signer_TODO.md)
+
+---
+
+## ⭐ 7/10 — Job Queue Server
+
+Goal: Manage durable queues and worker leases
+
+Build:
+
+```bash
+cargo run --bin job_queue_server
+```
+
+Learn:
+
+- durable queue semantics
+- worker lease and visibility timeout logic
+- retry and dead-letter handling
+- concurrency tests for claim/ack paths
+
+Guide:
+
+- [job_queue_server_TODO.md](projects/job_queue_server_TODO.md)
+
+---
+
+## ⭐ 6/10 — Webhook Dispatcher
+
+Goal: Deliver webhooks with retry/backoff
+
+Build:
+
+```bash
+cargo run --bin webhook_dispatcher
+```
+
+Learn:
+
+- delivery contract and idempotency keys
+- exponential backoff policy design
+- payload signing and endpoint auth basics
+- tests for retry exhaustion behavior
+
+Guide:
+
+- [webhook_dispatcher_TODO.md](projects/webhook_dispatcher_TODO.md)
+
+---
+
+## ⭐ 6/10 — Incident Router
+
+Goal: Route incidents with escalation policies
+
+Build:
+
+```bash
+cargo run --bin incident_router
+```
+
+Learn:
+
+- incident classification and envelope design
+- rule-based team routing
+- escalation and fallback semantics
+- deterministic tests for noisy-event handling
+
+Guide:
+
+- [incident_router_TODO.md](projects/incident_router_TODO.md)
+
+---
+
+## ⭐ 7/10 — SBOM Scanner
+
+Goal: Build SBOM reports and risk summaries
+
+Build:
+
+```bash
+cargo run --bin sbom_scanner
+```
+
+Learn:
+
+- dependency graph extraction
+- normalized package identity modeling
+- report generation and severity scoring
+- fixture-driven vulnerability matching tests
+
+Guide:
+
+- [sbom_scanner_TODO.md](projects/sbom_scanner_TODO.md)
+
+---
+
+## ⭐ 6/10 — Edge Cache
+
+Goal: Cache and revalidate edge responses
+
+Build:
+
+```bash
+cargo run --bin edge_cache
+```
+
+Learn:
+
+- cache key normalization
+- TTL and eviction policies
+- conditional revalidation behavior
+- tests for freshness and stale paths
+
+Guide:
+
+- [edge_cache_TODO.md](projects/edge_cache_TODO.md)
+
+---
+
+## ⭐ 8/10 — Canary Controller
+
+Goal: Automate canary promotion and rollback
+
+Build:
+
+```bash
+cargo run --bin canary_controller
+```
+
+Learn:
+
+- rollout stage state machines
+- health-signal scoring and thresholds
+- promote/rollback transition safety
+- tests for failure-driven rollback paths
+
+Guide:
+
+- [canary_controller_TODO.md](projects/canary_controller_TODO.md)
+
+---
+
+## ⭐ 5/10 — Quota Service
+
+Goal: Enforce tenant and endpoint quotas
+
+Build:
+
+```bash
+cargo run --bin quota_service
+```
+
+Learn:
+
+- quota dimension modeling
+- windowing algorithms
+- deterministic clock abstractions
+- tests around limit boundaries
+
+Guide:
+
+- [quota_service_TODO.md](projects/quota_service_TODO.md)
+
+---
+
+## ⭐ 6/10 — Audit Trail Store
+
+Goal: Append-only audit event storage
+
+Build:
+
+```bash
+cargo run --bin audit_trail_store
+```
+
+Learn:
+
+- immutable event log design
+- event ordering and filtering indexes
+- hash-chain tamper evidence basics
+- tests for integrity and query correctness
+
+Guide:
+
+- [audit_trail_store_TODO.md](projects/audit_trail_store_TODO.md)
+
+---
+
+## ⭐ 7/10 — Rollout Manager
+
+Goal: Execute staged feature rollouts safely
+
+Build:
+
+```bash
+cargo run --bin rollout_manager
+```
+
+Learn:
+
+- rollout plan representation
+- checkpointing and resumability
+- blast-radius and pause controls
+- tests for progression and cancellation
+
+Guide:
+
+- [rollout_manager_TODO.md](projects/rollout_manager_TODO.md)
+
+---
+
+## ⭐ 7/10 — Dependency Mirror
+
+Goal: Mirror dependency metadata and artifacts
+
+Build:
+
+```bash
+cargo run --bin dependency_mirror
+```
+
+Learn:
+
+- metadata/artifact consistency modeling
+- digest verification and trust boundaries
+- cache freshness and fallback strategy
+- tests for mirror failover behavior
+
+Guide:
+
+- [dependency_mirror_TODO.md](projects/dependency_mirror_TODO.md)
+
+---
+
+## ⭐ 8/10 — Chaos Orchestrator
+
+Goal: Run controlled fault injection experiments
+
+Build:
+
+```bash
+cargo run --bin chaos_orchestrator
+```
+
+Learn:
+
+- experiment and blast-radius modeling
+- fault injection adapters
+- guardrails and stop conditions
+- tests for safety and rollback behavior
+
+Guide:
+
+- [chaos_orchestrator_TODO.md](projects/chaos_orchestrator_TODO.md)
+
+---
+
+## ⭐ 5/10 — Session Store
+
+Goal: Manage expiring user sessions safely
+
+Build:
+
+```bash
+cargo run --bin session_store
+```
+
+Learn:
+
+- session lifecycle modeling
+- token identity and TTL semantics
+- refresh and invalidation patterns
+- tests for expiration edge cases
+
+Guide:
+
+- [session_store_TODO.md](projects/session_store_TODO.md)
+
+---
+
+## ⭐ 6/10 — API Contract Tester
+
+Goal: Validate APIs against contract expectations
+
+Build:
+
+```bash
+cargo run --bin api_contract_tester
+```
+
+Learn:
+
+- contract matcher design
+- request execution abstraction
+- schema and status assertions
+- failure diff reporting tests
+
+Guide:
+
+- [api_contract_tester_TODO.md](projects/api_contract_tester_TODO.md)
+
+---
+
+## ⭐ 6/10 — Cache Invalidator
+
+Goal: Coordinate distributed cache invalidation
+
+Build:
+
+```bash
+cargo run --bin cache_invalidator
+```
+
+Learn:
+
+- invalidation event modeling
+- fan-out and retry policies
+- idempotency handling
+- tests for propagation correctness
+
+Guide:
+
+- [cache_invalidator_TODO.md](projects/cache_invalidator_TODO.md)
+
+---
+
+## ⭐ 7/10 — Compliance Checker
+
+Goal: Evaluate resources against policy controls
+
+Build:
+
+```bash
+cargo run --bin compliance_checker
+```
+
+Learn:
+
+- policy rule evaluation
+- evidence collection and scoring
+- waiver lifecycle handling
+- tests for report integrity
+
+Guide:
+
+- [compliance_checker_TODO.md](projects/compliance_checker_TODO.md)
+
+---
+
+## ⭐ 5/10 — Synthetic Probe
+
+Goal: Run scheduled probes and health checks
+
+Build:
+
+```bash
+cargo run --bin synthetic_probe
+```
+
+Learn:
+
+- probe scenario scheduling
+- timeout and retry strategy
+- latency/result metric collection
+- tests for timing behavior
+
+Guide:
+
+- [synthetic_probe_TODO.md](projects/synthetic_probe_TODO.md)
+
+---
+
+## ⭐ 8/10 — Threat Feed Aggregator
+
+Goal: Aggregate and score threat intelligence feeds
+
+Build:
+
+```bash
+cargo run --bin threat_feed_aggregator
+```
+
+Learn:
+
+- multi-source indicator ingestion
+- canonical normalization and dedup
+- source weighting and confidence scoring
+- tests for merge and provenance behavior
+
+Guide:
+
+- [threat_feed_aggregator_TODO.md](projects/threat_feed_aggregator_TODO.md)
+
+---
+
+## ⭐ 7/10 — Tenant Provisioner
+
+Goal: Provision tenant resources with rollback safety
+
+Build:
+
+```bash
+cargo run --bin tenant_provisioner
+```
+
+Learn:
+
+- workflow checkpointing
+- idempotent provisioning steps
+- rollback on partial failures
+- tests for retry and recovery logic
+
+Guide:
+
+- [tenant_provisioner_TODO.md](projects/tenant_provisioner_TODO.md)

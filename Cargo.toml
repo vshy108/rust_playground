@@ -734,3 +734,131 @@ path = "projects/ini_inspector.rs"
 [[bin]]
 name = "date_calculator"
 path = "projects/date_calculator.rs"
+
+[[bin]]
+name = "feature_flag_service"
+path = "projects/feature_flag_service.rs"
+
+[[bin]]
+name = "cron_scheduler"
+path = "projects/cron_scheduler.rs"
+
+[[bin]]
+name = "api_mock_server"
+path = "projects/api_mock_server.rs"
+
+[[bin]]
+name = "backup_tool"
+path = "projects/backup_tool.rs"
+
+[[bin]]
+name = "notebook_sync_engine"
+path = "projects/notebook_sync_engine.rs"
+
+[[bin]]
+name = "search_indexer"
+path = "projects/search_indexer.rs"
+
+[[bin]]
+name = "media_library_server"
+path = "projects/media_library_server.rs"
+
+[[bin]]
+name = "package_registry"
+path = "projects/package_registry.rs"
+
+[[bin]]
+name = "ci_runner"
+path = "projects/ci_runner.rs"
+
+[[bin]]
+name = "metrics_dashboard"
+path = "projects/metrics_dashboard.rs"
+
+[[bin]]
+name = "plugin_runtime"
+path = "projects/plugin_runtime.rs"
+
+[[bin]]
+name = "notification_hub"
+path = "projects/notification_hub.rs"
+
+[[bin]]
+name = "config_deployer"
+path = "projects/config_deployer.rs"
+
+[[bin]]
+name = "artifact_signer"
+path = "projects/artifact_signer.rs"
+
+[[bin]]
+name = "job_queue_server"
+path = "projects/job_queue_server.rs"
+
+[[bin]]
+name = "webhook_dispatcher"
+path = "projects/webhook_dispatcher.rs"
+
+[[bin]]
+name = "incident_router"
+path = "projects/incident_router.rs"
+
+[[bin]]
+name = "sbom_scanner"
+path = "projects/sbom_scanner.rs"
+
+[[bin]]
+name = "edge_cache"
+path = "projects/edge_cache.rs"
+
+[[bin]]
+name = "canary_controller"
+path = "projects/canary_controller.rs"
+
+[[bin]]
+name = "quota_service"
+path = "projects/quota_service.rs"
+
+[[bin]]
+name = "audit_trail_store"
+path = "projects/audit_trail_store.rs"
+
+[[bin]]
+name = "rollout_manager"
+path = "projects/rollout_manager.rs"
+
+[[bin]]
+name = "dependency_mirror"
+path = "projects/dependency_mirror.rs"
+
+[[bin]]
+name = "chaos_orchestrator"
+path = "projects/chaos_orchestrator.rs"
+
+[[bin]]
+name = "session_store"
+path = "projects/session_store.rs"
+
+[[bin]]
+name = "api_contract_tester"
+path = "projects/api_contract_tester.rs"
+
+[[bin]]
+name = "cache_invalidator"
+path = "projects/cache_invalidator.rs"
+
+[[bin]]
+name = "compliance_checker"
+path = "projects/compliance_checker.rs"
+
+[[bin]]
+name = "synthetic_probe"
+path = "projects/synthetic_probe.rs"
+
+[[bin]]
+name = "threat_feed_aggregator"
+path = "projects/threat_feed_aggregator.rs"
+
+[[bin]]
+name = "tenant_provisioner"
+path = "projects/tenant_provisioner.rs"
