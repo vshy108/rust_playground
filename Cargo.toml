@@ -70,9 +70,13 @@ tower_governor = "0.8"
 # show tracing log
 tracing = "0.1.44"
 tracing-subscriber = "0.3.23"
+# status code
 http = "1.4.2"
+# terminal
 crossterm = "0.29.0"
+# gaming audio
 rusty_audio = "1.4.1"
+# gaming timer
 rusty_time = "1.1.0"
 
 # [[example]] must stay [[example]] is a Cargo-defined table name
