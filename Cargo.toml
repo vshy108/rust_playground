@@ -382,3 +382,131 @@ path = "projects/ebpf_monitor.rs"
 [[bin]]
 name = "blockchain_node"
 path = "projects/blockchain_node.rs"
+
+[[bin]]
+name = "object_store"
+path = "projects/object_store.rs"
+
+[[bin]]
+name = "smtp_server"
+path = "projects/smtp_server.rs"
+
+[[bin]]
+name = "coord_service"
+path = "projects/coord_service.rs"
+
+[[bin]]
+name = "policy_engine"
+path = "projects/policy_engine.rs"
+
+[[bin]]
+name = "stream_processor"
+path = "projects/stream_processor.rs"
+
+[[bin]]
+name = "backup_engine"
+path = "projects/backup_engine.rs"
+
+[[bin]]
+name = "cargo_registry"
+path = "projects/cargo_registry.rs"
+
+[[bin]]
+name = "spreadsheet_engine"
+path = "projects/spreadsheet_engine.rs"
+
+[[bin]]
+name = "language_server"
+path = "projects/language_server.rs"
+
+[[bin]]
+name = "webhook_gateway"
+path = "projects/webhook_gateway.rs"
+
+[[bin]]
+name = "time_series_db"
+path = "projects/time_series_db.rs"
+
+[[bin]]
+name = "config_manager"
+path = "projects/config_manager.rs"
+
+[[bin]]
+name = "container_registry"
+path = "projects/container_registry.rs"
+
+[[bin]]
+name = "irc_server"
+path = "projects/irc_server.rs"
+
+[[bin]]
+name = "feature_flag_server"
+path = "projects/feature_flag_server.rs"
+
+[[bin]]
+name = "map_tile_server"
+path = "projects/map_tile_server.rs"
+
+[[bin]]
+name = "service_discovery"
+path = "projects/service_discovery.rs"
+
+[[bin]]
+name = "tracing_backend"
+path = "projects/tracing_backend.rs"
+
+[[bin]]
+name = "vector_search_engine"
+path = "projects/vector_search_engine.rs"
+
+[[bin]]
+name = "image_optimizer"
+path = "projects/image_optimizer.rs"
+
+[[bin]]
+name = "workflow_scheduler"
+path = "projects/workflow_scheduler.rs"
+
+[[bin]]
+name = "collaborative_editor"
+path = "projects/collaborative_editor.rs"
+
+[[bin]]
+name = "mailing_list_manager"
+path = "projects/mailing_list_manager.rs"
+
+[[bin]]
+name = "ocr_engine"
+path = "projects/ocr_engine.rs"
+
+[[bin]]
+name = "dns_resolver"
+path = "projects/dns_resolver.rs"
+
+[[bin]]
+name = "ftp_server"
+path = "projects/ftp_server.rs"
+
+[[bin]]
+name = "video_transcoder"
+path = "projects/video_transcoder.rs"
+
+[[bin]]
+name = "static_analyzer"
+path = "projects/static_analyzer.rs"
+
+[[bin]]
+name = "release_engineering"
+path = "projects/release_engineering.rs"
+
+[[bin]]
+name = "event_sourcing_db"
+path = "projects/event_sourcing_db.rs"
+
+[[bin]]
+name = "browser_automation"
+path = "projects/browser_automation.rs"
+
+[[bin]]
+name = "hdfs_clone"
+path = "projects/hdfs_clone.rs"

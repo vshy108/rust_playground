@@ -124,6 +124,38 @@ The following projects currently have no unchecked items left in their TODO guid
 | 70 | ⭐ 7/10 | `secret_scanner` | [secret_scanner.rs](projects/secret_scanner.rs) | Credential detection + risk reporting |
 | 71 | ⭐ 9/10 | `ebpf_monitor` | [ebpf_monitor.rs](projects/ebpf_monitor.rs) | Kernel telemetry pipeline design |
 | 72 | ⭐ 9/10 | `blockchain_node` | [blockchain_node.rs](projects/blockchain_node.rs) | Ledger validation + peer protocol |
+| 73 | ⭐ 9/10 | `object_store` | [object_store.rs](projects/object_store.rs) | Blob storage + metadata integrity |
+| 74 | ⭐ 8/10 | `smtp_server` | [smtp_server.rs](projects/smtp_server.rs) | Mail transport + delivery queue |
+| 75 | ⭐ 9/10 | `coord_service` | [coord_service.rs](projects/coord_service.rs) | Coordination primitives + watches |
+| 76 | ⭐ 7/10 | `policy_engine` | [policy_engine.rs](projects/policy_engine.rs) | Authorization rules + decision traces |
+| 77 | ⭐ 9/10 | `stream_processor` | [stream_processor.rs](projects/stream_processor.rs) | Stateful event windows + checkpoints |
+| 78 | ⭐ 8/10 | `backup_engine` | [backup_engine.rs](projects/backup_engine.rs) | Snapshots + dedup + restore |
+| 79 | ⭐ 8/10 | `cargo_registry` | [cargo_registry.rs](projects/cargo_registry.rs) | Package index + artifact publishing |
+| 80 | ⭐ 7/10 | `spreadsheet_engine` | [spreadsheet_engine.rs](projects/spreadsheet_engine.rs) | Formula graphs + recalculation |
+| 81 | ⭐ 8/10 | `language_server` | [language_server.rs](projects/language_server.rs) | LSP protocol + incremental diagnostics |
+| 82 | ⭐ 7/10 | `webhook_gateway` | [webhook_gateway.rs](projects/webhook_gateway.rs) | Signed delivery + retry queues |
+| 83 | ⭐ 9/10 | `time_series_db` | [time_series_db.rs](projects/time_series_db.rs) | Time-series ingestion + query engine |
+| 84 | ⭐ 7/10 | `config_manager` | [config_manager.rs](projects/config_manager.rs) | Declarative state reconciliation |
+| 85 | ⭐ 8/10 | `container_registry` | [container_registry.rs](projects/container_registry.rs) | OCI manifests + blob lifecycle |
+| 86 | ⭐ 7/10 | `irc_server` | [irc_server.rs](projects/irc_server.rs) | Realtime chat protocol server |
+| 87 | ⭐ 6/10 | `feature_flag_server` | [feature_flag_server.rs](projects/feature_flag_server.rs) | Rollout targeting + evaluation API |
+| 88 | ⭐ 8/10 | `map_tile_server` | [map_tile_server.rs](projects/map_tile_server.rs) | Geospatial tile serving + cache |
+| 89 | ⭐ 8/10 | `service_discovery` | [service_discovery.rs](projects/service_discovery.rs) | Dynamic registry + health watches |
+| 90 | ⭐ 8/10 | `tracing_backend` | [tracing_backend.rs](projects/tracing_backend.rs) | Trace ingest + search backend |
+| 91 | ⭐ 9/10 | `vector_search_engine` | [vector_search_engine.rs](projects/vector_search_engine.rs) | Approximate nearest-neighbor indexing |
+| 92 | ⭐ 6/10 | `image_optimizer` | [image_optimizer.rs](projects/image_optimizer.rs) | Lossless compression + batch processing |
+| 93 | ⭐ 7/10 | `workflow_scheduler` | [workflow_scheduler.rs](projects/workflow_scheduler.rs) | Timed triggers + durable retries |
+| 94 | ⭐ 9/10 | `collaborative_editor` | [collaborative_editor.rs](projects/collaborative_editor.rs) | Shared editing + convergence rules |
+| 95 | ⭐ 8/10 | `mailing_list_manager` | [mailing_list_manager.rs](projects/mailing_list_manager.rs) | Subscription lifecycle + moderated delivery |
+| 96 | ⭐ 8/10 | `ocr_engine` | [ocr_engine.rs](projects/ocr_engine.rs) | Image preprocessing + text recognition |
+| 97 | ⭐ 7/10 | `dns_resolver` | [dns_resolver.rs](projects/dns_resolver.rs) | Recursive lookups + TTL caching |
+| 98 | ⭐ 7/10 | `ftp_server` | [ftp_server.rs](projects/ftp_server.rs) | Control/data channel protocol handling |
+| 99 | ⭐ 8/10 | `video_transcoder` | [video_transcoder.rs](projects/video_transcoder.rs) | Media job orchestration + progress tracking |
+| 100 | ⭐ 8/10 | `static_analyzer` | [static_analyzer.rs](projects/static_analyzer.rs) | Rule engine + source diagnostics |
+| 101 | ⭐ 7/10 | `release_engineering` | [release_engineering.rs](projects/release_engineering.rs) | Versioning + artifact promotion |
+| 102 | ⭐ 9/10 | `event_sourcing_db` | [event_sourcing_db.rs](projects/event_sourcing_db.rs) | Append-only streams + projections |
+| 103 | ⭐ 8/10 | `browser_automation` | [browser_automation.rs](projects/browser_automation.rs) | Session orchestration + DOM actions |
+| 104 | ⭐ 10/10 | `hdfs_clone` | [hdfs_clone.rs](projects/hdfs_clone.rs) | Namenode metadata + replicated blocks |
 
 ---
 
@@ -1799,3 +1831,739 @@ Learn:
 Guide:
 
 - [blockchain_node_TODO.md](projects/blockchain_node_TODO.md)
+
+---
+
+## ⭐ 9/10 — Object Store
+
+Goal: Blob storage + metadata integrity
+
+Build:
+
+```bash
+cargo run --bin object_store
+```
+
+Learn:
+
+- object metadata and content-addressed blob layouts
+- streaming uploads and multipart assembly
+- checksum validation and recovery paths
+- blob lifecycle and garbage collection
+
+Guide:
+
+- [object_store_TODO.md](projects/object_store_TODO.md)
+
+---
+
+## ⭐ 8/10 — SMTP Server
+
+Goal: Mail transport + delivery queue
+
+Build:
+
+```bash
+cargo run --bin smtp_server
+```
+
+Learn:
+
+- SMTP session state machines
+- command parsing and envelope sequencing
+- queued delivery and retry scheduling
+- protocol hardening around malformed input
+
+Guide:
+
+- [smtp_server_TODO.md](projects/smtp_server_TODO.md)
+
+---
+
+## ⭐ 9/10 — Coordination Service
+
+Goal: Coordination primitives + watches
+
+Build:
+
+```bash
+cargo run --bin coord_service
+```
+
+Learn:
+
+- leases and ephemeral session-bound state
+- watch delivery and change notification ordering
+- distributed locks and leader-election semantics
+- snapshot and recovery constraints
+
+Guide:
+
+- [coord_service_TODO.md](projects/coord_service_TODO.md)
+
+---
+
+## ⭐ 7/10 — Policy Engine
+
+Goal: Authorization rules + decision traces
+
+Build:
+
+```bash
+cargo run --bin policy_engine
+```
+
+Learn:
+
+- policy language and AST design
+- allow/deny precedence rules
+- contextual evaluation over subject/resource/action
+- explainable traces for audits and debugging
+
+Guide:
+
+- [policy_engine_TODO.md](projects/policy_engine_TODO.md)
+
+---
+
+## ⭐ 9/10 — Stream Processor
+
+Goal: Stateful event windows + checkpoints
+
+Build:
+
+```bash
+cargo run --bin stream_processor
+```
+
+Learn:
+
+- operator graph execution over event streams
+- keyed state and window aggregation logic
+- event-time progress and late-event handling
+- replay-safe checkpoint and restore design
+
+Guide:
+
+- [stream_processor_TODO.md](projects/stream_processor_TODO.md)
+
+---
+
+## ⭐ 8/10 — Backup Engine
+
+Goal: Snapshots + dedup + restore
+
+Build:
+
+```bash
+cargo run --bin backup_engine
+```
+
+Learn:
+
+- snapshot manifest design
+- chunking and deduplicated storage
+- restore correctness and retention policy
+- interrupted-run recovery handling
+
+Guide:
+
+- [backup_engine_TODO.md](projects/backup_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — Cargo Registry
+
+Goal: Package index + artifact publishing
+
+Build:
+
+```bash
+cargo run --bin cargo_registry
+```
+
+Learn:
+
+- crate index consistency rules
+- publish flows and version conflict handling
+- artifact checksum verification
+- proxy/cache behavior for package sources
+
+Guide:
+
+- [cargo_registry_TODO.md](projects/cargo_registry_TODO.md)
+
+---
+
+## ⭐ 7/10 — Spreadsheet Engine
+
+Goal: Formula graphs + recalculation
+
+Build:
+
+```bash
+cargo run --bin spreadsheet_engine
+```
+
+Learn:
+
+- formula parsing and typed cell values
+- dependency graph maintenance
+- deterministic recalculation scheduling
+- cycle detection and error propagation
+
+Guide:
+
+- [spreadsheet_engine_TODO.md](projects/spreadsheet_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — Language Server
+
+Goal: LSP protocol + incremental diagnostics
+
+Build:
+
+```bash
+cargo run --bin language_server
+```
+
+Learn:
+
+- JSON-RPC framing and request dispatch
+- document lifecycle and incremental sync
+- parser-driven diagnostics and editor features
+- protocol error handling and capability negotiation
+
+Guide:
+
+- [language_server_TODO.md](projects/language_server_TODO.md)
+
+---
+
+## ⭐ 7/10 — Webhook Gateway
+
+Goal: Signed delivery + retry queues
+
+Build:
+
+```bash
+cargo run --bin webhook_gateway
+```
+
+Learn:
+
+- outbound delivery models and retry strategy
+- request signing and verification flows
+- dead-letter handling and observability
+- idempotent redelivery semantics
+
+Guide:
+
+- [webhook_gateway_TODO.md](projects/webhook_gateway_TODO.md)
+
+---
+
+## ⭐ 9/10 — Time-Series DB
+
+Goal: Time-series ingestion + query engine
+
+Build:
+
+```bash
+cargo run --bin time_series_db
+```
+
+Learn:
+
+- series indexing and append paths
+- retention, compaction, and block compression
+- range queries and aggregate execution
+- write-vs-query storage tradeoffs
+
+Guide:
+
+- [time_series_db_TODO.md](projects/time_series_db_TODO.md)
+
+---
+
+## ⭐ 7/10 — Config Manager
+
+Goal: Declarative state reconciliation
+
+Build:
+
+```bash
+cargo run --bin config_manager
+```
+
+Learn:
+
+- desired-vs-actual state diffing
+- idempotent apply operations
+- dry-run planning and reconciliation reporting
+- drift detection and failure summaries
+
+Guide:
+
+- [config_manager_TODO.md](projects/config_manager_TODO.md)
+
+---
+
+## ⭐ 8/10 — Container Registry
+
+Goal: OCI manifests + blob lifecycle
+
+Build:
+
+```bash
+cargo run --bin container_registry
+```
+
+Learn:
+
+- digest-validated blob storage
+- manifest and tag consistency rules
+- registry auth and namespace semantics
+- garbage collection for unreferenced blobs
+
+Guide:
+
+- [container_registry_TODO.md](projects/container_registry_TODO.md)
+
+---
+
+## ⭐ 7/10 — IRC Server
+
+Goal: Realtime chat protocol server
+
+Build:
+
+```bash
+cargo run --bin irc_server
+```
+
+Learn:
+
+- line-oriented protocol parsing
+- connection registration and nickname state
+- channel membership and broadcast fanout
+- disconnect cleanup and collision handling
+
+Guide:
+
+- [irc_server_TODO.md](projects/irc_server_TODO.md)
+
+---
+
+## ⭐ 6/10 — Feature Flag Server
+
+Goal: Rollout targeting + evaluation API
+
+Build:
+
+```bash
+cargo run --bin feature_flag_server
+```
+
+Learn:
+
+- targeting rule evaluation
+- percentage rollout bucketing
+- stable hashing and deterministic assignment
+- auditability for rule changes
+
+Guide:
+
+- [feature_flag_server_TODO.md](projects/feature_flag_server_TODO.md)
+
+---
+
+## ⭐ 8/10 — Map Tile Server
+
+Goal: Geospatial tile serving + cache
+
+Build:
+
+```bash
+cargo run --bin map_tile_server
+```
+
+Learn:
+
+- z/x/y addressing and bounds validation
+- tile-source abstraction and HTTP serving
+- cache-key design for map tiles
+- metadata endpoints for source introspection
+
+Guide:
+
+- [map_tile_server_TODO.md](projects/map_tile_server_TODO.md)
+
+---
+
+## ⭐ 8/10 — Service Discovery
+
+Goal: Dynamic registry + health watches
+
+Build:
+
+```bash
+cargo run --bin service_discovery
+```
+
+Learn:
+
+- instance registration and heartbeat semantics
+- TTL expiry and unhealthy instance eviction
+- service query APIs and tag filtering
+- watch delivery for changing registry state
+
+Guide:
+
+- [service_discovery_TODO.md](projects/service_discovery_TODO.md)
+
+---
+
+## ⭐ 8/10 — Tracing Backend
+
+Goal: Trace ingest + search backend
+
+Build:
+
+```bash
+cargo run --bin tracing_backend
+```
+
+Learn:
+
+- span/event ingestion and trace assembly
+- out-of-order span handling
+- query indexes by service and time range
+- retention and storage compaction tradeoffs
+
+Guide:
+
+- [tracing_backend_TODO.md](projects/tracing_backend_TODO.md)
+
+---
+
+## ⭐ 9/10 — Vector Search Engine
+
+Goal: Approximate nearest-neighbor indexing
+
+Build:
+
+```bash
+cargo run --bin vector_search_engine
+```
+
+Learn:
+
+- embedding storage and collection metadata
+- exact versus approximate nearest-neighbor search
+- ANN index design such as HNSW or IVF
+- metadata filters alongside similarity ranking
+
+Guide:
+
+- [vector_search_engine_TODO.md](projects/vector_search_engine_TODO.md)
+
+---
+
+## ⭐ 6/10 — Image Optimizer
+
+Goal: Lossless compression + batch processing
+
+Build:
+
+```bash
+cargo run --bin image_optimizer
+```
+
+Learn:
+
+- image decode/encode pipeline separation
+- format-specific optimization passes
+- dry-run reporting and batch traversal
+- metadata preservation versus stripping choices
+
+Guide:
+
+- [image_optimizer_TODO.md](projects/image_optimizer_TODO.md)
+
+---
+
+## ⭐ 7/10 — Workflow Scheduler
+
+Goal: Timed triggers + durable retries
+
+Build:
+
+```bash
+cargo run --bin workflow_scheduler
+```
+
+Learn:
+
+- cron-like or interval trigger calculation
+- durable due-run queueing
+- retry/backoff for scheduled jobs
+- restart recovery and missed-run semantics
+
+Guide:
+
+- [workflow_scheduler_TODO.md](projects/workflow_scheduler_TODO.md)
+
+---
+
+## ⭐ 9/10 — Collaborative Editor
+
+Goal: Shared editing + convergence rules
+
+Build:
+
+```bash
+cargo run --bin collaborative_editor
+```
+
+Learn:
+
+- document sessions and edit operations
+- CRDT or operational transform semantics
+- concurrent edit convergence guarantees
+- presence/cursor state versus document state
+
+Guide:
+
+- [collaborative_editor_TODO.md](projects/collaborative_editor_TODO.md)
+
+---
+
+## ⭐ 8/10 — Mailing List Manager
+
+Goal: Subscription lifecycle + moderated delivery
+
+Build:
+
+```bash
+cargo run --bin mailing_list_manager
+```
+
+Learn:
+
+- subscribe/unsubscribe confirmation flows
+- moderated posting pipelines
+- list fanout and bounce suppression rules
+- auditable membership and delivery state
+
+Guide:
+
+- [mailing_list_manager_TODO.md](projects/mailing_list_manager_TODO.md)
+
+---
+
+## ⭐ 8/10 — OCR Engine
+
+Goal: Image preprocessing + text recognition
+
+Build:
+
+```bash
+cargo run --bin ocr_engine
+```
+
+Learn:
+
+- thresholding and segmentation preprocessing
+- glyph extraction and recognition pipeline
+- confidence scoring and error reporting
+- fixture-driven evaluation against expected text
+
+Guide:
+
+- [ocr_engine_TODO.md](projects/ocr_engine_TODO.md)
+
+---
+
+## ⭐ 7/10 — DNS Resolver
+
+Goal: Recursive lookups + TTL caching
+
+Build:
+
+```bash
+cargo run --bin dns_resolver
+```
+
+Learn:
+
+- DNS packet parsing and serialization
+- recursive resolution flow and retries
+- cache entries with TTL expiration
+- record handling and NXDOMAIN behavior
+
+Guide:
+
+- [dns_resolver_TODO.md](projects/dns_resolver_TODO.md)
+
+---
+
+## ⭐ 7/10 — FTP Server
+
+Goal: Control/data channel protocol handling
+
+Build:
+
+```bash
+cargo run --bin ftp_server
+```
+
+Learn:
+
+- command parsing and session state management
+- passive-mode data channel lifecycle
+- file listing, upload, and retrieval flows
+- root-path safety and permission failures
+
+Guide:
+
+- [ftp_server_TODO.md](projects/ftp_server_TODO.md)
+
+---
+
+## ⭐ 8/10 — Video Transcoder
+
+Goal: Media job orchestration + progress tracking
+
+Build:
+
+```bash
+cargo run --bin video_transcoder
+```
+
+Learn:
+
+- media probe and stream metadata planning
+- transcode job execution pipelines
+- progress accounting and user feedback
+- cleanup and failure recovery for temporary outputs
+
+Guide:
+
+- [video_transcoder_TODO.md](projects/video_transcoder_TODO.md)
+
+---
+
+## ⭐ 8/10 — Static Analyzer
+
+Goal: Rule engine + source diagnostics
+
+Build:
+
+```bash
+cargo run --bin static_analyzer
+```
+
+Learn:
+
+- syntax or semantic model construction
+- diagnostic rule evaluation
+- severity, suppression, and baseline handling
+- machine-readable output stability
+
+Guide:
+
+- [static_analyzer_TODO.md](projects/static_analyzer_TODO.md)
+
+---
+
+## ⭐ 7/10 — Release Engineering
+
+Goal: Versioning + artifact promotion
+
+Build:
+
+```bash
+cargo run --bin release_engineering
+```
+
+Learn:
+
+- semver bump logic and changelog generation
+- artifact build matrix modeling
+- signed release manifest production
+- release candidate versus final promotion states
+
+Guide:
+
+- [release_engineering_TODO.md](projects/release_engineering_TODO.md)
+
+---
+
+## ⭐ 9/10 — Event Sourcing DB
+
+Goal: Append-only streams + projections
+
+Build:
+
+```bash
+cargo run --bin event_sourcing_db
+```
+
+Learn:
+
+- append-only event stream design
+- optimistic concurrency on stream writes
+- snapshot and rehydration strategies
+- projection rebuild and read-model maintenance
+
+Guide:
+
+- [event_sourcing_db_TODO.md](projects/event_sourcing_db_TODO.md)
+
+---
+
+## ⭐ 8/10 — Browser Automation
+
+Goal: Session orchestration + DOM actions
+
+Build:
+
+```bash
+cargo run --bin browser_automation
+```
+
+Learn:
+
+- browser session and page abstraction design
+- DOM query and interaction primitives
+- wait conditions and transient retry handling
+- diagnostics through screenshots or trace capture
+
+Guide:
+
+- [browser_automation_TODO.md](projects/browser_automation_TODO.md)
+
+---
+
+## ⭐ 10/10 — HDFS Clone
+
+Goal: Namenode metadata + replicated blocks
+
+Build:
+
+```bash
+cargo run --bin hdfs_clone
+```
+
+Learn:
+
+- namenode metadata ownership model
+- block splitting and datanode placement
+- heartbeat, block reports, and repair behavior
+- recovery from node failure and under-replication
+
+Guide:
+
+- [hdfs_clone_TODO.md](projects/hdfs_clone_TODO.md)
