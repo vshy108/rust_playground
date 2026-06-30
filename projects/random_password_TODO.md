@@ -1,4 +1,4 @@
-# TODO: random_password_cli
+# TODO: random_password (⭐ 1/10)
 
 ## Usage
 
@@ -48,3 +48,10 @@ cargo test
 - [x] Detect duplicate flags — currently `--length 5 --length 20` silently uses 20; return an error instead.
 - [x] Replace `(usize, bool)` tuple with a named struct `Config { length: usize, symbols: bool }` — teaches when a tuple outgrows itself.
 - [x] `eprintln!` vs `println!` — errors go to stderr, output to stdout; note why this matters for piping (`genpass | pbcopy`).
+## Tips
+
+- Implement one milestone at a time and keep each slice testable.
+- Add a failing test first, then implement the smallest behavior to pass.
+- Keep CLI/API surface stable while iterating internals.
+- Validate both happy path and error path for every milestone.
+- Run focused tests before broad checks.

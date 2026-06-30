@@ -1,4 +1,4 @@
-# TODO: lru_cache
+# TODO: lru_cache (⭐ 3/10)
 
 ## Usage
 
@@ -100,3 +100,11 @@ Acceptance check:
 ```bash
 cargo test --bin lru_cache
 ```
+
+## Tips
+
+- Lock down data invariants first and encode them in tests.
+- Implement persistence boundaries early (snapshot, log, recovery) even if minimal.
+- Separate correctness path from optimization path; optimize only after passing invariants.
+- Add deterministic simulation tests for retries, crashes, and restart behavior.
+- Track state transitions with trace logs to simplify post-failure analysis.

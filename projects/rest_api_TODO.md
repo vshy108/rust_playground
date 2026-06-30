@@ -1,4 +1,4 @@
-# TODO: rest_api
+# TODO: rest_api (⭐ 5/10)
 
 ## Usage
 
@@ -49,3 +49,11 @@ Acceptance check: `cargo run` starts without error; `curl localhost:3000/items` 
 
 - [ ] Add a `POST /login` endpoint that returns a signed JWT.
 - [ ] Add an axum middleware layer that validates the JWT on protected routes.
+
+## Tips
+
+- Start with protocol and contract tests first (request, response, error, timeout).
+- Build a strict parser before adding convenience behavior; fail closed on malformed input.
+- Add structured request logging early so debugging network paths is cheap.
+- Keep connection lifecycle explicit: open, active, idle timeout, close.
+- Add load and latency checks after correctness is stable.

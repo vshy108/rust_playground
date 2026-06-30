@@ -1,4 +1,4 @@
-# TODO: log_parser_cli
+# TODO: log_parser (⭐ 4/10)
 
 ## Usage
 
@@ -52,3 +52,11 @@ Acceptance check: error rate prints for sample file.
 - [x] `ip_stats` aggregation: count + mean latency per IP in one pass.
 - [x] `write_csv` writes header + one row per IP with 2-decimal mean latency.
 - [x] Tests: `ip_stats_returns_count_and_mean_latency`, `write_csv_produces_correct_rows`.
+
+## Tips
+
+- Implement one milestone at a time and keep each slice testable.
+- Add a failing test first, then implement the smallest behavior to pass.
+- Keep CLI/API surface stable while iterating internals.
+- Validate both happy path and error path for every milestone.
+- Run focused tests before broad checks.

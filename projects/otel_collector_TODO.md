@@ -1,4 +1,4 @@
-# TODO: otel_collector
+# TODO: otel_collector (⭐ 8/10)
 
 ## Usage
 
@@ -45,3 +45,11 @@ Acceptance check: output file contains one JSON object per span.
 
 - [ ] Add `POST /v1/metrics` endpoint; route metric events through a separate pipeline.
 - [ ] Emit a summary line (spans/metrics per minute) every 60 seconds.
+
+## Tips
+
+- Start with a deterministic local fixture path before external integration.
+- Add bounded concurrency controls early to prevent overload and flakiness.
+- Separate collection from aggregation/output so each can be tested in isolation.
+- Add backoff and retry policy tests for transient failures.
+- Measure throughput and tail latency on representative input sizes.

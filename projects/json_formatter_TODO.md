@@ -1,4 +1,4 @@
-# TODO: json_formatter_cli
+# TODO: json_formatter (⭐ 2/10)
 
 ## Usage
 
@@ -45,3 +45,11 @@ cargo test --bin jsonfmt
 - [x] Pretty print (already using `to_string_pretty` — verify indentation is 2 spaces).
 - [x] Validate-only mode: `--check` flag exits 0 if valid, 1 if invalid, prints nothing.
 - [x] Read from stdin when no filename is given (`-` or no arg).
+
+## Tips
+
+- Implement one milestone at a time and keep each slice testable.
+- Add a failing test first, then implement the smallest behavior to pass.
+- Keep CLI/API surface stable while iterating internals.
+- Validate both happy path and error path for every milestone.
+- Run focused tests before broad checks.

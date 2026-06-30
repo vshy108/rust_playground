@@ -1,4 +1,4 @@
-# TODO: file_watcher
+# TODO: file_watcher (⭐ 4/10)
 
 ## Usage
 
@@ -244,3 +244,10 @@ Acceptance check:
 ```text
 Rapid writes to one file should produce fewer, more meaningful log lines.
 ```
+## Tips
+
+- Start with a deterministic local fixture path before external integration.
+- Add bounded concurrency controls early to prevent overload and flakiness.
+- Separate collection from aggregation/output so each can be tested in isolation.
+- Add backoff and retry policy tests for transient failures.
+- Measure throughput and tail latency on representative input sizes.

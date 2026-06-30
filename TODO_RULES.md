@@ -1,0 +1,47 @@
+# TODO Rules
+
+This file records the conventions for project TODO guides in this repository.
+
+## Title Format
+
+Every project TODO file must start with a title in this exact format:
+
+```md
+# TODO: <project_name> (⭐ x/10)
+```
+
+Examples:
+
+```md
+# TODO: random_password (⭐ 1/10)
+# TODO: mini_shell (⭐ 6/10)
+# TODO: raft_consensus (⭐ 10/10)
+```
+
+## Source Of Truth
+
+The difficulty rating in the TODO title must match the project rating in [PLAN.md](PLAN.md).
+
+If a project's difficulty changes in [PLAN.md](PLAN.md), update the matching TODO title as part of the same change.
+
+## File Naming
+
+Project TODO guides should use this file naming pattern:
+
+```md
+projects/<project_name>_TODO.md
+```
+
+Examples:
+
+```md
+projects/random_password_TODO.md
+projects/mini_shell_TODO.md
+projects/raft_consensus_TODO.md
+```
+
+## Why This Rule Exists
+
+- keeps difficulty visible when opening a TODO file directly
+- keeps TODO guides consistent with the learning path in [PLAN.md](PLAN.md)
+- makes bulk maintenance and review easier

@@ -1,4 +1,4 @@
-# TODO: web_crawler
+# TODO: web_crawler (⭐ 5/10)
 
 ## Usage
 
@@ -46,3 +46,11 @@ Acceptance check: crawling runs noticeably faster than the sequential version.
 ## Extra: concurrency limit
 
 - [ ] Add `--concurrency N` flag; use `tokio::sync::Semaphore` to cap in-flight fetches.
+
+## Tips
+
+- Start with a deterministic local fixture path before external integration.
+- Add bounded concurrency controls early to prevent overload and flakiness.
+- Separate collection from aggregation/output so each can be tested in isolation.
+- Add backoff and retry policy tests for transient failures.
+- Measure throughput and tail latency on representative input sizes.

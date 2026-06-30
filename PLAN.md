@@ -1,6 +1,6 @@
 # Rust Playground — Project Learning Path
 
-Projects are ordered by difficulty. Each builds on concepts from the ones before it.
+Projects are roughly ordered by difficulty. Each builds on concepts from the ones before it.
 
 ---
 
@@ -14,6 +14,26 @@ Shared test data in `fixtures/` — run commands from the repo root so relative 
 | [fixtures/compact.json](fixtures/compact.json) | `jsonfmt` | Valid compact JSON (happy path for pretty-print and `--check`) |
 | [fixtures/bad.json](fixtures/bad.json) | `jsonfmt` | JSON with a missing closing brace (error path) |
 | [fixtures/access.log](fixtures/access.log) | `logparse` | 20 lines of Common Log Format; mix of IPs and status codes, one intentionally malformed line for skip-and-warn testing |
+
+## Tips For Incomplete TODO Projects
+
+TODO guide convention reference: [TODO_RULES.md](TODO_RULES.md)
+
+Use this workflow whenever a project has unchecked milestones:
+
+1. Start from one milestone only. Pick the smallest observable behavior and ignore the rest.
+2. Add a failing test first for that behavior (`cargo test --bin <name>`), then implement the smallest fix.
+3. Keep boundaries explicit early (parse -> validate -> execute -> output) so refactors stay local.
+4. Prefer deterministic inputs and fixtures before adding randomness, concurrency, or networking.
+5. Add debug surfaces early (structured logs, `--verbose`, or trace output) to shorten feedback loops.
+6. Validate after every slice: `cargo check --bins` and focused bin tests before moving forward.
+7. When blocked, reduce scope instead of pausing: implement a reduced but complete version, then iterate.
+
+Definition of done for each milestone:
+
+- behavior is tested
+- error path is tested
+- CLI or API contract is documented in the project TODO
 
 | # | Rating | Binary | Source | Goal |
 |---|--------|--------|--------|------|
@@ -36,6 +56,32 @@ Shared test data in `fixtures/` — run commands from the repo root so relative 
 | 17 | ⭐ 9/10 | `sidecar` | [service_mesh_sidecar.rs](projects/service_mesh_sidecar.rs) | Networking mastery |
 | 18 | ⭐ 10/10 | `dist_cache` | [dist_cache.rs](projects/dist_cache.rs) | Rust architect level |
 | 19 | ⭐ 10/10 | `mini_runtime` | [mini_runtime.rs](projects/mini_runtime.rs) | Deep Rust internals |
+| 20 | ⭐ 5/10 | `dns_toolkit` | [dns_toolkit.rs](projects/dns_toolkit.rs) | Binary protocol + UDP networking |
+| 21 | ⭐ 5/10 | `mini_git` | [mini_git.rs](projects/mini_git.rs) | Content-addressed storage |
+| 22 | ⭐ 5/10 | `loadtest` | [http_load_tester.rs](projects/http_load_tester.rs) | Performance testing + latency stats |
+| 23 | ⭐ 6/10 | `job_queue` | [job_queue.rs](projects/job_queue.rs) | Retries, DLQ, worker orchestration |
+| 24 | ⭐ 6/10 | `inv_index` | [inverted_index.rs](projects/inverted_index.rs) | Search indexing + ranking |
+| 25 | ⭐ 6/10 | `mini_shell` | [mini_shell.rs](projects/mini_shell.rs) | Process control + pipes |
+| 26 | ⭐ 7/10 | `textedit` | [text_editor.rs](projects/text_editor.rs) | Terminal UI + buffer editing |
+| 27 | ⭐ 7/10 | `socks5_proxy` | [socks5_proxy.rs](projects/socks5_proxy.rs) | Protocol parsing + TCP proxying |
+| 28 | ⭐ 7/10 | `ws_broker` | [websocket_broker.rs](projects/websocket_broker.rs) | Realtime pub/sub patterns |
+| 29 | ⭐ 7/10 | `rate_limiter` | [rate_limiter.rs](projects/rate_limiter.rs) | Traffic shaping algorithms |
+| 30 | ⭐ 8/10 | `lsm_kv` | [lsm_kv.rs](projects/lsm_kv.rs) | Storage engine internals |
+| 31 | ⭐ 8/10 | `bloom_hll` | [bloom_hll.rs](projects/bloom_hll.rs) | Probabilistic data structures |
+| 32 | ⭐ 8/10 | `file_sync` | [file_sync.rs](projects/file_sync.rs) | Filesystem diff + sync engine |
+| 33 | ⭐ 8/10 | `template_engine` | [template_engine.rs](projects/template_engine.rs) | Parsing + AST + rendering |
+| 34 | ⭐ 9/10 | `regex_engine` | [regex_engine.rs](projects/regex_engine.rs) | Automata theory in practice |
+| 35 | ⭐ 9/10 | `bittorrent` | [bittorrent.rs](projects/bittorrent.rs) | P2P protocols + piece scheduling |
+| 36 | ⭐ 7/10 | `tcp_stack` | [tcp_stack.rs](projects/tcp_stack.rs) | Network stack internals |
+| 37 | ⭐ 7/10 | `mqtt_broker` | [mqtt_broker.rs](projects/mqtt_broker.rs) | Pub/sub protocol server design |
+| 38 | ⭐ 7/10 | `chip8` | [chip8.rs](projects/chip8.rs) | Emulator architecture |
+| 39 | ⭐ 8/10 | `browser_engine` | [browser_engine.rs](projects/browser_engine.rs) | Parsing + layout + rendering pipeline |
+| 40 | ⭐ 8/10 | `bytecode_vm` | [bytecode_vm.rs](projects/bytecode_vm.rs) | Interpreter internals |
+| 41 | ⭐ 8/10 | `mini_compiler` | [mini_compiler.rs](projects/mini_compiler.rs) | Language design + codegen |
+| 42 | ⭐ 8/10 | `packet_sniffer` | [packet_sniffer.rs](projects/packet_sniffer.rs) | Packet parsing + traffic analysis |
+| 43 | ⭐ 8/10 | `static_site_gen` | [static_site_gen.rs](projects/static_site_gen.rs) | Build pipeline + content generation |
+| 44 | ⭐ 9/10 | `iot_simulator` | [iot_simulator.rs](projects/iot_simulator.rs) | Distributed device simulation |
+| 45 | ⭐ 10/10 | `raft_consensus` | [raft_consensus.rs](projects/raft_consensus.rs) | Consensus algorithm implementation |
 
 ---
 
@@ -492,3 +538,601 @@ Learn:
 Extra:
 
 - multi-threaded scheduler with work-stealing (`crossbeam-deque`)
+
+---
+
+## ⭐ 5/10 — DNS Toolkit
+
+Goal: Binary protocol + UDP networking
+
+Build:
+
+```bash
+cargo run --bin dns_toolkit
+```
+
+Learn:
+
+- DNS packet parsing / encoding
+- UDP request/response flow
+- timeout + retry behavior
+- TTL cache behavior
+
+Guide:
+
+- [dns_toolkit_TODO.md](projects/dns_toolkit_TODO.md)
+
+---
+
+## ⭐ 5/10 — Mini Git
+
+Goal: Content-addressed storage
+
+Build:
+
+```bash
+cargo run --bin mini_git -- init
+```
+
+Learn:
+
+- hashing and object storage
+- staging/index design
+- commit graph fundamentals
+- repository state transitions
+
+Guide:
+
+- [mini_git_TODO.md](projects/mini_git_TODO.md)
+
+---
+
+## ⭐ 5/10 — HTTP Load Tester
+
+Goal: Performance testing + latency stats
+
+Build:
+
+```bash
+cargo run --bin loadtest -- --url http://127.0.0.1:3000 --concurrency 32 --requests 2000
+```
+
+Learn:
+
+- async worker orchestration
+- latency histogram calculations
+- throughput and error-rate reporting
+- client connection reuse
+
+Guide:
+
+- [http_load_tester_TODO.md](projects/http_load_tester_TODO.md)
+
+---
+
+## ⭐ 6/10 — Job Queue
+
+Goal: Retries, DLQ, worker orchestration
+
+Build:
+
+```bash
+cargo run --bin job_queue
+```
+
+Learn:
+
+- lease/ack semantics
+- retry policy design
+- dead-letter handling
+- graceful shutdown behavior
+
+Guide:
+
+- [job_queue_TODO.md](projects/job_queue_TODO.md)
+
+---
+
+## ⭐ 6/10 — Inverted Index
+
+Goal: Search indexing + ranking
+
+Build:
+
+```bash
+cargo run --bin inv_index -- fixtures/sample.txt
+```
+
+Learn:
+
+- tokenization and normalization
+- postings list construction
+- query parsing
+- BM25-style scoring
+
+Guide:
+
+- [inverted_index_TODO.md](projects/inverted_index_TODO.md)
+
+---
+
+## ⭐ 6/10 — Mini Shell
+
+Goal: Process control + pipes
+
+Build:
+
+```bash
+cargo run --bin mini_shell
+```
+
+Learn:
+
+- REPL architecture
+- command parsing and quoting
+- subprocess management
+- pipelines and redirection
+
+Guide:
+
+- [mini_shell_TODO.md](projects/mini_shell_TODO.md)
+
+---
+
+## ⭐ 7/10 — Text Editor
+
+Goal: Terminal UI + buffer editing
+
+Build:
+
+```bash
+cargo run --bin textedit -- README.md
+```
+
+Learn:
+
+- viewport rendering
+- cursor + selection safety
+- insertion/deletion primitives
+- save/search workflows
+
+Guide:
+
+- [text_editor_TODO.md](projects/text_editor_TODO.md)
+
+---
+
+## ⭐ 7/10 — SOCKS5 Proxy
+
+Goal: Protocol parsing + TCP proxying
+
+Build:
+
+```bash
+cargo run --bin socks5_proxy -- --listen 127.0.0.1:1080
+```
+
+Learn:
+
+- SOCKS5 handshake and connect flow
+- target address parsing
+- bidirectional stream copying
+- timeout and connection accounting
+
+Guide:
+
+- [socks5_proxy_TODO.md](projects/socks5_proxy_TODO.md)
+
+---
+
+## ⭐ 7/10 — WebSocket Broker
+
+Goal: Realtime pub/sub patterns
+
+Build:
+
+```bash
+cargo run --bin ws_broker
+```
+
+Learn:
+
+- websocket session lifecycle
+- pub/sub topic routing
+- backpressure handling
+- heartbeat/cleanup loops
+
+Guide:
+
+- [websocket_broker_TODO.md](projects/websocket_broker_TODO.md)
+
+---
+
+## ⭐ 7/10 — Rate Limiter
+
+Goal: Traffic shaping algorithms
+
+Build:
+
+```bash
+cargo run --bin rate_limiter
+```
+
+Learn:
+
+- token bucket implementation
+- sliding-window implementation
+- per-key state management
+- middleware integration patterns
+
+Guide:
+
+- [rate_limiter_TODO.md](projects/rate_limiter_TODO.md)
+
+---
+
+## ⭐ 8/10 — LSM KV Store
+
+Goal: Storage engine internals
+
+Build:
+
+```bash
+cargo run --bin lsm_kv
+```
+
+Learn:
+
+- memtable + WAL layering
+- SSTable read/write format
+- compaction + tombstones
+- crash recovery
+
+Guide:
+
+- [lsm_kv_TODO.md](projects/lsm_kv_TODO.md)
+
+---
+
+## ⭐ 8/10 — Bloom + HyperLogLog
+
+Goal: Probabilistic data structures
+
+Build:
+
+```bash
+cargo run --bin bloom_hll
+```
+
+Learn:
+
+- approximate membership checks
+- cardinality estimation
+- merge behavior correctness
+- precision/performance tradeoffs
+
+Guide:
+
+- [bloom_hll_TODO.md](projects/bloom_hll_TODO.md)
+
+---
+
+## ⭐ 8/10 — File Sync
+
+Goal: Filesystem diff + sync engine
+
+Build:
+
+```bash
+cargo run --bin file_sync -- --src ./fixtures --dst /tmp/sync_target
+```
+
+Learn:
+
+- directory manifest modeling
+- hashing and delta detection
+- atomic file replacement
+- bounded parallel copy
+
+Guide:
+
+- [file_sync_TODO.md](projects/file_sync_TODO.md)
+
+---
+
+## ⭐ 8/10 — Template Engine
+
+Goal: Parsing + AST + rendering
+
+Build:
+
+```bash
+cargo run --bin template_engine
+```
+
+Learn:
+
+- tokenization and parser design
+- AST traversal
+- context resolution
+- conditional/loop control blocks
+
+Guide:
+
+- [template_engine_TODO.md](projects/template_engine_TODO.md)
+
+---
+
+## ⭐ 9/10 — Regex Engine
+
+Goal: Automata theory in practice
+
+Build:
+
+```bash
+cargo run --bin regex_engine -- "a+b" "aaab"
+```
+
+Learn:
+
+- regex grammar parsing
+- NFA construction
+- NFA simulation matching
+- optional DFA conversion path
+
+Guide:
+
+- [regex_engine_TODO.md](projects/regex_engine_TODO.md)
+
+---
+
+## ⭐ 9/10 — BitTorrent Client Core
+
+Goal: P2P protocols + piece scheduling
+
+Build:
+
+```bash
+cargo run --bin bittorrent
+```
+
+Learn:
+
+- bencode parsing
+- tracker/peer coordination
+- piece verification and assembly
+- rarest-first scheduling strategy
+
+Guide:
+
+- [bittorrent_TODO.md](projects/bittorrent_TODO.md)
+
+---
+
+## ⭐ 7/10 — TCP/IP Stack (Toy)
+
+Goal: Network stack internals
+
+Build:
+
+```bash
+cargo run --bin tcp_stack
+```
+
+Learn:
+
+- packet parsing and encoding
+- layered protocol boundaries
+- TCP handshake state transitions
+- retransmission and timeout modeling
+
+Guide:
+
+- [tcp_stack_TODO.md](projects/tcp_stack_TODO.md)
+
+---
+
+## ⭐ 7/10 — MQTT Broker
+
+Goal: Pub/sub protocol server design
+
+Build:
+
+```bash
+cargo run --bin mqtt_broker
+```
+
+Learn:
+
+- binary protocol framing
+- topic routing with wildcards
+- session lifecycle and keepalive
+- QoS delivery guarantees
+
+Guide:
+
+- [mqtt_broker_TODO.md](projects/mqtt_broker_TODO.md)
+
+---
+
+## ⭐ 7/10 — CHIP-8 Emulator
+
+Goal: Emulator architecture
+
+Build:
+
+```bash
+cargo run --bin chip8
+```
+
+Learn:
+
+- instruction decode and execute loop
+- memory/register modeling
+- deterministic timer behavior
+- ROM loading and compatibility checks
+
+Guide:
+
+- [chip8_TODO.md](projects/chip8_TODO.md)
+
+---
+
+## ⭐ 8/10 — Browser Engine (Toy)
+
+Goal: Parsing + layout + rendering pipeline
+
+Build:
+
+```bash
+cargo run --bin browser_engine
+```
+
+Learn:
+
+- HTML/CSS parsing
+- DOM and style tree construction
+- box-model layout traversal
+- paint command generation
+
+Guide:
+
+- [browser_engine_TODO.md](projects/browser_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — Bytecode VM
+
+Goal: Interpreter internals
+
+Build:
+
+```bash
+cargo run --bin bytecode_vm
+```
+
+Learn:
+
+- VM instruction dispatch
+- frame and stack discipline
+- call/return mechanics
+- debugging with disassembly
+
+Guide:
+
+- [bytecode_vm_TODO.md](projects/bytecode_vm_TODO.md)
+
+---
+
+## ⭐ 8/10 — Mini Compiler
+
+Goal: Language design + codegen
+
+Build:
+
+```bash
+cargo run --bin mini_compiler
+```
+
+Learn:
+
+- lexing and parsing strategy
+- AST + semantic checks
+- IR or bytecode generation
+- execution and correctness validation
+
+Guide:
+
+- [mini_compiler_TODO.md](projects/mini_compiler_TODO.md)
+
+---
+
+## ⭐ 8/10 — Packet Sniffer
+
+Goal: Packet parsing + traffic analysis
+
+Build:
+
+```bash
+cargo run --bin packet_sniffer
+```
+
+Learn:
+
+- packet capture pipeline
+- robust header parsing
+- query/filter model design
+- flow-level aggregation metrics
+
+Guide:
+
+- [packet_sniffer_TODO.md](projects/packet_sniffer_TODO.md)
+
+---
+
+## ⭐ 8/10 — Static Site Generator
+
+Goal: Build pipeline + content generation
+
+Build:
+
+```bash
+cargo run --bin static_site_gen
+```
+
+Learn:
+
+- markdown + front matter parsing
+- template composition
+- deterministic output generation
+- incremental rebuild logic
+
+Guide:
+
+- [static_site_gen_TODO.md](projects/static_site_gen_TODO.md)
+
+---
+
+## ⭐ 9/10 — IoT Device Simulator
+
+Goal: Distributed device simulation
+
+Build:
+
+```bash
+cargo run --bin iot_simulator
+```
+
+Learn:
+
+- deterministic event scheduling
+- virtual sensor/actuator abstractions
+- network fault injection
+- scenario-driven simulation testing
+
+Guide:
+
+- [iot_simulator_TODO.md](projects/iot_simulator_TODO.md)
+
+---
+
+## ⭐ 10/10 — Raft Consensus
+
+Goal: Consensus algorithm implementation
+
+Build:
+
+```bash
+cargo run --bin raft_consensus
+```
+
+Learn:
+
+- leader election and term management
+- replicated log consistency
+- persistence and crash recovery model
+- safety/liveness test design
+
+Guide:
+
+- [raft_consensus_TODO.md](projects/raft_consensus_TODO.md)

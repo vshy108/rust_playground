@@ -1,4 +1,4 @@
-# TODO: dist_cache
+# TODO: dist_cache (⭐ 10/10)
 
 ## Usage
 
@@ -58,3 +58,11 @@ Acceptance check: stopping node 2 does not prevent reading its keys via node 1.
 
 - [ ] Track a quorum counter; refuse writes when fewer than W nodes are reachable.
 - [ ] Return a clear error to the client instead of silently succeeding on one replica.
+
+## Tips
+
+- Lock down data invariants first and encode them in tests.
+- Implement persistence boundaries early (snapshot, log, recovery) even if minimal.
+- Separate correctness path from optimization path; optimize only after passing invariants.
+- Add deterministic simulation tests for retries, crashes, and restart behavior.
+- Track state transitions with trace logs to simplify post-failure analysis.

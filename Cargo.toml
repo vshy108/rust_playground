@@ -174,3 +174,107 @@ path = "projects/mini_runtime.rs"
 [[bin]]
 name = "invaders"
 path = "projects/invaders.rs"
+
+[[bin]]
+name = "dns_toolkit"
+path = "projects/dns_toolkit.rs"
+
+[[bin]]
+name = "mini_git"
+path = "projects/mini_git.rs"
+
+[[bin]]
+name = "loadtest"
+path = "projects/http_load_tester.rs"
+
+[[bin]]
+name = "job_queue"
+path = "projects/job_queue.rs"
+
+[[bin]]
+name = "inv_index"
+path = "projects/inverted_index.rs"
+
+[[bin]]
+name = "mini_shell"
+path = "projects/mini_shell.rs"
+
+[[bin]]
+name = "textedit"
+path = "projects/text_editor.rs"
+
+[[bin]]
+name = "socks5_proxy"
+path = "projects/socks5_proxy.rs"
+
+[[bin]]
+name = "ws_broker"
+path = "projects/websocket_broker.rs"
+
+[[bin]]
+name = "rate_limiter"
+path = "projects/rate_limiter.rs"
+
+[[bin]]
+name = "lsm_kv"
+path = "projects/lsm_kv.rs"
+
+[[bin]]
+name = "bloom_hll"
+path = "projects/bloom_hll.rs"
+
+[[bin]]
+name = "file_sync"
+path = "projects/file_sync.rs"
+
+[[bin]]
+name = "template_engine"
+path = "projects/template_engine.rs"
+
+[[bin]]
+name = "regex_engine"
+path = "projects/regex_engine.rs"
+
+[[bin]]
+name = "bittorrent"
+path = "projects/bittorrent.rs"
+
+[[bin]]
+name = "tcp_stack"
+path = "projects/tcp_stack.rs"
+
+[[bin]]
+name = "mqtt_broker"
+path = "projects/mqtt_broker.rs"
+
+[[bin]]
+name = "chip8"
+path = "projects/chip8.rs"
+
+[[bin]]
+name = "browser_engine"
+path = "projects/browser_engine.rs"
+
+[[bin]]
+name = "bytecode_vm"
+path = "projects/bytecode_vm.rs"
+
+[[bin]]
+name = "mini_compiler"
+path = "projects/mini_compiler.rs"
+
+[[bin]]
+name = "packet_sniffer"
+path = "projects/packet_sniffer.rs"
+
+[[bin]]
+name = "static_site_gen"
+path = "projects/static_site_gen.rs"
+
+[[bin]]
+name = "iot_simulator"
+path = "projects/iot_simulator.rs"
+
+[[bin]]
+name = "raft_consensus"
+path = "projects/raft_consensus.rs"

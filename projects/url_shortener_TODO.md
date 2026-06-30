@@ -1,4 +1,4 @@
-# TODO: url_shortener
+# TODO: url_shortener (⭐ 3/10)
 
 ## Usage
 
@@ -103,3 +103,11 @@ curl -v http://localhost:3000/$CODE          # expect 303
 sleep 6
 curl -v http://localhost:3000/$CODE          # expect 410
 ```
+
+## Tips
+
+- Start with protocol and contract tests first (request, response, error, timeout).
+- Build a strict parser before adding convenience behavior; fail closed on malformed input.
+- Add structured request logging early so debugging network paths is cheap.
+- Keep connection lifecycle explicit: open, active, idle timeout, close.
+- Add load and latency checks after correctness is stable.

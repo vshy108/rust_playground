@@ -1,4 +1,4 @@
-Here is the **full updated TODO file (production-aligned, clean, copy-paste ready)**:
+# TODO: api_gateway (⭐ 7/10)
 
 ---
 
@@ -534,3 +534,11 @@ The missing core shift is:
 
 
 
+
+## Tips
+
+- Start with protocol and contract tests first (request, response, error, timeout).
+- Build a strict parser before adding convenience behavior; fail closed on malformed input.
+- Add structured request logging early so debugging network paths is cheap.
+- Keep connection lifecycle explicit: open, active, idle timeout, close.
+- Add load and latency checks after correctness is stable.

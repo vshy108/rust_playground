@@ -1,4 +1,4 @@
-# TODO: workflow_engine
+# TODO: workflow_engine (⭐ 8/10)
 
 ## Usage
 
@@ -49,3 +49,11 @@ Acceptance check: independent nodes (A→C, B→C) run concurrently; C runs afte
 ## Extra: terminal UI
 
 - [ ] Print a live status table (node name, state) using ANSI escape codes or `crossterm`.
+
+## Tips
+
+- Lock down data invariants first and encode them in tests.
+- Implement persistence boundaries early (snapshot, log, recovery) even if minimal.
+- Separate correctness path from optimization path; optimize only after passing invariants.
+- Add deterministic simulation tests for retries, crashes, and restart behavior.
+- Track state transitions with trace logs to simplify post-failure analysis.

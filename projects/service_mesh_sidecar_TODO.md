@@ -1,4 +1,4 @@
-# TODO: service_mesh_sidecar
+# TODO: service_mesh_sidecar (⭐ 9/10)
 
 ## Usage
 
@@ -53,3 +53,11 @@ Acceptance check: `curl localhost:9091/metrics` prints bytes, latency, and error
 
 - [ ] Read the first line of each incoming HTTP request; match `Host` header to a route table;
   forward to different upstreams per host.
+
+## Tips
+
+- Start with protocol and contract tests first (request, response, error, timeout).
+- Build a strict parser before adding convenience behavior; fail closed on malformed input.
+- Add structured request logging early so debugging network paths is cheap.
+- Keep connection lifecycle explicit: open, active, idle timeout, close.
+- Add load and latency checks after correctness is stable.

@@ -1,4 +1,4 @@
-# TODO: redis_clone
+# TODO: redis_clone (⭐ 6/10)
 
 ## Usage
 
@@ -46,3 +46,11 @@ Acceptance check: `redis-cli -p 6380 PING` returns `+PONG\r\n`.
 
 - [ ] On SIGTERM, serialise the HashMap to a JSON file.
 - [ ] On startup, load the file if it exists.
+
+## Tips
+
+- Lock down data invariants first and encode them in tests.
+- Implement persistence boundaries early (snapshot, log, recovery) even if minimal.
+- Separate correctness path from optimization path; optimize only after passing invariants.
+- Add deterministic simulation tests for retries, crashes, and restart behavior.
+- Track state transitions with trace logs to simplify post-failure analysis.

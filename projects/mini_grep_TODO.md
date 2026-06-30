@@ -1,4 +1,4 @@
-# TODO: mini_grep_cli
+# TODO: mini_grep (⭐ 2/10)
 
 ## Usage
 
@@ -46,3 +46,11 @@ cargo test --bin rgrep
 ## 3. Extra
 
 - [x] Regex support: accept a regex pattern instead of a plain string (use `regex` crate).
+
+## Tips
+
+- Implement one milestone at a time and keep each slice testable.
+- Add a failing test first, then implement the smallest behavior to pass.
+- Keep CLI/API surface stable while iterating internals.
+- Validate both happy path and error path for every milestone.
+- Run focused tests before broad checks.

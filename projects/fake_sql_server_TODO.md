@@ -1,4 +1,4 @@
-# TODO: fake_sql_server
+# TODO: fake_sql_server (⭐ 9/10)
 
 ## Usage
 
@@ -46,3 +46,11 @@ Acceptance check: `SELECT 1;` returns a single row with value `1`.
 
 - [ ] Parse `SELECT <expr> FROM <table>` with a hand-rolled parser.
 - [ ] Look up table names in a `HashMap<String, Vec<Row>>`; stream matching rows.
+
+## Tips
+
+- Implement one milestone at a time and keep each slice testable.
+- Add a failing test first, then implement the smallest behavior to pass.
+- Keep CLI/API surface stable while iterating internals.
+- Validate both happy path and error path for every milestone.
+- Run focused tests before broad checks.
