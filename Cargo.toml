@@ -606,3 +606,131 @@ path = "projects/rss_pipeline.rs"
 [[bin]]
 name = "dns_authority"
 path = "projects/dns_authority.rs"
+
+[[bin]]
+name = "unit_converter"
+path = "projects/unit_converter.rs"
+
+[[bin]]
+name = "checksum_tool"
+path = "projects/checksum_tool.rs"
+
+[[bin]]
+name = "qr_tool"
+path = "projects/qr_tool.rs"
+
+[[bin]]
+name = "weather_cli"
+path = "projects/weather_cli.rs"
+
+[[bin]]
+name = "batch_renamer"
+path = "projects/batch_renamer.rs"
+
+[[bin]]
+name = "markdown_reader"
+path = "projects/markdown_reader.rs"
+
+[[bin]]
+name = "duplicate_line_filter"
+path = "projects/duplicate_line_filter.rs"
+
+[[bin]]
+name = "totp_manager"
+path = "projects/totp_manager.rs"
+
+[[bin]]
+name = "calculator_cli"
+path = "projects/calculator_cli.rs"
+
+[[bin]]
+name = "json_viewer"
+path = "projects/json_viewer.rs"
+
+[[bin]]
+name = "timer_cli"
+path = "projects/timer_cli.rs"
+
+[[bin]]
+name = "password_store_cli"
+path = "projects/password_store_cli.rs"
+
+[[bin]]
+name = "csv_pretty_printer"
+path = "projects/csv_pretty_printer.rs"
+
+[[bin]]
+name = "text_diff_cli"
+path = "projects/text_diff_cli.rs"
+
+[[bin]]
+name = "file_splitter"
+path = "projects/file_splitter.rs"
+
+[[bin]]
+name = "env_linter"
+path = "projects/env_linter.rs"
+
+[[bin]]
+name = "base64_cli"
+path = "projects/base64_cli.rs"
+
+[[bin]]
+name = "hex_viewer"
+path = "projects/hex_viewer.rs"
+
+[[bin]]
+name = "uuid_generator"
+path = "projects/uuid_generator.rs"
+
+[[bin]]
+name = "gitignore_gen"
+path = "projects/gitignore_gen.rs"
+
+[[bin]]
+name = "http_client_cli"
+path = "projects/http_client_cli.rs"
+
+[[bin]]
+name = "archive_extractor"
+path = "projects/archive_extractor.rs"
+
+[[bin]]
+name = "file_finder"
+path = "projects/file_finder.rs"
+
+[[bin]]
+name = "color_preview"
+path = "projects/color_preview.rs"
+
+[[bin]]
+name = "wc_clone"
+path = "projects/wc_clone.rs"
+
+[[bin]]
+name = "line_ending_converter"
+path = "projects/line_ending_converter.rs"
+
+[[bin]]
+name = "slug_generator"
+path = "projects/slug_generator.rs"
+
+[[bin]]
+name = "notes_cli"
+path = "projects/notes_cli.rs"
+
+[[bin]]
+name = "ascii_table"
+path = "projects/ascii_table.rs"
+
+[[bin]]
+name = "url_codec"
+path = "projects/url_codec.rs"
+
+[[bin]]
+name = "ini_inspector"
+path = "projects/ini_inspector.rs"
+
+[[bin]]
+name = "date_calculator"
+path = "projects/date_calculator.rs"

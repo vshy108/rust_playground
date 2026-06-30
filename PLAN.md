@@ -180,6 +180,38 @@ The following projects currently have no unchecked items left in their TODO guid
 | 126 | ⭐ 8/10 | `artifact_proxy` | [artifact_proxy.rs](projects/artifact_proxy.rs) | Upstream package proxy + integrity cache |
 | 127 | ⭐ 6/10 | `rss_pipeline` | [rss_pipeline.rs](projects/rss_pipeline.rs) | Feed ingestion + transform pipeline |
 | 128 | ⭐ 8/10 | `dns_authority` | [dns_authority.rs](projects/dns_authority.rs) | Authoritative zone serving + delegation rules |
+| 129 | ⭐ 3/10 | `unit_converter` | [unit_converter.rs](projects/unit_converter.rs) | Simple unit conversions from CLI input |
+| 130 | ⭐ 3/10 | `checksum_tool` | [checksum_tool.rs](projects/checksum_tool.rs) | File hashing + checksum verification |
+| 131 | ⭐ 4/10 | `qr_tool` | [qr_tool.rs](projects/qr_tool.rs) | QR encode/decode utility |
+| 132 | ⭐ 3/10 | `weather_cli` | [weather_cli.rs](projects/weather_cli.rs) | Current weather + short forecast output |
+| 133 | ⭐ 4/10 | `batch_renamer` | [batch_renamer.rs](projects/batch_renamer.rs) | Safe bulk filename transformation |
+| 134 | ⭐ 4/10 | `markdown_reader` | [markdown_reader.rs](projects/markdown_reader.rs) | Terminal markdown viewing |
+| 135 | ⭐ 3/10 | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/duplicate_line_filter.rs) | Remove or count repeated lines |
+| 136 | ⭐ 4/10 | `totp_manager` | [totp_manager.rs](projects/totp_manager.rs) | Local TOTP code generator |
+| 137 | ⭐ 2/10 | `calculator_cli` | [calculator_cli.rs](projects/calculator_cli.rs) | Evaluate basic arithmetic expressions |
+| 138 | ⭐ 3/10 | `json_viewer` | [json_viewer.rs](projects/json_viewer.rs) | Pretty-print JSON data |
+| 139 | ⭐ 2/10 | `timer_cli` | [timer_cli.rs](projects/timer_cli.rs) | Countdown and stopwatch utility |
+| 140 | ⭐ 4/10 | `password_store_cli` | [password_store_cli.rs](projects/password_store_cli.rs) | Simple encrypted secret storage |
+| 141 | ⭐ 3/10 | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/csv_pretty_printer.rs) | Render CSV as aligned tables |
+| 142 | ⭐ 4/10 | `text_diff_cli` | [text_diff_cli.rs](projects/text_diff_cli.rs) | Line-by-line text comparison |
+| 143 | ⭐ 3/10 | `file_splitter` | [file_splitter.rs](projects/file_splitter.rs) | Split files by size or lines |
+| 144 | ⭐ 3/10 | `env_linter` | [env_linter.rs](projects/env_linter.rs) | Detect common `.env` file issues |
+| 145 | ⭐ 2/10 | `base64_cli` | [base64_cli.rs](projects/base64_cli.rs) | Encode and decode Base64 data |
+| 146 | ⭐ 3/10 | `hex_viewer` | [hex_viewer.rs](projects/hex_viewer.rs) | Inspect binary files in hex |
+| 147 | ⭐ 2/10 | `uuid_generator` | [uuid_generator.rs](projects/uuid_generator.rs) | Generate UUIDs from CLI |
+| 148 | ⭐ 2/10 | `gitignore_gen` | [gitignore_gen.rs](projects/gitignore_gen.rs) | Generate `.gitignore` presets |
+| 149 | ⭐ 4/10 | `http_client_cli` | [http_client_cli.rs](projects/http_client_cli.rs) | Send simple HTTP requests |
+| 150 | ⭐ 4/10 | `archive_extractor` | [archive_extractor.rs](projects/archive_extractor.rs) | List and extract simple archives |
+| 151 | ⭐ 3/10 | `file_finder` | [file_finder.rs](projects/file_finder.rs) | Recursively search files by pattern |
+| 152 | ⭐ 2/10 | `color_preview` | [color_preview.rs](projects/color_preview.rs) | Preview colors in the terminal |
+| 153 | ⭐ 2/10 | `wc_clone` | [wc_clone.rs](projects/wc_clone.rs) | Count lines, words, and bytes |
+| 154 | ⭐ 3/10 | `line_ending_converter` | [line_ending_converter.rs](projects/line_ending_converter.rs) | Convert text line endings |
+| 155 | ⭐ 2/10 | `slug_generator` | [slug_generator.rs](projects/slug_generator.rs) | Generate URL-friendly slugs |
+| 156 | ⭐ 3/10 | `notes_cli` | [notes_cli.rs](projects/notes_cli.rs) | Store and manage simple notes |
+| 157 | ⭐ 2/10 | `ascii_table` | [ascii_table.rs](projects/ascii_table.rs) | Print an ASCII reference table |
+| 158 | ⭐ 2/10 | `url_codec` | [url_codec.rs](projects/url_codec.rs) | Encode and decode URL components |
+| 159 | ⭐ 4/10 | `ini_inspector` | [ini_inspector.rs](projects/ini_inspector.rs) | Inspect and query INI files |
+| 160 | ⭐ 4/10 | `date_calculator` | [date_calculator.rs](projects/date_calculator.rs) | Perform simple date arithmetic |
 
 ---
 
@@ -3143,3 +3175,739 @@ Learn:
 Guide:
 
 - [dns_authority_TODO.md](projects/dns_authority_TODO.md)
+
+---
+
+## ⭐ 3/10 — Unit Converter
+
+Goal: Simple unit conversions from CLI input
+
+Build:
+
+```bash
+cargo run --bin unit_converter
+```
+
+Learn:
+
+- CLI parsing for values and units
+- small conversion-table design
+- category validation for compatible units
+- stable numeric formatting
+
+Guide:
+
+- [unit_converter_TODO.md](projects/unit_converter_TODO.md)
+
+---
+
+## ⭐ 3/10 — Checksum Tool
+
+Goal: File hashing + checksum verification
+
+Build:
+
+```bash
+cargo run --bin checksum_tool
+```
+
+Learn:
+
+- file or stdin hashing flow
+- digest formatting for human and script use
+- manifest verification behavior
+- deterministic traversal if extended to directories
+
+Guide:
+
+- [checksum_tool_TODO.md](projects/checksum_tool_TODO.md)
+
+---
+
+## ⭐ 4/10 — QR Tool
+
+Goal: QR encode/decode utility
+
+Build:
+
+```bash
+cargo run --bin qr_tool
+```
+
+Learn:
+
+- text-to-QR generation flow
+- terminal or image rendering output
+- basic decode-path handling
+- round-trip fixture testing
+
+Guide:
+
+- [qr_tool_TODO.md](projects/qr_tool_TODO.md)
+
+---
+
+## ⭐ 3/10 — Weather CLI
+
+Goal: Current weather + short forecast output
+
+Build:
+
+```bash
+cargo run --bin weather_cli
+```
+
+Learn:
+
+- simple CLI argument parsing
+- forecast response shaping and formatting
+- resilient handling of missing fields
+- terminal layout for compact summaries
+
+Guide:
+
+- [weather_cli_TODO.md](projects/weather_cli_TODO.md)
+
+---
+
+## ⭐ 4/10 — Batch Renamer
+
+Goal: Safe bulk filename transformation
+
+Build:
+
+```bash
+cargo run --bin batch_renamer
+```
+
+Learn:
+
+- rename-plan generation before mutation
+- transform composition for filenames
+- collision detection and dry-run previews
+- filesystem mutation safety basics
+
+Guide:
+
+- [batch_renamer_TODO.md](projects/batch_renamer_TODO.md)
+
+---
+
+## ⭐ 4/10 — Markdown Reader
+
+Goal: Terminal markdown viewing
+
+Build:
+
+```bash
+cargo run --bin markdown_reader
+```
+
+Learn:
+
+- markdown parsing versus render separation
+- heading/list/code-block display rules
+- wrapping and narrow-terminal behavior
+- fixture-driven output checks
+
+Guide:
+
+- [markdown_reader_TODO.md](projects/markdown_reader_TODO.md)
+
+---
+
+## ⭐ 3/10 — Duplicate Line Filter
+
+Goal: Remove or count repeated lines
+
+Build:
+
+```bash
+cargo run --bin duplicate_line_filter
+```
+
+Learn:
+
+- streaming line processing basics
+- equality versus normalized-text comparison
+- keep-first/keep-last style output rules
+- simple text-fixture testing
+
+Guide:
+
+- [duplicate_line_filter_TODO.md](projects/duplicate_line_filter_TODO.md)
+
+---
+
+## ⭐ 4/10 — TOTP Manager
+
+Goal: Local TOTP code generator
+
+Build:
+
+```bash
+cargo run --bin totp_manager
+```
+
+Learn:
+
+- shared-secret parsing and validation
+- time-step based code generation
+- named-account storage layout
+- RFC-style vector testing
+
+Guide:
+
+- [totp_manager_TODO.md](projects/totp_manager_TODO.md)
+
+---
+
+## ⭐ 2/10 — Calculator CLI
+
+Goal: Evaluate basic arithmetic expressions
+
+Build:
+
+```bash
+cargo run --bin calculator_cli
+```
+
+Learn:
+
+- expression tokenization basics
+- operator precedence handling
+- simple evaluation pipelines
+- clear malformed-input errors
+
+Guide:
+
+- [calculator_cli_TODO.md](projects/calculator_cli_TODO.md)
+
+---
+
+## ⭐ 3/10 — JSON Viewer
+
+Goal: Pretty-print JSON data
+
+Build:
+
+```bash
+cargo run --bin json_viewer
+```
+
+Learn:
+
+- JSON input parsing
+- compact versus pretty rendering
+- parse-error reporting
+- stable formatting for fixtures
+
+Guide:
+
+- [json_viewer_TODO.md](projects/json_viewer_TODO.md)
+
+---
+
+## ⭐ 2/10 — Timer CLI
+
+Goal: Countdown and stopwatch utility
+
+Build:
+
+```bash
+cargo run --bin timer_cli
+```
+
+Learn:
+
+- duration parsing from CLI args
+- display formatting for elapsed time
+- countdown versus stopwatch mode split
+- invalid-duration handling
+
+Guide:
+
+- [timer_cli_TODO.md](projects/timer_cli_TODO.md)
+
+---
+
+## ⭐ 4/10 — Password Store CLI
+
+Goal: Simple encrypted secret storage
+
+Build:
+
+```bash
+cargo run --bin password_store_cli
+```
+
+Learn:
+
+- local secret metadata versus value storage
+- simple encrypt/decrypt boundaries
+- CRUD command design for secrets
+- bad-key and round-trip validation
+
+Guide:
+
+- [password_store_cli_TODO.md](projects/password_store_cli_TODO.md)
+
+---
+
+## ⭐ 3/10 — CSV Pretty Printer
+
+Goal: Render CSV as aligned tables
+
+Build:
+
+```bash
+cargo run --bin csv_pretty_printer
+```
+
+Learn:
+
+- CSV parsing basics
+- width calculation and aligned terminal output
+- quoted-field edge cases
+- header versus no-header modes
+
+Guide:
+
+- [csv_pretty_printer_TODO.md](projects/csv_pretty_printer_TODO.md)
+
+---
+
+## ⭐ 4/10 — Text Diff CLI
+
+Goal: Line-by-line text comparison
+
+Build:
+
+```bash
+cargo run --bin text_diff_cli
+```
+
+Learn:
+
+- basic diff algorithm structure
+- added/removed/unchanged rendering
+- newline and empty-file edge cases
+- fixture-based diff output checks
+
+Guide:
+
+- [text_diff_cli_TODO.md](projects/text_diff_cli_TODO.md)
+
+---
+
+## ⭐ 3/10 — File Splitter
+
+Goal: Split files by size or lines
+
+Build:
+
+```bash
+cargo run --bin file_splitter
+```
+
+Learn:
+
+- line-count versus byte-count split logic
+- deterministic part naming
+- tiny-file and boundary-case handling
+- optional reassembly metadata
+
+Guide:
+
+- [file_splitter_TODO.md](projects/file_splitter_TODO.md)
+
+---
+
+## ⭐ 3/10 — Env Linter
+
+Goal: Detect common `.env` file issues
+
+Build:
+
+```bash
+cargo run --bin env_linter
+```
+
+Learn:
+
+- `.env` parsing basics
+- duplicate-key and invalid-name rules
+- lint rule separation from parsing
+- human versus machine-readable diagnostics
+
+Guide:
+
+- [env_linter_TODO.md](projects/env_linter_TODO.md)
+
+---
+
+## ⭐ 2/10 — Base64 CLI
+
+Goal: Encode and decode Base64 data
+
+Build:
+
+```bash
+cargo run --bin base64_cli
+```
+
+Learn:
+
+- Base64 encode/decode flow
+- stdin/stdout handling basics
+- invalid-input reporting
+- round-trip testing
+
+Guide:
+
+- [base64_cli_TODO.md](projects/base64_cli_TODO.md)
+
+---
+
+## ⭐ 3/10 — Hex Viewer
+
+Goal: Inspect binary files in hex
+
+Build:
+
+```bash
+cargo run --bin hex_viewer
+```
+
+Learn:
+
+- binary input reading
+- offset and row layout formatting
+- ASCII side-column rendering
+- stable binary-fixture tests
+
+Guide:
+
+- [hex_viewer_TODO.md](projects/hex_viewer_TODO.md)
+
+---
+
+## ⭐ 2/10 — UUID Generator
+
+Goal: Generate UUIDs from CLI
+
+Build:
+
+```bash
+cargo run --bin uuid_generator
+```
+
+Learn:
+
+- simple random identifier generation
+- output formatting choices
+- count-based batch output
+- format validation tests
+
+Guide:
+
+- [uuid_generator_TODO.md](projects/uuid_generator_TODO.md)
+
+---
+
+## ⭐ 2/10 — Gitignore Gen
+
+Goal: Generate `.gitignore` presets
+
+Build:
+
+```bash
+cargo run --bin gitignore_gen
+```
+
+Learn:
+
+- preset composition for ignore rules
+- duplicate removal with stable ordering
+- stdout versus file-output behavior
+- simple preset data modeling
+
+Guide:
+
+- [gitignore_gen_TODO.md](projects/gitignore_gen_TODO.md)
+
+---
+
+## ⭐ 4/10 — HTTP Client CLI
+
+Goal: Send simple HTTP requests
+
+Build:
+
+```bash
+cargo run --bin http_client_cli
+```
+
+Learn:
+
+- request-building from CLI flags
+- response formatting for headers and body
+- timeout and error reporting
+- helper-level request tests
+
+Guide:
+
+- [http_client_cli_TODO.md](projects/http_client_cli_TODO.md)
+
+---
+
+## ⭐ 4/10 — Archive Extractor
+
+Goal: List and extract simple archives
+
+Build:
+
+```bash
+cargo run --bin archive_extractor
+```
+
+Learn:
+
+- archive-type detection basics
+- listing versus extraction flow split
+- path-traversal safety checks
+- extraction-layout fixtures
+
+Guide:
+
+- [archive_extractor_TODO.md](projects/archive_extractor_TODO.md)
+
+---
+
+## ⭐ 3/10 — File Finder
+
+Goal: Recursively search files by pattern
+
+Build:
+
+```bash
+cargo run --bin file_finder
+```
+
+Learn:
+
+- recursive directory traversal
+- pattern-based filtering
+- stable result ordering
+- traversal-edge-case testing
+
+Guide:
+
+- [file_finder_TODO.md](projects/file_finder_TODO.md)
+
+---
+
+## ⭐ 2/10 — Color Preview
+
+Goal: Preview colors in the terminal
+
+Build:
+
+```bash
+cargo run --bin color_preview
+```
+
+Learn:
+
+- hex or RGB parsing
+- terminal color swatch rendering
+- multi-color preview formatting
+- malformed-color validation
+
+Guide:
+
+- [color_preview_TODO.md](projects/color_preview_TODO.md)
+
+---
+
+## ⭐ 2/10 — WC Clone
+
+Goal: Count lines, words, and bytes
+
+Build:
+
+```bash
+cargo run --bin wc_clone
+```
+
+Learn:
+
+- streaming text input basics
+- line, word, and byte counting logic
+- output formatting similar to small Unix tools
+- fixture-driven counting tests
+
+Guide:
+
+- [wc_clone_TODO.md](projects/wc_clone_TODO.md)
+
+---
+
+## ⭐ 3/10 — Line Ending Converter
+
+Goal: Convert text between LF and CRLF
+
+Build:
+
+```bash
+cargo run --bin line_ending_converter
+```
+
+Learn:
+
+- newline normalization strategies
+- stdout versus in-place file updates
+- preserving trailing-newline behavior
+- mixed-line-ending fixture tests
+
+Guide:
+
+- [line_ending_converter_TODO.md](projects/line_ending_converter_TODO.md)
+
+---
+
+## ⭐ 2/10 — Slug Generator
+
+Goal: Turn text into URL-friendly slugs
+
+Build:
+
+```bash
+cargo run --bin slug_generator
+```
+
+Learn:
+
+- lowercase normalization
+- separator collapsing rules
+- punctuation cleanup
+- transformation-step unit tests
+
+Guide:
+
+- [slug_generator_TODO.md](projects/slug_generator_TODO.md)
+
+---
+
+## ⭐ 3/10 — Notes CLI
+
+Goal: Store and manage simple notes
+
+Build:
+
+```bash
+cargo run --bin notes_cli
+```
+
+Learn:
+
+- small local persistence design
+- add/list/delete command structure
+- simple record identifiers
+- storage round-trip tests
+
+Guide:
+
+- [notes_cli_TODO.md](projects/notes_cli_TODO.md)
+
+---
+
+## ⭐ 2/10 — ASCII Table
+
+Goal: Print an ASCII reference table
+
+Build:
+
+```bash
+cargo run --bin ascii_table
+```
+
+Learn:
+
+- tabular CLI output formatting
+- control-character labeling
+- numeric base conversions
+- snapshot-like rendering tests
+
+Guide:
+
+- [ascii_table_TODO.md](projects/ascii_table_TODO.md)
+
+---
+
+## ⭐ 2/10 — URL Codec
+
+Goal: Encode and decode URL components
+
+Build:
+
+```bash
+cargo run --bin url_codec
+```
+
+Learn:
+
+- percent-encoding rules
+- malformed escape validation
+- mode-based CLI behavior
+- symbol-heavy input tests
+
+Guide:
+
+- [url_codec_TODO.md](projects/url_codec_TODO.md)
+
+---
+
+## ⭐ 4/10 — INI Inspector
+
+Goal: Inspect and query INI files
+
+Build:
+
+```bash
+cargo run --bin ini_inspector
+```
+
+Learn:
+
+- section and key/value parsing
+- duplicate-key diagnostics
+- query-oriented data modeling
+- fixture-based parser tests
+
+Guide:
+
+- [ini_inspector_TODO.md](projects/ini_inspector_TODO.md)
+
+---
+
+## ⭐ 4/10 — Date Calculator
+
+Goal: Perform simple date arithmetic
+
+Build:
+
+```bash
+cargo run --bin date_calculator
+```
+
+Learn:
+
+- date parsing and formatting
+- day-based addition and subtraction
+- date-difference calculations
+- boundary tests for leap years and month rollover
+
+Guide:
+
+- [date_calculator_TODO.md](projects/date_calculator_TODO.md)
