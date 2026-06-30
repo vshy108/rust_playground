@@ -156,6 +156,30 @@ The following projects currently have no unchecked items left in their TODO guid
 | 102 | ⭐ 9/10 | `event_sourcing_db` | [event_sourcing_db.rs](projects/event_sourcing_db.rs) | Append-only streams + projections |
 | 103 | ⭐ 8/10 | `browser_automation` | [browser_automation.rs](projects/browser_automation.rs) | Session orchestration + DOM actions |
 | 104 | ⭐ 10/10 | `hdfs_clone` | [hdfs_clone.rs](projects/hdfs_clone.rs) | Namenode metadata + replicated blocks |
+| 105 | ⭐ 8/10 | `schema_registry` | [schema_registry.rs](projects/schema_registry.rs) | Schema evolution + compatibility checks |
+| 106 | ⭐ 8/10 | `secrets_manager` | [secrets_manager.rs](projects/secrets_manager.rs) | Encrypted secret storage + policy control |
+| 107 | ⭐ 9/10 | `activitypub_server` | [activitypub_server.rs](projects/activitypub_server.rs) | Federated social protocol server |
+| 108 | ⭐ 8/10 | `sip_proxy` | [sip_proxy.rs](projects/sip_proxy.rs) | VoIP signaling routing + registration |
+| 109 | ⭐ 8/10 | `reverse_tunnel` | [reverse_tunnel.rs](projects/reverse_tunnel.rs) | Secure port exposure + multiplexed forwarding |
+| 110 | ⭐ 7/10 | `dedup_engine` | [dedup_engine.rs](projects/dedup_engine.rs) | File deduplication + reclaim planning |
+| 111 | ⭐ 8/10 | `live_stream_server` | [live_stream_server.rs](projects/live_stream_server.rs) | Live ingest + segment serving pipeline |
+| 112 | ⭐ 7/10 | `crash_reporter` | [crash_reporter.rs](projects/crash_reporter.rs) | Crash event intake + issue grouping |
+| 113 | ⭐ 8/10 | `imap_server` | [imap_server.rs](projects/imap_server.rs) | Mailbox protocol server + sync semantics |
+| 114 | ⭐ 7/10 | `bot_framework` | [bot_framework.rs](projects/bot_framework.rs) | Event-driven bot runtime + adapters |
+| 115 | ⭐ 7/10 | `wiki_engine` | [wiki_engine.rs](projects/wiki_engine.rs) | Revisioned pages + internal link graph |
+| 116 | ⭐ 8/10 | `modbus_gateway` | [modbus_gateway.rs](projects/modbus_gateway.rs) | Industrial protocol bridge + polling |
+| 117 | ⭐ 8/10 | `graphql_gateway` | [graphql_gateway.rs](projects/graphql_gateway.rs) | Schema composition + resolver orchestration |
+| 118 | ⭐ 8/10 | `terminal_multiplexer` | [terminal_multiplexer.rs](projects/terminal_multiplexer.rs) | PTY sessions + pane layout control |
+| 119 | ⭐ 6/10 | `power_monitor` | [power_monitor.rs](projects/power_monitor.rs) | Host energy sampling + trend reporting |
+| 120 | ⭐ 7/10 | `torrent_tracker` | [torrent_tracker.rs](projects/torrent_tracker.rs) | Peer announce handling + swarm coordination |
+| 121 | ⭐ 8/10 | `ldap_server` | [ldap_server.rs](projects/ldap_server.rs) | Directory service + LDAP query handling |
+| 122 | ⭐ 7/10 | `statsd_server` | [statsd_server.rs](projects/statsd_server.rs) | Metrics line ingestion + timed aggregation |
+| 123 | ⭐ 8/10 | `mail_archive` | [mail_archive.rs](projects/mail_archive.rs) | MIME archival + searchable retention |
+| 124 | ⭐ 9/10 | `fuzzer_engine` | [fuzzer_engine.rs](projects/fuzzer_engine.rs) | Corpus mutation + feedback-guided execution |
+| 125 | ⭐ 9/10 | `code_sandbox` | [code_sandbox.rs](projects/code_sandbox.rs) | Policy-driven isolated execution |
+| 126 | ⭐ 8/10 | `artifact_proxy` | [artifact_proxy.rs](projects/artifact_proxy.rs) | Upstream package proxy + integrity cache |
+| 127 | ⭐ 6/10 | `rss_pipeline` | [rss_pipeline.rs](projects/rss_pipeline.rs) | Feed ingestion + transform pipeline |
+| 128 | ⭐ 8/10 | `dns_authority` | [dns_authority.rs](projects/dns_authority.rs) | Authoritative zone serving + delegation rules |
 
 ---
 
@@ -2567,3 +2591,555 @@ Learn:
 Guide:
 
 - [hdfs_clone_TODO.md](projects/hdfs_clone_TODO.md)
+
+---
+
+## ⭐ 8/10 — Schema Registry
+
+Goal: Schema evolution + compatibility checks
+
+Build:
+
+```bash
+cargo run --bin schema_registry
+```
+
+Learn:
+
+- subject/version compatibility policy design
+- descriptor storage and global identifier mapping
+- schema registration and lookup APIs
+- auditability for schema changes
+
+Guide:
+
+- [schema_registry_TODO.md](projects/schema_registry_TODO.md)
+
+---
+
+## ⭐ 8/10 — Secrets Manager
+
+Goal: Encrypted secret storage + policy control
+
+Build:
+
+```bash
+cargo run --bin secrets_manager
+```
+
+Learn:
+
+- encrypted secret versioning boundaries
+- least-privilege policy evaluation
+- key rotation and lease semantics
+- auditable access logging
+
+Guide:
+
+- [secrets_manager_TODO.md](projects/secrets_manager_TODO.md)
+
+---
+
+## ⭐ 9/10 — ActivityPub Server
+
+Goal: Federated social protocol server
+
+Build:
+
+```bash
+cargo run --bin activitypub_server
+```
+
+Learn:
+
+- actor, inbox, and outbox state modeling
+- signed federation delivery and verification
+- idempotent inbox processing rules
+- local versus remote actor data handling
+
+Guide:
+
+- [activitypub_server_TODO.md](projects/activitypub_server_TODO.md)
+
+---
+
+## ⭐ 8/10 — SIP Proxy
+
+Goal: VoIP signaling routing + registration
+
+Build:
+
+```bash
+cargo run --bin sip_proxy
+```
+
+Learn:
+
+- SIP message parsing and normalization
+- registration binding lifecycle
+- transaction state and response routing
+- digest authentication and refresh handling
+
+Guide:
+
+- [sip_proxy_TODO.md](projects/sip_proxy_TODO.md)
+
+---
+
+## ⭐ 8/10 — Reverse Tunnel
+
+Goal: Secure port exposure + multiplexed forwarding
+
+Build:
+
+```bash
+cargo run --bin reverse_tunnel
+```
+
+Learn:
+
+- client/server handshake and session ownership
+- remote port reservation rules
+- multiplexed stream forwarding design
+- reconnect and resume semantics
+
+Guide:
+
+- [reverse_tunnel_TODO.md](projects/reverse_tunnel_TODO.md)
+
+---
+
+## ⭐ 7/10 — Dedup Engine
+
+Goal: File deduplication + reclaim planning
+
+Build:
+
+```bash
+cargo run --bin dedup_engine
+```
+
+Learn:
+
+- file discovery and hashing stages
+- duplicate grouping and reclaim reporting
+- safe replacement planning with dry-run support
+- whole-file versus chunk-level dedup tradeoffs
+
+Guide:
+
+- [dedup_engine_TODO.md](projects/dedup_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — Live Stream Server
+
+Goal: Live ingest + segment serving pipeline
+
+Build:
+
+```bash
+cargo run --bin live_stream_server
+```
+
+Learn:
+
+- ingest session and stream-key modeling
+- segment and playlist packaging flow
+- viewer delivery and retention behavior
+- stream lifecycle cleanup rules
+
+Guide:
+
+- [live_stream_server_TODO.md](projects/live_stream_server_TODO.md)
+
+---
+
+## ⭐ 7/10 — Crash Reporter
+
+Goal: Crash event intake + issue grouping
+
+Build:
+
+```bash
+cargo run --bin crash_reporter
+```
+
+Learn:
+
+- crash event schema and release metadata
+- symbolization or source map lookup boundaries
+- fingerprinting and issue grouping rules
+- regression detection and retention tradeoffs
+
+Guide:
+
+- [crash_reporter_TODO.md](projects/crash_reporter_TODO.md)
+
+---
+
+## ⭐ 8/10 — IMAP Server
+
+Goal: Mailbox protocol server + sync semantics
+
+Build:
+
+```bash
+cargo run --bin imap_server
+```
+
+Learn:
+
+- mailbox and UID state modeling
+- IMAP command parsing and execution
+- flag mutation and mailbox metadata rules
+- sync semantics for concurrent sessions
+
+Guide:
+
+- [imap_server_TODO.md](projects/imap_server_TODO.md)
+
+---
+
+## ⭐ 7/10 — Bot Framework
+
+Goal: Event-driven bot runtime + adapters
+
+Build:
+
+```bash
+cargo run --bin bot_framework
+```
+
+Learn:
+
+- event routing and command dispatch
+- provider adapter isolation
+- middleware sequencing and retries
+- conversation state lifecycle
+
+Guide:
+
+- [bot_framework_TODO.md](projects/bot_framework_TODO.md)
+
+---
+
+## ⭐ 7/10 — Wiki Engine
+
+Goal: Revisioned pages + internal link graph
+
+Build:
+
+```bash
+cargo run --bin wiki_engine
+```
+
+Learn:
+
+- page revision storage models
+- link parsing and backlink derivation
+- edit conflict detection
+- search indexing for content and titles
+
+Guide:
+
+- [wiki_engine_TODO.md](projects/wiki_engine_TODO.md)
+
+---
+
+## ⭐ 8/10 — Modbus Gateway
+
+Goal: Industrial protocol bridge + polling
+
+Build:
+
+```bash
+cargo run --bin modbus_gateway
+```
+
+Learn:
+
+- Modbus frame parsing and dispatch
+- register modeling for industrial data
+- polling, retry, and timeout orchestration
+- protocol bridge design for downstream devices
+
+Guide:
+
+- [modbus_gateway_TODO.md](projects/modbus_gateway_TODO.md)
+
+---
+
+## ⭐ 8/10 — GraphQL Gateway
+
+Goal: Schema composition + resolver orchestration
+
+Build:
+
+```bash
+cargo run --bin graphql_gateway
+```
+
+Learn:
+
+- schema composition and validation rules
+- execution planning and resolver batching
+- auth context propagation
+- persisted-query and cache tradeoffs
+
+Guide:
+
+- [graphql_gateway_TODO.md](projects/graphql_gateway_TODO.md)
+
+---
+
+## ⭐ 8/10 — Terminal Multiplexer
+
+Goal: PTY sessions + pane layout control
+
+Build:
+
+```bash
+cargo run --bin terminal_multiplexer
+```
+
+Learn:
+
+- PTY-backed pane lifecycle management
+- split layout math and resize propagation
+- input routing and focus semantics
+- detach/reattach session behavior
+
+Guide:
+
+- [terminal_multiplexer_TODO.md](projects/terminal_multiplexer_TODO.md)
+
+---
+
+## ⭐ 6/10 — Power Monitor
+
+Goal: Host energy sampling + trend reporting
+
+Build:
+
+```bash
+cargo run --bin power_monitor
+```
+
+Learn:
+
+- cross-platform power metric collection boundaries
+- rolling aggregation over sampled data
+- threshold alerting and summary reporting
+- handling partial or missing metrics gracefully
+
+Guide:
+
+- [power_monitor_TODO.md](projects/power_monitor_TODO.md)
+
+---
+
+## ⭐ 7/10 — Torrent Tracker
+
+Goal: Peer announce handling + swarm coordination
+
+Build:
+
+```bash
+cargo run --bin torrent_tracker
+```
+
+Learn:
+
+- announce request parsing and peer identity
+- swarm membership lifecycle rules
+- compact peer response encoding
+- scrape metrics and stale-peer eviction
+
+Guide:
+
+- [torrent_tracker_TODO.md](projects/torrent_tracker_TODO.md)
+
+---
+
+## ⭐ 8/10 — LDAP Server
+
+Goal: Directory service + LDAP query handling
+
+Build:
+
+```bash
+cargo run --bin ldap_server
+```
+
+Learn:
+
+- DN and attribute schema modeling
+- bind and search protocol handling
+- filter parsing and subtree matching
+- access control and directory mutation rules
+
+Guide:
+
+- [ldap_server_TODO.md](projects/ldap_server_TODO.md)
+
+---
+
+## ⭐ 7/10 — StatsD Server
+
+Goal: Metrics line ingestion + timed aggregation
+
+Build:
+
+```bash
+cargo run --bin statsd_server
+```
+
+Learn:
+
+- StatsD line parsing and metric typing
+- aggregation windows and flush intervals
+- sample-rate correction behavior
+- exporter boundaries for downstream sinks
+
+Guide:
+
+- [statsd_server_TODO.md](projects/statsd_server_TODO.md)
+
+---
+
+## ⭐ 8/10 — Mail Archive
+
+Goal: MIME archival + searchable retention
+
+Build:
+
+```bash
+cargo run --bin mail_archive
+```
+
+Learn:
+
+- raw email preservation and MIME parsing
+- metadata extraction and indexing
+- retention and legal-hold style policies
+- query surfaces across headers and bodies
+
+Guide:
+
+- [mail_archive_TODO.md](projects/mail_archive_TODO.md)
+
+---
+
+## ⭐ 9/10 — Fuzzer Engine
+
+Goal: Corpus mutation + feedback-guided execution
+
+Build:
+
+```bash
+cargo run --bin fuzzer_engine
+```
+
+Learn:
+
+- mutation strategies and corpus evolution
+- target harness isolation
+- feedback signal collection and scheduling
+- crash minimization and reproduction flow
+
+Guide:
+
+- [fuzzer_engine_TODO.md](projects/fuzzer_engine_TODO.md)
+
+---
+
+## ⭐ 9/10 — Code Sandbox
+
+Goal: Policy-driven isolated execution
+
+Build:
+
+```bash
+cargo run --bin code_sandbox
+```
+
+Learn:
+
+- declarative sandbox policy modeling
+- backend abstraction for isolation mechanisms
+- resource accounting and exit classification
+- output capture and audit boundaries
+
+Guide:
+
+- [code_sandbox_TODO.md](projects/code_sandbox_TODO.md)
+
+---
+
+## ⭐ 8/10 — Artifact Proxy
+
+Goal: Upstream package proxy + integrity cache
+
+Build:
+
+```bash
+cargo run --bin artifact_proxy
+```
+
+Learn:
+
+- metadata versus blob caching rules
+- upstream fetch and proxy semantics
+- auth, namespace, and air-gap policy design
+- integrity verification for cached artifacts
+
+Guide:
+
+- [artifact_proxy_TODO.md](projects/artifact_proxy_TODO.md)
+
+---
+
+## ⭐ 6/10 — RSS Pipeline
+
+Goal: Feed ingestion + transform pipeline
+
+Build:
+
+```bash
+cargo run --bin rss_pipeline
+```
+
+Learn:
+
+- RSS or Atom fetch and parse stages
+- transform-chain ordering and enrichment
+- item deduplication across polling runs
+- sink abstractions for downstream delivery
+
+Guide:
+
+- [rss_pipeline_TODO.md](projects/rss_pipeline_TODO.md)
+
+---
+
+## ⭐ 8/10 — DNS Authority
+
+Goal: Authoritative zone serving + delegation rules
+
+Build:
+
+```bash
+cargo run --bin dns_authority
+```
+
+Learn:
+
+- zone ownership and record storage design
+- authoritative response construction
+- SOA, NS, and negative response behavior
+- zone reload and delegation boundary handling
+
+Guide:
+
+- [dns_authority_TODO.md](projects/dns_authority_TODO.md)

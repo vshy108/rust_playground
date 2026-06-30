@@ -510,3 +510,99 @@ path = "projects/browser_automation.rs"
 [[bin]]
 name = "hdfs_clone"
 path = "projects/hdfs_clone.rs"
+
+[[bin]]
+name = "schema_registry"
+path = "projects/schema_registry.rs"
+
+[[bin]]
+name = "secrets_manager"
+path = "projects/secrets_manager.rs"
+
+[[bin]]
+name = "activitypub_server"
+path = "projects/activitypub_server.rs"
+
+[[bin]]
+name = "sip_proxy"
+path = "projects/sip_proxy.rs"
+
+[[bin]]
+name = "reverse_tunnel"
+path = "projects/reverse_tunnel.rs"
+
+[[bin]]
+name = "dedup_engine"
+path = "projects/dedup_engine.rs"
+
+[[bin]]
+name = "live_stream_server"
+path = "projects/live_stream_server.rs"
+
+[[bin]]
+name = "crash_reporter"
+path = "projects/crash_reporter.rs"
+
+[[bin]]
+name = "imap_server"
+path = "projects/imap_server.rs"
+
+[[bin]]
+name = "bot_framework"
+path = "projects/bot_framework.rs"
+
+[[bin]]
+name = "wiki_engine"
+path = "projects/wiki_engine.rs"
+
+[[bin]]
+name = "modbus_gateway"
+path = "projects/modbus_gateway.rs"
+
+[[bin]]
+name = "graphql_gateway"
+path = "projects/graphql_gateway.rs"
+
+[[bin]]
+name = "terminal_multiplexer"
+path = "projects/terminal_multiplexer.rs"
+
+[[bin]]
+name = "power_monitor"
+path = "projects/power_monitor.rs"
+
+[[bin]]
+name = "torrent_tracker"
+path = "projects/torrent_tracker.rs"
+
+[[bin]]
+name = "ldap_server"
+path = "projects/ldap_server.rs"
+
+[[bin]]
+name = "statsd_server"
+path = "projects/statsd_server.rs"
+
+[[bin]]
+name = "mail_archive"
+path = "projects/mail_archive.rs"
+
+[[bin]]
+name = "fuzzer_engine"
+path = "projects/fuzzer_engine.rs"
+
+[[bin]]
+name = "code_sandbox"
+path = "projects/code_sandbox.rs"
+
+[[bin]]
+name = "artifact_proxy"
+path = "projects/artifact_proxy.rs"
+
+[[bin]]
+name = "rss_pipeline"
+path = "projects/rss_pipeline.rs"
+
+[[bin]]
+name = "dns_authority"
+path = "projects/dns_authority.rs"
