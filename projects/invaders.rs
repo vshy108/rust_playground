@@ -1,12 +1,28 @@
-use std::{error::Error, io, sync::mpsc, thread, time::{Duration, Instant}};
+use std::{
+    error::Error,
+    io,
+    sync::mpsc,
+    thread,
+    time::{Duration, Instant},
+};
 
 mod rusty;
 
-use crossterm::{ExecutableCommand, cursor::{Hide, Show}, event::{self, Event, KeyCode}, terminal::{self, EnterAlternateScreen, LeaveAlternateScreen}};
+use crossterm::{
+    ExecutableCommand,
+    cursor::{Hide, Show},
+    event::{self, Event, KeyCode},
+    terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
+};
 
 use rusty_audio::Audio;
 
-use crate::rusty::{frame::{self, Drawable, new_frame}, invaders::Invaders, player::Player, render};
+use crate::rusty::{
+    frame::{self, Drawable, new_frame},
+    invaders::Invaders,
+    player::Player,
+    render,
+};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut audio = Audio::new();
@@ -31,15 +47,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     // OLD: let (render_tx, render_rx) = mpsc::channel();
     let (render_tx, render_rx) = mpsc::sync_channel(1);
     let render_handle = thread::spawn(move || {
-        let mut last_frame= frame::new_frame();
+        let mut last_frame = frame::new_frame();
         // NOTE: remember to have () or not, else closure assigned
         let mut stdout = io::stdout();
         render::render(&mut stdout, &last_frame, &last_frame, true);
-        loop {
-            let curr_frame = match render_rx.recv() {
-                Ok(x) => x,
-                Err(_) => break,
-            };
+        // CLIPPY: since Err is just break, the loop then let can be while let
+        // loop {
+        //     let curr_frame = match render_rx.recv() {
+        //         Ok(x) => x,
+        //         Err(_) => break,
+        //     };
+        //     render::render(&mut stdout, &last_frame, &curr_frame, false);
+        //     last_frame = curr_frame;
+        // }
+        while let Ok(x) = render_rx.recv() {
+            let curr_frame = x;
             render::render(&mut stdout, &last_frame, &curr_frame, false);
             last_frame = curr_frame;
         }
@@ -62,15 +84,14 @@ fn main() -> Result<(), Box<dyn Error>> {
                     KeyCode::Left => player.move_left(),
                     KeyCode::Right => player.move_right(),
                     // spacebar use ' '
-                    KeyCode::Char(' ') | KeyCode::Enter => {
-                        if player.shoot() {
-                            audio.play("pew");
-                        }
-                    },
+                    KeyCode::Char(' ') | KeyCode::Enter if player.can_shoot() => {
+                        player.shoot();
+                        audio.play("pew");
+                    }
                     KeyCode::Esc | KeyCode::Char('q') => {
-                       audio.play("lose"); 
-                       break 'gameloop;
-                    },
+                        audio.play("lose");
+                        break 'gameloop;
+                    }
                     _ => {}
                 }
             }
@@ -92,7 +113,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Replace below with &dyn Drawable Generic
         // player.draw(&mut curr_frame);
         // invaders.draw(&mut curr_frame);
-        let drawables : Vec<&dyn Drawable> = vec![&player, &invaders];
+        let drawables: Vec<&dyn Drawable> = vec![&player, &invaders];
         for drawable in drawables {
             drawable.draw(&mut curr_frame);
         }

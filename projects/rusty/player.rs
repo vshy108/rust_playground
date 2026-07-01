@@ -1,6 +1,11 @@
 use std::time::Duration;
 
-use crate::rusty::{NUM_COLS, NUM_ROWS, frame::{Drawable, Frame}, invaders::Invaders, shot::Shot};
+use crate::rusty::{
+    NUM_COLS, NUM_ROWS,
+    frame::{Drawable, Frame},
+    invaders::Invaders,
+    shot::Shot,
+};
 
 pub struct Player {
     x: usize,
@@ -26,13 +31,12 @@ impl Player {
             self.x += 1;
         }
     }
-    pub fn shoot(&mut self) -> bool {
-        if self.shots.len() < 2 {
-            self.shots.push(Shot::new(self.x, self.y - 1));
-            true
-        } else {
-            false
-        }
+    // Separate `can_shoot` from `shoot` so the match guard remains side-effect free
+    pub fn can_shoot(&self) -> bool {
+        self.shots.len() < 2
+    }
+    pub fn shoot(&mut self) {
+        self.shots.push(Shot::new(self.x, self.y - 1));
     }
     pub fn update(&mut self, delta: Duration) {
         for shot in self.shots.iter_mut() {
@@ -43,11 +47,9 @@ impl Player {
     pub fn detect_hits(&mut self, invaders: &mut Invaders) -> bool {
         let mut hit_something = false;
         for shot in self.shots.iter_mut() {
-            if !shot.exploding {
-                if invaders.kill_invader_at(shot.x, shot.y) {
-                    hit_something = true;
-                    shot.explode();
-                }
+            if !shot.exploding && invaders.kill_invader_at(shot.x, shot.y) {
+                hit_something = true;
+                shot.explode();
             }
         }
         hit_something

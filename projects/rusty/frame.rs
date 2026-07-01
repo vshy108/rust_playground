@@ -12,7 +12,7 @@ pub fn new_frame() -> Frame {
         // for _ in 0..NUM_ROWS {
         //     col.push(" ");
         // }
-        let col = vec![" ";NUM_ROWS];
+        let col = vec![" "; NUM_ROWS];
         // `col.extend(std::iter::repeat_n(" ", NUM_ROWS))`
         cols.push(col);
     }

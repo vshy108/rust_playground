@@ -37,7 +37,7 @@ impl Shot {
         self.timer = Timer::new(Duration::from_millis(250));
     }
     pub fn dead(&self) -> bool {
-        (self.exploding && self.timer.just_finished())  || (self.y == 0)
+        (self.exploding && self.timer.just_finished()) || (self.y == 0)
     }
 }
 
