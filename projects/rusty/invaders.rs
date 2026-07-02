@@ -7,6 +7,7 @@ use crate::rusty::{
     frame::{Drawable, Frame},
 };
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct Invader {
     pub x: usize,
     pub y: usize,
@@ -81,16 +82,15 @@ impl Invaders {
         self.army.iter().map(|invader| invader.y).max().unwrap_or(0) >= NUM_ROWS - 1
     }
     pub fn kill_invader_at(&mut self, x: usize, y: usize) -> bool {
-        if let Some(idx) = self
+        self.kill_invader(x, y).is_some()
+    }
+    pub fn kill_invader(&mut self, x: usize, y: usize) -> Option<Invader> {
+        let idx = self
             .army
             .iter()
-            .position(|invader| (invader.x == x) && (invader.y == y))
-        {
-            self.army.remove(idx);
-            true
-        } else {
-            false
-        }
+            .position(|invader| invader.x == x && invader.y == y)?;
+
+        Some(self.army.remove(idx))
     }
 }
 
@@ -104,5 +104,101 @@ impl Drawable for Invaders {
                 "+"
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // add new function for Invaders
+    impl Invaders {
+        fn with_army(army: Vec<Invader>) -> Self {
+            let mut invaders = Self::new();
+            invaders.army = army;
+            invaders
+        }
+    }
+
+    #[test]
+    fn kill_existing_invader() {
+        let mut invaders =
+            Invaders::with_army(vec![Invader { x: 1, y: 1 }, Invader { x: 5, y: 3 }]);
+
+        assert!(invaders.kill_invader_at(5, 3));
+
+        assert_eq!(invaders.army.len(), 1);
+        assert!(!invaders.army.iter().any(|i| i.x == 5 && i.y == 3));
+    }
+
+    #[test]
+    fn kill_nonexistent_invader() {
+        let mut invaders =
+            Invaders::with_army(vec![Invader { x: 1, y: 1 }, Invader { x: 5, y: 3 }]);
+
+        assert!(!invaders.kill_invader_at(10, 10));
+
+        assert_eq!(invaders.army.len(), 2);
+    }
+
+    #[test]
+    fn kill_from_empty_army() {
+        let mut invaders = Invaders::with_army(Vec::new());
+
+        assert!(!invaders.kill_invader_at(0, 0));
+    }
+
+    #[test]
+    fn kill_only_matching_invader() {
+        let mut invaders = Invaders::with_army(vec![
+            Invader { x: 2, y: 2 },
+            Invader { x: 3, y: 3 },
+            Invader { x: 4, y: 4 },
+        ]);
+
+        invaders.kill_invader_at(3, 3);
+
+        assert_eq!(
+            invaders.army,
+            vec![Invader { x: 2, y: 2 }, Invader { x: 4, y: 4 },]
+        );
+    }
+
+    #[test]
+    fn kill_middle_invader() {
+        let mut invaders = Invaders::with_army(vec![
+            Invader { x: 1, y: 1 },
+            Invader { x: 2, y: 2 },
+            Invader { x: 3, y: 3 },
+        ]);
+
+        assert!(invaders.kill_invader_at(2, 2));
+
+        assert_eq!(invaders.army.len(), 2);
+
+        assert_eq!(invaders.army[0].x, 1);
+        assert_eq!(invaders.army[1].x, 3);
+    }
+
+    #[test]
+    fn kill_first_invader() {
+        let mut invaders =
+            Invaders::with_army(vec![Invader { x: 1, y: 1 }, Invader { x: 2, y: 2 }]);
+
+        assert!(invaders.kill_invader_at(1, 1));
+
+        assert_eq!(invaders.army.len(), 1);
+        assert_eq!(invaders.army[0].x, 2);
+    }
+
+    #[test]
+    fn kill_last_invader() {
+        let mut invaders =
+            Invaders::with_army(vec![Invader { x: 1, y: 1 }, Invader { x: 2, y: 2 }]);
+
+        assert!(invaders.kill_invader_at(2, 2));
+
+        assert_eq!(invaders.army.len(), 1);
+        assert_eq!(invaders.army[0].x, 1);
     }
 }
