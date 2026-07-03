@@ -56,10 +56,19 @@ uuid = { version = "1.23.2", features = ["v4"] }
 # is enabled by default. However, because Cargo features are additive, 
 # a transitive dependency could still pull in native-tls. 
 # To prevent this, explicitly turn off default features
-reqwest = { version = "0.13.4", default-features = false, features = ["json", "rustls", "stream"] }
+reqwest = { version = "0.13.4", default-features = false, features = [
+    "json",
+    "rustls",
+    "stream",
+] }
 
 # .layer(TraceLayer::new_for_http())
-tower-http = { version = "0.6", features = ["trace", "timeout", "util", "request-id"] }
+tower-http = { version = "0.6", features = [
+    "trace",
+    "timeout",
+    "util",
+    "request-id",
+] }
 
 # networking clients and servers.
 tower = "0.5"
