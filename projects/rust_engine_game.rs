@@ -1,4 +1,5 @@
 use rusty_engine::prelude::*;
+use rand::Rng;
 
 #[derive(Resource)]
 struct GameState {
@@ -6,7 +7,7 @@ struct GameState {
     score: u32,
     ferries_index: i32,
     // enemy_labels: Vec<String>,
-    // spawn_timer: Timer,
+    spawn_timer: Timer,
 }
 
 impl Default for GameState {
@@ -17,8 +18,8 @@ impl Default for GameState {
             ferries_index: 0,
             // enemy_labels: Vec::new(),
             // FIX: Newer Bevy/rusty_engine Timer API no longer accepts a bool.
-            // Use TimerMode::Once to preserve the old `false` behavior (non-repeating).
-            // spawn_timer: Timer::from_seconds(1.0, TimerMode::Once),
+            // Use TimerMode::Repeating to preserve the old `true` behavior (repeating).
+            spawn_timer: Timer::from_seconds(2.0, TimerMode::Repeating),
         }
     }
 }
@@ -90,7 +91,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         }
     }
 
-    // handle keybowrd movement
+    // handle keyboard movement
     let player = engine.sprites.get_mut("player").unwrap();
     const MOVEMENT_SPEED: f32 = 100.0;
     // NOTE: when the 4 directions in one if..else if, then cannot support diagonal
@@ -126,6 +127,19 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         score.value = "Score: 0".to_string();
     }
 
+    if game_state.spawn_timer.tick(engine.delta).just_finished() {
+        let label = format!("ferries{}", game_state.ferries_index);
+        game_state.ferries_index += 1;
+
+        let ferris = engine.add_sprite(label.clone(), SpritePreset::RacingCarYellow);
+        let mut rng = rand::rng();
+        let x = rng.random_range(-550.0..550.0);
+        let y = rng.random_range(-325.0..325.0);
+        ferris.translation = Vec2 { x, y };
+        // NOTE: two objects has collision true only will have Collision event
+        ferris.collision = true;
+    }
+
     // handle mouse input
     // just_pressed for one-shot actions
     if engine.mouse_state.just_pressed(MouseButton::Left) {
@@ -134,7 +148,6 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
             game_state.ferries_index += 1;
 
             let ferris = engine.add_sprite(label.clone(), SpritePreset::RacingCarYellow);
-            // translation to car_one
             ferris.translation = mouse_location;
             // NOTE: two objects has collision true only will have Collision event
             ferris.collision = true;
