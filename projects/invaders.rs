@@ -27,12 +27,12 @@ use crate::rusty::{
 fn main() -> Result<(), Box<dyn Error>> {
     let mut audio = Audio::new();
     // when running with cargo run, the working directory is root folder
-    audio.add("explode", "sounds/explode.wav");
-    audio.add("lose", "sounds/lose.wav");
-    audio.add("move", "sounds/move.wav");
-    audio.add("pew", "sounds/pew.wav");
-    audio.add("startup", "sounds/startup.wav");
-    audio.add("win", "sounds/win.wav");
+    audio.add("explode", "assets/audio/sounds/explode.wav");
+    audio.add("lose", "assets/audio/sounds/lose.wav");
+    audio.add("move", "assets/audio/sounds/move.wav");
+    audio.add("pew", "assets/audio/sounds/pew.wav");
+    audio.add("startup", "assets/audio/sounds/startup.wav");
+    audio.add("win", "assets/audio/sounds/win.wav");
     audio.play("startup");
 
     // Terminal

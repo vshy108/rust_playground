@@ -78,6 +78,17 @@ crossterm = "0.29.0"
 rusty_audio = "1.4.1"
 # gaming timer
 rusty_time = "1.1.0"
+# gaming engine
+rusty_engine = "7.0.0"
+
+# rusty_engine mimic release profile
+[profile.dev]
+opt-level = 3
+debug = false
+debug-assertions = false
+overflow-checks = false
+incremental = false
+codegen-units = 16
 
 # [[example]] must stay [[example]] is a Cargo-defined table name
 # name should be lowercase letters/numbers with _ or -
@@ -990,3 +1001,7 @@ path = "projects/authz_drift_detector.rs"
 [[bin]]
 name = "incident_comms_broker"
 path = "projects/incident_comms_broker.rs"
+
+[[bin]]
+name = "rust_engine_game"
+path = "projects/rust_engine_game.rs"
