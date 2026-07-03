@@ -56,6 +56,13 @@ fn main() {
 fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // your actual game logic goes
 
+    // quit if Q is pressed
+    if engine.keyboard_state.just_pressed(KeyCode::KeyQ) {
+        engine.should_exit = true;
+
+        return
+    }
+
     // collider is white border nearby the sprite
     // engine.show_colliders = true;
 
