@@ -1,6 +1,9 @@
-use rusty_engine::prelude::*;
 use rand::Rng;
+use rusty_engine::prelude::*;
 
+// ThreadRng is internally Rc + UnsafeCell, so it is not Sync.
+// GameState is a Bevy-style Resource, and Resource types must be thread-safe.
+// So putting ThreadRng inside GameState fails trait bounds.
 #[derive(Resource)]
 struct GameState {
     high_score: u32,
@@ -26,8 +29,8 @@ impl Default for GameState {
 
 fn main() {
     let mut game = Game::new();
-    game.audio_manager.play_music(MusicPreset::WhimsicalPopsicle, 0.1);
-
+    game.audio_manager
+        .play_music(MusicPreset::WhimsicalPopsicle, 0.1);
 
     let player = game.add_sprite("player", SpritePreset::RacingCarBlue);
     // origin at center of screen
@@ -60,7 +63,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     if engine.keyboard_state.just_pressed(KeyCode::KeyQ) {
         engine.should_exit = true;
 
-        return
+        return;
     }
 
     // collider is white border nearby the sprite
@@ -149,15 +152,15 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
 
     // handle mouse input
     // just_pressed for one-shot actions
-    if engine.mouse_state.just_pressed(MouseButton::Left) {
-        if let Some(mouse_location) = engine.mouse_state.location() {
-            let label = format!("ferries{}", game_state.ferries_index);
-            game_state.ferries_index += 1;
+    if engine.mouse_state.just_pressed(MouseButton::Left)
+        && let Some(mouse_location) = engine.mouse_state.location()
+    {
+        let label = format!("ferries{}", game_state.ferries_index);
+        game_state.ferries_index += 1;
 
-            let ferris = engine.add_sprite(label.clone(), SpritePreset::RacingCarYellow);
-            ferris.translation = mouse_location;
-            // NOTE: two objects has collision true only will have Collision event
-            ferris.collision = true;
-        }
+        let ferris = engine.add_sprite(label.clone(), SpritePreset::RacingCarYellow);
+        ferris.translation = mouse_location;
+        // NOTE: two objects has collision true only will have Collision event
+        ferris.collision = true;
     }
 }
