@@ -51,8 +51,9 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // your actual game logic goes
 
     // collider is white border nearby the sprite
-    engine.show_colliders = true;
+    // engine.show_colliders = true;
 
+    // handle collisions
     // .drain(..) returns each event and removes it, so each event is handled once.
     for event in engine.collision_events.drain(..) {
         println!("{:#?}", event);
@@ -74,6 +75,32 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         }
     }
 
+    // handle movement
     let player = engine.sprites.get_mut("player").unwrap();
-    player.translation.x += 100.0 * engine.delta_f32;
+    const MOVEMENT_SPEED: f32 = 100.0;
+    // NOTE: when the 4 directions in one if..else if, then cannot support diagonal
+    // old version is Up ---> ArrowUp, W to KeyW
+    if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::ArrowUp, KeyCode::KeyW])
+    {
+        player.translation.y += MOVEMENT_SPEED * engine.delta_f32;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::ArrowDown, KeyCode::KeyS])
+    {
+        player.translation.y -= MOVEMENT_SPEED * engine.delta_f32;
+    }
+
+    if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::ArrowRight, KeyCode::KeyD])
+    {
+        player.translation.x += MOVEMENT_SPEED * engine.delta_f32;
+    } else if engine
+        .keyboard_state
+        .pressed_any(&[KeyCode::ArrowLeft, KeyCode::KeyA])
+    {
+        player.translation.x -= MOVEMENT_SPEED * engine.delta_f32;
+    }
 }
