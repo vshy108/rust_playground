@@ -29,6 +29,12 @@ impl Default for GameState {
 
 fn main() {
     let mut game = Game::new();
+    game.window_settings(Window {
+        title: "Tutorial!".to_string(),
+        resolution: WindowResolution::new(1400, 500),
+        ..Default::default()
+    });
+
     game.audio_manager
         .play_music(MusicPreset::WhimsicalPopsicle, 0.1);
 
@@ -44,11 +50,10 @@ fn main() {
     player.collision = true;
 
     // score display
-    let score = game.add_text("score", "Score: 0");
-    score.translation = Vec2::new(520.0, 320.0);
+    let _score = game.add_text("score", "Score: 0");
+    // score.translation = Vec2::new(520.0, 320.0);
 
-    let high_score = game.add_text("high_score", "High Score: 0");
-    high_score.translation = Vec2::new(-520.0, 320.0);
+    let _high_score = game.add_text("high_score", "High Score: 0");
 
     // setup game here
     game.add_logic(game_logic);
@@ -65,6 +70,16 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
 
         return;
     }
+
+    // keep text near the edges of the screen even window resized
+    let offset = ((engine.time_since_startup_f64 * 3.0).cos() * 5.0) as f32;
+    let score = engine.texts.get_mut("score").unwrap();
+    score.translation.x = engine.window_dimensions.x / 2.0 - 80.0;
+    score.translation.y = engine.window_dimensions.y / 2.0 - 30.0 + offset;
+
+    let high_score = engine.texts.get_mut("high_score").unwrap();
+    high_score.translation.x = -engine.window_dimensions.x / 2.0 + 120.0;
+    high_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
 
     // collider is white border nearby the sprite
     // engine.show_colliders = true;
