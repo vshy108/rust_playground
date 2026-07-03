@@ -25,6 +25,8 @@ impl Default for GameState {
 
 fn main() {
     let mut game = Game::new();
+    game.audio_manager.play_music(MusicPreset::WhimsicalPopsicle, 0.1);
+
 
     let player = game.add_sprite("player", SpritePreset::RacingCarBlue);
     // origin at center of screen
@@ -59,7 +61,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     // handle collisions
     // .drain(..) returns each event and removes it, so each event is handled once.
     for event in engine.collision_events.drain(..) {
-        println!("{:#?}", event);
+        // println!("{:#?}", event);
         if event.state == CollisionState::Begin && event.pair.one_starts_with("player") {
             // remove the sprite the player collided with
             // for label in [event.pair.0, event.pair.1] {
@@ -75,6 +77,7 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
             engine.sprites.remove(&other);
 
             game_state.score += 1;
+            engine.audio_manager.play_sfx(SfxPreset::Minimize1, 0.3);
             let score = engine.texts.get_mut("score").unwrap();
             score.value = format!("Score: {}", game_state.score);
 
