@@ -65,10 +65,10 @@ fn main() {
     player.collision = true;
 
     // score display
-    let _score = game.add_text(SCORE_TEXT, "Score: 0");
+    let _ = game.add_text(SCORE_TEXT, "Score: 0");
     // score.translation = Vec2::new(520.0, 320.0);
 
-    let _high_score = game.add_text(HIGH_SCORE_TEXT, "High Score: 0");
+    let _ = game.add_text(HIGH_SCORE_TEXT, "High Score: 0");
 
     // setup game here
     game.add_logic(game_logic);
