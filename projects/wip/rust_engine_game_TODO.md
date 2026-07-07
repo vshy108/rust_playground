@@ -1,4 +1,4 @@
-# TODO: rust_engine_game (⭐ ?/10)
+# TODO: rust_engine_game (⭐ 8/10)
 
 ## Status
 
