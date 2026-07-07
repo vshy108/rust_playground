@@ -168,7 +168,9 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
         direction.x -= 1.0;
     }
 
-    if direction != Vec2::ZERO && let Some(player) = engine.sprites.get_mut("player") {
+    if direction != Vec2::ZERO
+        && let Some(player) = engine.sprites.get_mut("player")
+    {
         player.translation += direction.normalize() * MOVEMENT_SPEED * engine.delta_f32;
     }
 

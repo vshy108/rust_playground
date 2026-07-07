@@ -105,7 +105,7 @@ codegen-units = 16
 # cargo run --example random_password_cli
 # [[example]]
 # name = "random_password_cli"
-# path = "projects/random_password_cli.rs"
+# path = "projects/completed/random_password_cli.rs"
 
 # cargo run --bin genpass -- --length 20
 # cargo install --path .
@@ -117,31 +117,31 @@ tower = { version = "0.5", features = ["util"] }
 
 [[bin]]
 name = "genpass"
-path = "projects/random_password_cli.rs"
+path = "projects/completed/random_password_cli.rs"
 
 [[bin]]
 name = "jsonfmt"
-path = "projects/json_formatter_cli.rs"
+path = "projects/completed/json_formatter_cli.rs"
 
 [[bin]]
 name = "rgrep"
-path = "projects/mini_grep_cli.rs"
+path = "projects/completed/mini_grep_cli.rs"
 
 [[bin]]
 name = "url_shortener"
-path = "projects/url_shortener.rs"
+path = "projects/completed/url_shortener.rs"
 
 [[bin]]
 name = "lru_cache"
-path = "projects/lru_cache.rs"
+path = "projects/completed/lru_cache.rs"
 
 [[bin]]
 name = "watchdir"
-path = "projects/file_watcher_cli.rs"
+path = "projects/completed/file_watcher_cli.rs"
 
 [[bin]]
 name = "logparse"
-path = "projects/log_parser_cli.rs"
+path = "projects/completed/log_parser_cli.rs"
 
 [[bin]]
 name = "rest_api"
@@ -161,7 +161,7 @@ path = "projects/metrics_collector.rs"
 
 [[bin]]
 name = "api_gateway"
-path = "projects/api_gateway.rs"
+path = "projects/completed/api_gateway.rs"
 
 [[bin]]
 name = "kafka_consumer"
