@@ -1,5 +1,6 @@
 # TODO: kafka_consumer (⭐ 7/10)
 
+
 ## Usage
 
 ```bash
@@ -61,3 +62,13 @@ Acceptance check: DLQ contains the expected messages after processing.
 - Separate collection from aggregation/output so each can be tested in isolation.
 - Add backoff and retry policy tests for transient failures.
 - Measure throughput and tail latency on representative input sizes.
+
+## Learn Notes
+
+- async — each worker is a `tokio::spawn` task; tasks process messages concurrently without blocking each other or the thread pool
+- worker pool — a fixed set of worker tasks pulls from a shared work channel; the pool size caps parallelism without spawning an unbounded number of tasks
+
+## Extra
+
+- tracing — instrument each message with a span (`tracing::info_span!`) so retries and DLQ moves are visible in structured logs
+

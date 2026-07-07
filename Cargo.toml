@@ -193,7 +193,7 @@ path = "projects/mini_runtime.rs"
 
 [[bin]]
 name = "invaders"
-path = "projects/invaders.rs"
+path = "projects/wip/invaders.rs"
 
 [[bin]]
 name = "dns_toolkit"
@@ -1013,4 +1013,4 @@ path = "projects/incident_comms_broker.rs"
 
 [[bin]]
 name = "rust_engine_game"
-path = "projects/rust_engine_game.rs"
+path = "projects/wip/rust_engine_game.rs"

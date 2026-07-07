@@ -1,5 +1,6 @@
 # TODO: fake_sql_server (⭐ 9/10)
 
+
 ## Usage
 
 ```bash
@@ -54,3 +55,13 @@ Acceptance check: `SELECT 1;` returns a single row with value `1`.
 - Keep CLI/API surface stable while iterating internals.
 - Validate both happy path and error path for every milestone.
 - Run focused tests before broad checks.
+
+## Learn Notes
+
+- protocol — the PostgreSQL wire protocol starts with a Startup message (version + params), then an Authentication request/response, followed by ReadyForQuery; each message has a 1-byte type tag and a 4-byte big-endian length prefix
+- binary parsing — read fixed-width fields with `u32::from_be_bytes`; read variable-length strings as null-terminated byte sequences; use a cursor over the byte buffer
+
+## Extra
+
+- query execution — parse simple SELECT statements and return mock rows
+

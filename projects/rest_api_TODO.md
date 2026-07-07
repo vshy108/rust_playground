@@ -1,5 +1,6 @@
 # TODO: rest_api (⭐ 5/10)
 
+
 ## Usage
 
 ```bash
@@ -57,3 +58,16 @@ Acceptance check: `cargo run` starts without error; `curl localhost:3000/items` 
 - Add structured request logging early so debugging network paths is cheap.
 - Keep connection lifecycle explicit: open, active, idle timeout, close.
 - Add load and latency checks after correctness is stable.
+
+## Learn Notes
+
+- async — `async fn` returns a Future; `.await` suspends the task without blocking the thread
+- middleware — tower layers applied to every request (logging, auth, error handling)
+- axum routing — `Router::new().route(path, method(handler))` wires HTTP methods to handlers
+- serde — `#[derive(Deserialize, Serialize)]` on structs for JSON request/response bodies
+- State — `Arc<Mutex<T>>` shared across handlers; cloned into each via axum's `State` extractor
+
+## Extra
+
+- JWT authentication middleware
+

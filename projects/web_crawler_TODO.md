@@ -1,5 +1,6 @@
 # TODO: web_crawler (⭐ 5/10)
 
+
 ## Usage
 
 ```bash
@@ -54,3 +55,14 @@ Acceptance check: crawling runs noticeably faster than the sequential version.
 - Separate collection from aggregation/output so each can be tested in isolation.
 - Add backoff and retry policy tests for transient failures.
 - Measure throughput and tail latency on representative input sizes.
+
+## Learn Notes
+
+- futures — a Future is a lazy computation; it does nothing until polled by an executor
+- task scheduling — `tokio::spawn` creates an independent task; tasks run concurrently on the tokio thread pool; `JoinHandle` lets the spawner await the result
+- async channels — `tokio::sync::mpsc` passes URLs between the discovery task and workers without blocking; the channel decouples producers from consumers
+
+## Extra
+
+- limit concurrency with a semaphore (`tokio::sync::Semaphore`)
+

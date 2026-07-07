@@ -1,5 +1,6 @@
 # TODO: workflow_engine (⭐ 8/10)
 
+
 ## Usage
 
 ```bash
@@ -57,3 +58,13 @@ Acceptance check: independent nodes (A→C, B→C) run concurrently; C runs afte
 - Separate correctness path from optimization path; optimize only after passing invariants.
 - Add deterministic simulation tests for retries, crashes, and restart behavior.
 - Track state transitions with trace logs to simplify post-failure analysis.
+
+## Learn Notes
+
+- graph — a workflow is a directed acyclic graph (DAG); nodes are steps, edges are dependencies; represent with adjacency lists (`HashMap<NodeId, Vec<NodeId>>`)
+- execution model — topological sort determines a valid execution order; a node is ready when all its predecessors have completed; use a queue of ready nodes
+
+## Extra
+
+- UI — a simple terminal visualization of node states (pending / running / done / failed)
+

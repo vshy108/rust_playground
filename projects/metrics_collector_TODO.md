@@ -1,5 +1,6 @@
 # TODO: metrics_collector (⭐ 6/10)
 
+
 ## Usage
 
 ```bash
@@ -47,3 +48,13 @@ Acceptance check: query returns the correct aggregation after a burst of events.
 - Separate collection from aggregation/output so each can be tested in isolation.
 - Add backoff and retry policy tests for transient failures.
 - Measure throughput and tail latency on representative input sizes.
+
+## Learn Notes
+
+- channels — `std::sync::mpsc` (or `tokio::sync::mpsc`) decouples metric producers from the aggregator; producers send `MetricEvent` values; the aggregator owns the receiver
+- aggregation — the aggregator loop accumulates counters and histograms in a HashMap; a query interface reads snapshots without blocking producers
+
+## Extra
+
+- Prometheus endpoint — expose `/metrics` in the text-based Prometheus exposition format
+

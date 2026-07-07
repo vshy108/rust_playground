@@ -1,5 +1,6 @@
 # TODO: redis_clone (⭐ 6/10)
 
+
 ## Usage
 
 ```bash
@@ -54,3 +55,14 @@ Acceptance check: `redis-cli -p 6380 PING` returns `+PONG\r\n`.
 - Separate correctness path from optimization path; optimize only after passing invariants.
 - Add deterministic simulation tests for retries, crashes, and restart behavior.
 - Track state transitions with trace logs to simplify post-failure analysis.
+
+## Learn Notes
+
+- TCP — `TcpListener::bind` accepts connections; each connection is a byte stream read with `BufReader`; responses are written back with `write_all`
+- parsing — the Redis Serialization Protocol (RESP) uses `*N\r\n` (array), `$N\r\n` (bulk string), `+OK\r\n` (simple string), `-ERR msg\r\n` (error) as its wire format
+- state — `Arc<Mutex<HashMap<String, String>>>` shared across connection handler tasks; each task locks, reads/writes, then drops the guard immediately
+
+## Extra
+
+- persistence — dump the store to a file on SIGTERM and reload on startup
+

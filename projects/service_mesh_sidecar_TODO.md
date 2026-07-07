@@ -1,5 +1,6 @@
 # TODO: service_mesh_sidecar (⭐ 9/10)
 
+
 ## Usage
 
 ```bash
@@ -61,3 +62,13 @@ Acceptance check: `curl localhost:9091/metrics` prints bytes, latency, and error
 - Add structured request logging early so debugging network paths is cheap.
 - Keep connection lifecycle explicit: open, active, idle timeout, close.
 - Add load and latency checks after correctness is stable.
+
+## Learn Notes
+
+- TCP — `TcpListener` accepts connections; `TcpStream` is a bidirectional byte pipe; `tokio::io::copy` pumps bytes between two streams concurrently
+- observability — count bytes in/out, request latency, and error count per upstream; expose a `/metrics` endpoint for scraping
+
+## Extra
+
+- routing — inspect the first request line to route HTTP traffic to different upstreams
+

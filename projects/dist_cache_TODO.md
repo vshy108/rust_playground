@@ -1,5 +1,6 @@
 # TODO: dist_cache (⭐ 10/10)
 
+
 ## Usage
 
 ```bash
@@ -66,3 +67,13 @@ Acceptance check: stopping node 2 does not prevent reading its keys via node 1.
 - Separate correctness path from optimization path; optimize only after passing invariants.
 - Add deterministic simulation tests for retries, crashes, and restart behavior.
 - Track state transitions with trace logs to simplify post-failure analysis.
+
+## Learn Notes
+
+- consensus — a quorum write (W > N/2) ensures at least one replica has the data before acknowledging; a quorum read (R > N/2) guarantees reading a node that saw the write
+- distributed systems — consistent hashing assigns keys to nodes; adding/removing a node remaps only a fraction of keys; vector clocks or last-write-wins resolve write conflicts
+
+## Extra
+
+- partition tolerance — detect split-brain; refuse writes when quorum is unavailable
+

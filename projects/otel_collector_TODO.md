@@ -1,5 +1,6 @@
 # TODO: otel_collector (⭐ 8/10)
 
+
 ## Usage
 
 ```bash
@@ -53,3 +54,13 @@ Acceptance check: output file contains one JSON object per span.
 - Separate collection from aggregation/output so each can be tested in isolation.
 - Add backoff and retry policy tests for transient failures.
 - Measure throughput and tail latency on representative input sizes.
+
+## Learn Notes
+
+- streaming — receive telemetry over a socket (OTLP/gRPC or HTTP); process records as they arrive without buffering the full stream in memory
+- batching — accumulate spans/metrics in a buffer; flush when the buffer reaches a size threshold or a time deadline, whichever comes first
+
+## Extra
+
+- metrics + traces — handle both signal types in the same pipeline
+

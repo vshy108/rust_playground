@@ -7,6 +7,16 @@ cargo run --bin mini_runtime
 cargo test --bin mini_runtime
 ```
 
+## Learn Notes
+
+- pinning: `Pin<P>` prevents a value from being moved after pinning; needed for self-referential structures.
+- unsafe polling: manual `Future::poll` implementations often require `unsafe { Pin::new_unchecked(...) }` when not `Unpin`.
+- async internals: executors poll futures with a `Context`; on `Pending`, futures store the waker and call `wake()` when ready.
+
+## Notes
+
+- Source file intentionally stays as a scaffold stub until implementation starts.
+
 ## 1. Manual Future
 
 - [ ] Implement a `TimerFuture` that yields `Pending` on the first poll and `Ready` on the second.
