@@ -145,19 +145,19 @@ path = "projects/completed/log_parser_cli.rs"
 
 [[bin]]
 name = "rest_api"
-path = "projects/rest_api.rs"
+path = "projects/planned/rating_5/rest_api.rs"
 
 [[bin]]
 name = "crawler"
-path = "projects/web_crawler.rs"
+path = "projects/planned/rating_5/web_crawler.rs"
 
 [[bin]]
 name = "redis_clone"
-path = "projects/redis_clone.rs"
+path = "projects/planned/rating_6/redis_clone.rs"
 
 [[bin]]
 name = "metrics_collector"
-path = "projects/metrics_collector.rs"
+path = "projects/planned/rating_6/metrics_collector.rs"
 
 [[bin]]
 name = "api_gateway"
@@ -165,31 +165,31 @@ path = "projects/completed/api_gateway.rs"
 
 [[bin]]
 name = "kafka_consumer"
-path = "projects/kafka_consumer.rs"
+path = "projects/planned/rating_7/kafka_consumer.rs"
 
 [[bin]]
 name = "workflow_engine"
-path = "projects/workflow_engine.rs"
+path = "projects/planned/rating_8/workflow_engine.rs"
 
 [[bin]]
 name = "otel_collector"
-path = "projects/otel_collector.rs"
+path = "projects/planned/rating_8/otel_collector.rs"
 
 [[bin]]
 name = "fake_sql_server"
-path = "projects/fake_sql_server.rs"
+path = "projects/planned/rating_9/fake_sql_server.rs"
 
 [[bin]]
 name = "sidecar"
-path = "projects/service_mesh_sidecar.rs"
+path = "projects/planned/rating_9/service_mesh_sidecar.rs"
 
 [[bin]]
 name = "dist_cache"
-path = "projects/dist_cache.rs"
+path = "projects/planned/rating_10/dist_cache.rs"
 
 [[bin]]
 name = "mini_runtime"
-path = "projects/mini_runtime.rs"
+path = "projects/planned/rating_10/mini_runtime.rs"
 
 [[bin]]
 name = "invaders"
@@ -197,819 +197,819 @@ path = "projects/wip/invaders.rs"
 
 [[bin]]
 name = "dns_toolkit"
-path = "projects/dns_toolkit.rs"
+path = "projects/planned/rating_5/dns_toolkit.rs"
 
 [[bin]]
 name = "mini_git"
-path = "projects/mini_git.rs"
+path = "projects/planned/rating_5/mini_git.rs"
 
 [[bin]]
 name = "loadtest"
-path = "projects/http_load_tester.rs"
+path = "projects/planned/rating_5/http_load_tester.rs"
 
 [[bin]]
 name = "job_queue"
-path = "projects/job_queue.rs"
+path = "projects/planned/rating_6/job_queue.rs"
 
 [[bin]]
 name = "inv_index"
-path = "projects/inverted_index.rs"
+path = "projects/planned/rating_6/inverted_index.rs"
 
 [[bin]]
 name = "mini_shell"
-path = "projects/mini_shell.rs"
+path = "projects/planned/rating_6/mini_shell.rs"
 
 [[bin]]
 name = "textedit"
-path = "projects/text_editor.rs"
+path = "projects/planned/rating_7/text_editor.rs"
 
 [[bin]]
 name = "socks5_proxy"
-path = "projects/socks5_proxy.rs"
+path = "projects/planned/rating_7/socks5_proxy.rs"
 
 [[bin]]
 name = "ws_broker"
-path = "projects/websocket_broker.rs"
+path = "projects/planned/rating_7/websocket_broker.rs"
 
 [[bin]]
 name = "rate_limiter"
-path = "projects/rate_limiter.rs"
+path = "projects/planned/rating_7/rate_limiter.rs"
 
 [[bin]]
 name = "lsm_kv"
-path = "projects/lsm_kv.rs"
+path = "projects/planned/rating_8/lsm_kv.rs"
 
 [[bin]]
 name = "bloom_hll"
-path = "projects/bloom_hll.rs"
+path = "projects/planned/rating_8/bloom_hll.rs"
 
 [[bin]]
 name = "file_sync"
-path = "projects/file_sync.rs"
+path = "projects/planned/rating_8/file_sync.rs"
 
 [[bin]]
 name = "template_engine"
-path = "projects/template_engine.rs"
+path = "projects/planned/rating_8/template_engine.rs"
 
 [[bin]]
 name = "regex_engine"
-path = "projects/regex_engine.rs"
+path = "projects/planned/rating_9/regex_engine.rs"
 
 [[bin]]
 name = "bittorrent"
-path = "projects/bittorrent.rs"
+path = "projects/planned/rating_9/bittorrent.rs"
 
 [[bin]]
 name = "tcp_stack"
-path = "projects/tcp_stack.rs"
+path = "projects/planned/rating_7/tcp_stack.rs"
 
 [[bin]]
 name = "mqtt_broker"
-path = "projects/mqtt_broker.rs"
+path = "projects/planned/rating_7/mqtt_broker.rs"
 
 [[bin]]
 name = "chip8"
-path = "projects/chip8.rs"
+path = "projects/planned/rating_7/chip8.rs"
 
 [[bin]]
 name = "browser_engine"
-path = "projects/browser_engine.rs"
+path = "projects/planned/rating_8/browser_engine.rs"
 
 [[bin]]
 name = "bytecode_vm"
-path = "projects/bytecode_vm.rs"
+path = "projects/planned/rating_8/bytecode_vm.rs"
 
 [[bin]]
 name = "mini_compiler"
-path = "projects/mini_compiler.rs"
+path = "projects/planned/rating_8/mini_compiler.rs"
 
 [[bin]]
 name = "packet_sniffer"
-path = "projects/packet_sniffer.rs"
+path = "projects/planned/rating_8/packet_sniffer.rs"
 
 [[bin]]
 name = "static_site_gen"
-path = "projects/static_site_gen.rs"
+path = "projects/planned/rating_8/static_site_gen.rs"
 
 [[bin]]
 name = "iot_simulator"
-path = "projects/iot_simulator.rs"
+path = "projects/planned/rating_9/iot_simulator.rs"
 
 [[bin]]
 name = "raft_consensus"
-path = "projects/raft_consensus.rs"
+path = "projects/planned/rating_10/raft_consensus.rs"
 
 [[bin]]
 name = "sqlite_clone"
-path = "projects/sqlite_clone.rs"
+path = "projects/planned/rating_9/sqlite_clone.rs"
 
 [[bin]]
 name = "ray_tracer"
-path = "projects/ray_tracer.rs"
+path = "projects/planned/rating_7/ray_tracer.rs"
 
 [[bin]]
 name = "wasm_runtime"
-path = "projects/wasm_runtime.rs"
+path = "projects/planned/rating_9/wasm_runtime.rs"
 
 [[bin]]
 name = "container_runtime"
-path = "projects/container_runtime.rs"
+path = "projects/planned/rating_9/container_runtime.rs"
 
 [[bin]]
 name = "wasm_game_of_life"
-path = "projects/wasm_game_of_life.rs"
+path = "projects/planned/rating_6/wasm_game_of_life.rs"
 
 [[bin]]
 name = "spell_checker"
-path = "projects/spell_checker.rs"
+path = "projects/planned/rating_5/spell_checker.rs"
 
 [[bin]]
 name = "terminal_emulator"
-path = "projects/terminal_emulator.rs"
+path = "projects/planned/rating_7/terminal_emulator.rs"
 
 [[bin]]
 name = "nes_emulator"
-path = "projects/nes_emulator.rs"
+path = "projects/planned/rating_8/nes_emulator.rs"
 
 [[bin]]
 name = "memory_allocator"
-path = "projects/memory_allocator.rs"
+path = "projects/planned/rating_8/memory_allocator.rs"
 
 [[bin]]
 name = "physics_engine"
-path = "projects/physics_engine.rs"
+path = "projects/planned/rating_8/physics_engine.rs"
 
 [[bin]]
 name = "fuse_fs"
-path = "projects/fuse_fs.rs"
+path = "projects/planned/rating_8/fuse_fs.rs"
 
 [[bin]]
 name = "os_kernel"
-path = "projects/os_kernel.rs"
+path = "projects/planned/rating_10/os_kernel.rs"
 
 [[bin]]
 name = "ci_system"
-path = "projects/ci_system.rs"
+path = "projects/planned/rating_7/ci_system.rs"
 
 [[bin]]
 name = "vpn_tunnel"
-path = "projects/vpn_tunnel.rs"
+path = "projects/planned/rating_9/vpn_tunnel.rs"
 
 [[bin]]
 name = "toy_debugger"
-path = "projects/toy_debugger.rs"
+path = "projects/planned/rating_8/toy_debugger.rs"
 
 [[bin]]
 name = "markdown_parser"
-path = "projects/markdown_parser.rs"
+path = "projects/planned/rating_5/markdown_parser.rs"
 
 [[bin]]
 name = "auth_service"
-path = "projects/auth_service.rs"
+path = "projects/planned/rating_6/auth_service.rs"
 
 [[bin]]
 name = "image_codec"
-path = "projects/image_codec.rs"
+path = "projects/planned/rating_7/image_codec.rs"
 
 [[bin]]
 name = "search_engine"
-path = "projects/search_engine.rs"
+path = "projects/planned/rating_8/search_engine.rs"
 
 [[bin]]
 name = "package_manager"
-path = "projects/package_manager.rs"
+path = "projects/planned/rating_8/package_manager.rs"
 
 [[bin]]
 name = "graph_database"
-path = "projects/graph_database.rs"
+path = "projects/planned/rating_9/graph_database.rs"
 
 [[bin]]
 name = "message_queue"
-path = "projects/message_queue.rs"
+path = "projects/planned/rating_8/message_queue.rs"
 
 [[bin]]
 name = "build_system"
-path = "projects/build_system.rs"
+path = "projects/planned/rating_7/build_system.rs"
 
 [[bin]]
 name = "secret_scanner"
-path = "projects/secret_scanner.rs"
+path = "projects/planned/rating_7/secret_scanner.rs"
 
 [[bin]]
 name = "ebpf_monitor"
-path = "projects/ebpf_monitor.rs"
+path = "projects/planned/rating_9/ebpf_monitor.rs"
 
 [[bin]]
 name = "blockchain_node"
-path = "projects/blockchain_node.rs"
+path = "projects/planned/rating_9/blockchain_node.rs"
 
 [[bin]]
 name = "object_store"
-path = "projects/object_store.rs"
+path = "projects/planned/rating_9/object_store.rs"
 
 [[bin]]
 name = "smtp_server"
-path = "projects/smtp_server.rs"
+path = "projects/planned/rating_8/smtp_server.rs"
 
 [[bin]]
 name = "coord_service"
-path = "projects/coord_service.rs"
+path = "projects/planned/rating_9/coord_service.rs"
 
 [[bin]]
 name = "policy_engine"
-path = "projects/policy_engine.rs"
+path = "projects/planned/rating_7/policy_engine.rs"
 
 [[bin]]
 name = "stream_processor"
-path = "projects/stream_processor.rs"
+path = "projects/planned/rating_9/stream_processor.rs"
 
 [[bin]]
 name = "backup_engine"
-path = "projects/backup_engine.rs"
+path = "projects/planned/rating_8/backup_engine.rs"
 
 [[bin]]
 name = "cargo_registry"
-path = "projects/cargo_registry.rs"
+path = "projects/planned/rating_8/cargo_registry.rs"
 
 [[bin]]
 name = "spreadsheet_engine"
-path = "projects/spreadsheet_engine.rs"
+path = "projects/planned/rating_7/spreadsheet_engine.rs"
 
 [[bin]]
 name = "language_server"
-path = "projects/language_server.rs"
+path = "projects/planned/rating_8/language_server.rs"
 
 [[bin]]
 name = "webhook_gateway"
-path = "projects/webhook_gateway.rs"
+path = "projects/planned/rating_7/webhook_gateway.rs"
 
 [[bin]]
 name = "time_series_db"
-path = "projects/time_series_db.rs"
+path = "projects/planned/rating_9/time_series_db.rs"
 
 [[bin]]
 name = "config_manager"
-path = "projects/config_manager.rs"
+path = "projects/planned/rating_7/config_manager.rs"
 
 [[bin]]
 name = "container_registry"
-path = "projects/container_registry.rs"
+path = "projects/planned/rating_8/container_registry.rs"
 
 [[bin]]
 name = "irc_server"
-path = "projects/irc_server.rs"
+path = "projects/planned/rating_7/irc_server.rs"
 
 [[bin]]
 name = "feature_flag_server"
-path = "projects/feature_flag_server.rs"
+path = "projects/planned/rating_6/feature_flag_server.rs"
 
 [[bin]]
 name = "map_tile_server"
-path = "projects/map_tile_server.rs"
+path = "projects/planned/rating_8/map_tile_server.rs"
 
 [[bin]]
 name = "service_discovery"
-path = "projects/service_discovery.rs"
+path = "projects/planned/rating_8/service_discovery.rs"
 
 [[bin]]
 name = "tracing_backend"
-path = "projects/tracing_backend.rs"
+path = "projects/planned/rating_8/tracing_backend.rs"
 
 [[bin]]
 name = "vector_search_engine"
-path = "projects/vector_search_engine.rs"
+path = "projects/planned/rating_9/vector_search_engine.rs"
 
 [[bin]]
 name = "image_optimizer"
-path = "projects/image_optimizer.rs"
+path = "projects/planned/rating_6/image_optimizer.rs"
 
 [[bin]]
 name = "workflow_scheduler"
-path = "projects/workflow_scheduler.rs"
+path = "projects/planned/rating_7/workflow_scheduler.rs"
 
 [[bin]]
 name = "collaborative_editor"
-path = "projects/collaborative_editor.rs"
+path = "projects/planned/rating_9/collaborative_editor.rs"
 
 [[bin]]
 name = "mailing_list_manager"
-path = "projects/mailing_list_manager.rs"
+path = "projects/planned/rating_8/mailing_list_manager.rs"
 
 [[bin]]
 name = "ocr_engine"
-path = "projects/ocr_engine.rs"
+path = "projects/planned/rating_8/ocr_engine.rs"
 
 [[bin]]
 name = "dns_resolver"
-path = "projects/dns_resolver.rs"
+path = "projects/planned/rating_7/dns_resolver.rs"
 
 [[bin]]
 name = "ftp_server"
-path = "projects/ftp_server.rs"
+path = "projects/planned/rating_7/ftp_server.rs"
 
 [[bin]]
 name = "video_transcoder"
-path = "projects/video_transcoder.rs"
+path = "projects/planned/rating_8/video_transcoder.rs"
 
 [[bin]]
 name = "static_analyzer"
-path = "projects/static_analyzer.rs"
+path = "projects/planned/rating_8/static_analyzer.rs"
 
 [[bin]]
 name = "release_engineering"
-path = "projects/release_engineering.rs"
+path = "projects/planned/rating_7/release_engineering.rs"
 
 [[bin]]
 name = "event_sourcing_db"
-path = "projects/event_sourcing_db.rs"
+path = "projects/planned/rating_9/event_sourcing_db.rs"
 
 [[bin]]
 name = "browser_automation"
-path = "projects/browser_automation.rs"
+path = "projects/planned/rating_8/browser_automation.rs"
 
 [[bin]]
 name = "hdfs_clone"
-path = "projects/hdfs_clone.rs"
+path = "projects/planned/rating_10/hdfs_clone.rs"
 
 [[bin]]
 name = "schema_registry"
-path = "projects/schema_registry.rs"
+path = "projects/planned/rating_8/schema_registry.rs"
 
 [[bin]]
 name = "secrets_manager"
-path = "projects/secrets_manager.rs"
+path = "projects/planned/rating_8/secrets_manager.rs"
 
 [[bin]]
 name = "activitypub_server"
-path = "projects/activitypub_server.rs"
+path = "projects/planned/rating_9/activitypub_server.rs"
 
 [[bin]]
 name = "sip_proxy"
-path = "projects/sip_proxy.rs"
+path = "projects/planned/rating_8/sip_proxy.rs"
 
 [[bin]]
 name = "reverse_tunnel"
-path = "projects/reverse_tunnel.rs"
+path = "projects/planned/rating_8/reverse_tunnel.rs"
 
 [[bin]]
 name = "dedup_engine"
-path = "projects/dedup_engine.rs"
+path = "projects/planned/rating_7/dedup_engine.rs"
 
 [[bin]]
 name = "live_stream_server"
-path = "projects/live_stream_server.rs"
+path = "projects/planned/rating_8/live_stream_server.rs"
 
 [[bin]]
 name = "crash_reporter"
-path = "projects/crash_reporter.rs"
+path = "projects/planned/rating_7/crash_reporter.rs"
 
 [[bin]]
 name = "imap_server"
-path = "projects/imap_server.rs"
+path = "projects/planned/rating_8/imap_server.rs"
 
 [[bin]]
 name = "bot_framework"
-path = "projects/bot_framework.rs"
+path = "projects/planned/rating_7/bot_framework.rs"
 
 [[bin]]
 name = "wiki_engine"
-path = "projects/wiki_engine.rs"
+path = "projects/planned/rating_7/wiki_engine.rs"
 
 [[bin]]
 name = "modbus_gateway"
-path = "projects/modbus_gateway.rs"
+path = "projects/planned/rating_8/modbus_gateway.rs"
 
 [[bin]]
 name = "graphql_gateway"
-path = "projects/graphql_gateway.rs"
+path = "projects/planned/rating_8/graphql_gateway.rs"
 
 [[bin]]
 name = "terminal_multiplexer"
-path = "projects/terminal_multiplexer.rs"
+path = "projects/planned/rating_8/terminal_multiplexer.rs"
 
 [[bin]]
 name = "power_monitor"
-path = "projects/power_monitor.rs"
+path = "projects/planned/rating_6/power_monitor.rs"
 
 [[bin]]
 name = "torrent_tracker"
-path = "projects/torrent_tracker.rs"
+path = "projects/planned/rating_7/torrent_tracker.rs"
 
 [[bin]]
 name = "ldap_server"
-path = "projects/ldap_server.rs"
+path = "projects/planned/rating_8/ldap_server.rs"
 
 [[bin]]
 name = "statsd_server"
-path = "projects/statsd_server.rs"
+path = "projects/planned/rating_7/statsd_server.rs"
 
 [[bin]]
 name = "mail_archive"
-path = "projects/mail_archive.rs"
+path = "projects/planned/rating_8/mail_archive.rs"
 
 [[bin]]
 name = "fuzzer_engine"
-path = "projects/fuzzer_engine.rs"
+path = "projects/planned/rating_9/fuzzer_engine.rs"
 
 [[bin]]
 name = "code_sandbox"
-path = "projects/code_sandbox.rs"
+path = "projects/planned/rating_9/code_sandbox.rs"
 
 [[bin]]
 name = "artifact_proxy"
-path = "projects/artifact_proxy.rs"
+path = "projects/planned/rating_8/artifact_proxy.rs"
 
 [[bin]]
 name = "rss_pipeline"
-path = "projects/rss_pipeline.rs"
+path = "projects/planned/rating_6/rss_pipeline.rs"
 
 [[bin]]
 name = "dns_authority"
-path = "projects/dns_authority.rs"
+path = "projects/planned/rating_8/dns_authority.rs"
 
 [[bin]]
 name = "unit_converter"
-path = "projects/unit_converter.rs"
+path = "projects/planned/rating_3/unit_converter.rs"
 
 [[bin]]
 name = "checksum_tool"
-path = "projects/checksum_tool.rs"
+path = "projects/planned/rating_3/checksum_tool.rs"
 
 [[bin]]
 name = "qr_tool"
-path = "projects/qr_tool.rs"
+path = "projects/planned/rating_4/qr_tool.rs"
 
 [[bin]]
 name = "weather_cli"
-path = "projects/weather_cli.rs"
+path = "projects/planned/rating_3/weather_cli.rs"
 
 [[bin]]
 name = "batch_renamer"
-path = "projects/batch_renamer.rs"
+path = "projects/planned/rating_4/batch_renamer.rs"
 
 [[bin]]
 name = "markdown_reader"
-path = "projects/markdown_reader.rs"
+path = "projects/planned/rating_4/markdown_reader.rs"
 
 [[bin]]
 name = "duplicate_line_filter"
-path = "projects/duplicate_line_filter.rs"
+path = "projects/planned/rating_3/duplicate_line_filter.rs"
 
 [[bin]]
 name = "totp_manager"
-path = "projects/totp_manager.rs"
+path = "projects/planned/rating_4/totp_manager.rs"
 
 [[bin]]
 name = "calculator_cli"
-path = "projects/calculator_cli.rs"
+path = "projects/planned/rating_2/calculator_cli.rs"
 
 [[bin]]
 name = "json_viewer"
-path = "projects/json_viewer.rs"
+path = "projects/planned/rating_3/json_viewer.rs"
 
 [[bin]]
 name = "timer_cli"
-path = "projects/timer_cli.rs"
+path = "projects/planned/rating_2/timer_cli.rs"
 
 [[bin]]
 name = "password_store_cli"
-path = "projects/password_store_cli.rs"
+path = "projects/planned/rating_4/password_store_cli.rs"
 
 [[bin]]
 name = "csv_pretty_printer"
-path = "projects/csv_pretty_printer.rs"
+path = "projects/planned/rating_3/csv_pretty_printer.rs"
 
 [[bin]]
 name = "text_diff_cli"
-path = "projects/text_diff_cli.rs"
+path = "projects/planned/rating_4/text_diff_cli.rs"
 
 [[bin]]
 name = "file_splitter"
-path = "projects/file_splitter.rs"
+path = "projects/planned/rating_3/file_splitter.rs"
 
 [[bin]]
 name = "env_linter"
-path = "projects/env_linter.rs"
+path = "projects/planned/rating_3/env_linter.rs"
 
 [[bin]]
 name = "base64_cli"
-path = "projects/base64_cli.rs"
+path = "projects/planned/rating_2/base64_cli.rs"
 
 [[bin]]
 name = "hex_viewer"
-path = "projects/hex_viewer.rs"
+path = "projects/planned/rating_3/hex_viewer.rs"
 
 [[bin]]
 name = "uuid_generator"
-path = "projects/uuid_generator.rs"
+path = "projects/planned/rating_2/uuid_generator.rs"
 
 [[bin]]
 name = "gitignore_gen"
-path = "projects/gitignore_gen.rs"
+path = "projects/planned/rating_2/gitignore_gen.rs"
 
 [[bin]]
 name = "http_client_cli"
-path = "projects/http_client_cli.rs"
+path = "projects/planned/rating_4/http_client_cli.rs"
 
 [[bin]]
 name = "archive_extractor"
-path = "projects/archive_extractor.rs"
+path = "projects/planned/rating_4/archive_extractor.rs"
 
 [[bin]]
 name = "file_finder"
-path = "projects/file_finder.rs"
+path = "projects/planned/rating_3/file_finder.rs"
 
 [[bin]]
 name = "color_preview"
-path = "projects/color_preview.rs"
+path = "projects/planned/rating_2/color_preview.rs"
 
 [[bin]]
 name = "wc_clone"
-path = "projects/wc_clone.rs"
+path = "projects/planned/rating_2/wc_clone.rs"
 
 [[bin]]
 name = "line_ending_converter"
-path = "projects/line_ending_converter.rs"
+path = "projects/planned/rating_3/line_ending_converter.rs"
 
 [[bin]]
 name = "slug_generator"
-path = "projects/slug_generator.rs"
+path = "projects/planned/rating_2/slug_generator.rs"
 
 [[bin]]
 name = "notes_cli"
-path = "projects/notes_cli.rs"
+path = "projects/planned/rating_3/notes_cli.rs"
 
 [[bin]]
 name = "ascii_table"
-path = "projects/ascii_table.rs"
+path = "projects/planned/rating_2/ascii_table.rs"
 
 [[bin]]
 name = "url_codec"
-path = "projects/url_codec.rs"
+path = "projects/planned/rating_2/url_codec.rs"
 
 [[bin]]
 name = "ini_inspector"
-path = "projects/ini_inspector.rs"
+path = "projects/planned/rating_4/ini_inspector.rs"
 
 [[bin]]
 name = "date_calculator"
-path = "projects/date_calculator.rs"
+path = "projects/planned/rating_4/date_calculator.rs"
 
 [[bin]]
 name = "feature_flag_service"
-path = "projects/feature_flag_service.rs"
+path = "projects/planned/rating_6/feature_flag_service.rs"
 
 [[bin]]
 name = "cron_scheduler"
-path = "projects/cron_scheduler.rs"
+path = "projects/planned/rating_5/cron_scheduler.rs"
 
 [[bin]]
 name = "api_mock_server"
-path = "projects/api_mock_server.rs"
+path = "projects/planned/rating_5/api_mock_server.rs"
 
 [[bin]]
 name = "backup_tool"
-path = "projects/backup_tool.rs"
+path = "projects/planned/rating_6/backup_tool.rs"
 
 [[bin]]
 name = "notebook_sync_engine"
-path = "projects/notebook_sync_engine.rs"
+path = "projects/planned/rating_7/notebook_sync_engine.rs"
 
 [[bin]]
 name = "search_indexer"
-path = "projects/search_indexer.rs"
+path = "projects/planned/rating_7/search_indexer.rs"
 
 [[bin]]
 name = "media_library_server"
-path = "projects/media_library_server.rs"
+path = "projects/planned/rating_7/media_library_server.rs"
 
 [[bin]]
 name = "package_registry"
-path = "projects/package_registry.rs"
+path = "projects/planned/rating_8/package_registry.rs"
 
 [[bin]]
 name = "ci_runner"
-path = "projects/ci_runner.rs"
+path = "projects/planned/rating_7/ci_runner.rs"
 
 [[bin]]
 name = "metrics_dashboard"
-path = "projects/metrics_dashboard.rs"
+path = "projects/planned/rating_6/metrics_dashboard.rs"
 
 [[bin]]
 name = "plugin_runtime"
-path = "projects/plugin_runtime.rs"
+path = "projects/planned/rating_8/plugin_runtime.rs"
 
 [[bin]]
 name = "notification_hub"
-path = "projects/notification_hub.rs"
+path = "projects/planned/rating_5/notification_hub.rs"
 
 [[bin]]
 name = "config_deployer"
-path = "projects/config_deployer.rs"
+path = "projects/planned/rating_6/config_deployer.rs"
 
 [[bin]]
 name = "artifact_signer"
-path = "projects/artifact_signer.rs"
+path = "projects/planned/rating_5/artifact_signer.rs"
 
 [[bin]]
 name = "job_queue_server"
-path = "projects/job_queue_server.rs"
+path = "projects/planned/rating_7/job_queue_server.rs"
 
 [[bin]]
 name = "webhook_dispatcher"
-path = "projects/webhook_dispatcher.rs"
+path = "projects/planned/rating_6/webhook_dispatcher.rs"
 
 [[bin]]
 name = "incident_router"
-path = "projects/incident_router.rs"
+path = "projects/planned/rating_6/incident_router.rs"
 
 [[bin]]
 name = "sbom_scanner"
-path = "projects/sbom_scanner.rs"
+path = "projects/planned/rating_7/sbom_scanner.rs"
 
 [[bin]]
 name = "edge_cache"
-path = "projects/edge_cache.rs"
+path = "projects/planned/rating_6/edge_cache.rs"
 
 [[bin]]
 name = "canary_controller"
-path = "projects/canary_controller.rs"
+path = "projects/planned/rating_8/canary_controller.rs"
 
 [[bin]]
 name = "quota_service"
-path = "projects/quota_service.rs"
+path = "projects/planned/rating_5/quota_service.rs"
 
 [[bin]]
 name = "audit_trail_store"
-path = "projects/audit_trail_store.rs"
+path = "projects/planned/rating_6/audit_trail_store.rs"
 
 [[bin]]
 name = "rollout_manager"
-path = "projects/rollout_manager.rs"
+path = "projects/planned/rating_7/rollout_manager.rs"
 
 [[bin]]
 name = "dependency_mirror"
-path = "projects/dependency_mirror.rs"
+path = "projects/planned/rating_7/dependency_mirror.rs"
 
 [[bin]]
 name = "chaos_orchestrator"
-path = "projects/chaos_orchestrator.rs"
+path = "projects/planned/rating_8/chaos_orchestrator.rs"
 
 [[bin]]
 name = "session_store"
-path = "projects/session_store.rs"
+path = "projects/planned/rating_5/session_store.rs"
 
 [[bin]]
 name = "api_contract_tester"
-path = "projects/api_contract_tester.rs"
+path = "projects/planned/rating_6/api_contract_tester.rs"
 
 [[bin]]
 name = "cache_invalidator"
-path = "projects/cache_invalidator.rs"
+path = "projects/planned/rating_6/cache_invalidator.rs"
 
 [[bin]]
 name = "compliance_checker"
-path = "projects/compliance_checker.rs"
+path = "projects/planned/rating_7/compliance_checker.rs"
 
 [[bin]]
 name = "synthetic_probe"
-path = "projects/synthetic_probe.rs"
+path = "projects/planned/rating_5/synthetic_probe.rs"
 
 [[bin]]
 name = "threat_feed_aggregator"
-path = "projects/threat_feed_aggregator.rs"
+path = "projects/planned/rating_8/threat_feed_aggregator.rs"
 
 [[bin]]
 name = "tenant_provisioner"
-path = "projects/tenant_provisioner.rs"
+path = "projects/planned/rating_7/tenant_provisioner.rs"
 
 [[bin]]
 name = "release_train"
-path = "projects/release_train.rs"
+path = "projects/planned/rating_6/release_train.rs"
 
 [[bin]]
 name = "incident_timeline"
-path = "projects/incident_timeline.rs"
+path = "projects/planned/rating_5/incident_timeline.rs"
 
 [[bin]]
 name = "policy_simulator"
-path = "projects/policy_simulator.rs"
+path = "projects/planned/rating_6/policy_simulator.rs"
 
 [[bin]]
 name = "dependency_auditor"
-path = "projects/dependency_auditor.rs"
+path = "projects/planned/rating_7/dependency_auditor.rs"
 
 [[bin]]
 name = "traffic_replayer"
-path = "projects/traffic_replayer.rs"
+path = "projects/planned/rating_7/traffic_replayer.rs"
 
 [[bin]]
 name = "failover_coordinator"
-path = "projects/failover_coordinator.rs"
+path = "projects/planned/rating_8/failover_coordinator.rs"
 
 [[bin]]
 name = "tenant_billing_meter"
-path = "projects/tenant_billing_meter.rs"
+path = "projects/planned/rating_6/tenant_billing_meter.rs"
 
 [[bin]]
 name = "runtime_profiler"
-path = "projects/runtime_profiler.rs"
+path = "projects/planned/rating_5/runtime_profiler.rs"
 
 [[bin]]
 name = "service_catalog"
-path = "projects/service_catalog.rs"
+path = "projects/planned/rating_6/service_catalog.rs"
 
 [[bin]]
 name = "incident_postmortem"
-path = "projects/incident_postmortem.rs"
+path = "projects/planned/rating_5/incident_postmortem.rs"
 
 [[bin]]
 name = "access_review_engine"
-path = "projects/access_review_engine.rs"
+path = "projects/planned/rating_7/access_review_engine.rs"
 
 [[bin]]
 name = "secret_rotation_service"
-path = "projects/secret_rotation_service.rs"
+path = "projects/planned/rating_7/secret_rotation_service.rs"
 
 [[bin]]
 name = "capacity_planner"
-path = "projects/capacity_planner.rs"
+path = "projects/planned/rating_6/capacity_planner.rs"
 
 [[bin]]
 name = "uptime_sla_tracker"
-path = "projects/uptime_sla_tracker.rs"
+path = "projects/planned/rating_5/uptime_sla_tracker.rs"
 
 [[bin]]
 name = "config_diff_auditor"
-path = "projects/config_diff_auditor.rs"
+path = "projects/planned/rating_6/config_diff_auditor.rs"
 
 [[bin]]
 name = "api_replay_harness"
-path = "projects/api_replay_harness.rs"
+path = "projects/planned/rating_7/api_replay_harness.rs"
 
 [[bin]]
 name = "change_approval_engine"
-path = "projects/change_approval_engine.rs"
+path = "projects/planned/rating_7/change_approval_engine.rs"
 
 [[bin]]
 name = "log_redaction_gateway"
-path = "projects/log_redaction_gateway.rs"
+path = "projects/planned/rating_6/log_redaction_gateway.rs"
 
 [[bin]]
 name = "schema_migration_planner"
-path = "projects/schema_migration_planner.rs"
+path = "projects/planned/rating_8/schema_migration_planner.rs"
 
 [[bin]]
 name = "incident_simulator"
-path = "projects/incident_simulator.rs"
+path = "projects/planned/rating_6/incident_simulator.rs"
 
 [[bin]]
 name = "api_deprecation_tracker"
-path = "projects/api_deprecation_tracker.rs"
+path = "projects/planned/rating_5/api_deprecation_tracker.rs"
 
 [[bin]]
 name = "workload_forecaster"
-path = "projects/workload_forecaster.rs"
+path = "projects/planned/rating_6/workload_forecaster.rs"
 
 [[bin]]
 name = "credential_inventory"
-path = "projects/credential_inventory.rs"
+path = "projects/planned/rating_6/credential_inventory.rs"
 
 [[bin]]
 name = "delivery_slo_guard"
-path = "projects/delivery_slo_guard.rs"
+path = "projects/planned/rating_7/delivery_slo_guard.rs"
 
 [[bin]]
 name = "blast_radius_analyzer"
-path = "projects/blast_radius_analyzer.rs"
+path = "projects/planned/rating_7/blast_radius_analyzer.rs"
 
 [[bin]]
 name = "runbook_recommender"
-path = "projects/runbook_recommender.rs"
+path = "projects/planned/rating_6/runbook_recommender.rs"
 
 [[bin]]
 name = "maintenance_window_manager"
-path = "projects/maintenance_window_manager.rs"
+path = "projects/planned/rating_5/maintenance_window_manager.rs"
 
 [[bin]]
 name = "latency_budget_planner"
-path = "projects/latency_budget_planner.rs"
+path = "projects/planned/rating_6/latency_budget_planner.rs"
 
 [[bin]]
 name = "release_guardrail"
-path = "projects/release_guardrail.rs"
+path = "projects/planned/rating_7/release_guardrail.rs"
 
 [[bin]]
 name = "dependency_risk_heatmap"
-path = "projects/dependency_risk_heatmap.rs"
+path = "projects/planned/rating_6/dependency_risk_heatmap.rs"
 
 [[bin]]
 name = "authz_drift_detector"
-path = "projects/authz_drift_detector.rs"
+path = "projects/planned/rating_8/authz_drift_detector.rs"
 
 [[bin]]
 name = "incident_comms_broker"
-path = "projects/incident_comms_broker.rs"
+path = "projects/planned/rating_6/incident_comms_broker.rs"
 
 [[bin]]
 name = "rust_engine_game"

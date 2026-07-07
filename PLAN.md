@@ -85,244 +85,244 @@ The following projects currently have no unchecked items left in their TODO guid
 
 | Binary | TODO Guide |
 |--------|------------|
-| `genpass` | [random_password_TODO.md](projects/random_password_TODO.md) |
-| `jsonfmt` | [json_formatter_TODO.md](projects/json_formatter_TODO.md) |
-| `rgrep` | [mini_grep_TODO.md](projects/mini_grep_TODO.md) |
-| `url_shortener` | [url_shortener_TODO.md](projects/url_shortener_TODO.md) |
-| `lru_cache` | [lru_cache_TODO.md](projects/lru_cache_TODO.md) |
-| `watchdir` | [file_watcher_TODO.md](projects/file_watcher_TODO.md) |
-| `logparse` | [log_parser_TODO.md](projects/log_parser_TODO.md) |
-| `api_gateway` | [api_gateway_TODO.md](projects/api_gateway_TODO.md) |
+| `genpass` | [random_password_TODO.md](projects/completed/random_password_TODO.md) |
+| `jsonfmt` | [json_formatter_TODO.md](projects/completed/json_formatter_TODO.md) |
+| `rgrep` | [mini_grep_TODO.md](projects/completed/mini_grep_TODO.md) |
+| `url_shortener` | [url_shortener_TODO.md](projects/completed/url_shortener_TODO.md) |
+| `lru_cache` | [lru_cache_TODO.md](projects/completed/lru_cache_TODO.md) |
+| `watchdir` | [file_watcher_TODO.md](projects/completed/file_watcher_TODO.md) |
+| `logparse` | [log_parser_TODO.md](projects/completed/log_parser_TODO.md) |
+| `api_gateway` | [api_gateway_TODO.md](projects/completed/api_gateway_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
 | # | Rating | Status | Binary | Source | Goal |
 |---|--------|--------|--------|--------|------|
-| 1 | ⭐ 1/10 | Completed | `genpass` | [random_password_cli.rs](projects/random_password_cli.rs) | Rust basics |
-| 2 | ⭐ 2/10 | Completed | `jsonfmt` | [json_formatter_cli.rs](projects/json_formatter_cli.rs) | Serialization with serde |
-| 3 | ⭐ 2/10 | Completed | `rgrep` | [mini_grep_cli.rs](projects/mini_grep_cli.rs) | Ownership + iterators |
-| 4 | ⭐ 2/10 | Planned | `calculator_cli` | [calculator_cli.rs](projects/calculator_cli.rs) | Evaluate basic arithmetic expressions |
-| 5 | ⭐ 2/10 | Planned | `timer_cli` | [timer_cli.rs](projects/timer_cli.rs) | Countdown and stopwatch utility |
-| 6 | ⭐ 2/10 | Planned | `base64_cli` | [base64_cli.rs](projects/base64_cli.rs) | Encode and decode Base64 data |
-| 7 | ⭐ 2/10 | Planned | `uuid_generator` | [uuid_generator.rs](projects/uuid_generator.rs) | Generate UUIDs from CLI |
-| 8 | ⭐ 2/10 | Planned | `gitignore_gen` | [gitignore_gen.rs](projects/gitignore_gen.rs) | Generate `.gitignore` presets |
-| 9 | ⭐ 2/10 | Planned | `color_preview` | [color_preview.rs](projects/color_preview.rs) | Preview colors in the terminal |
-| 10 | ⭐ 2/10 | Planned | `wc_clone` | [wc_clone.rs](projects/wc_clone.rs) | Count lines, words, and bytes |
-| 11 | ⭐ 2/10 | Planned | `slug_generator` | [slug_generator.rs](projects/slug_generator.rs) | Generate URL-friendly slugs |
-| 12 | ⭐ 2/10 | Planned | `ascii_table` | [ascii_table.rs](projects/ascii_table.rs) | Print an ASCII reference table |
-| 13 | ⭐ 2/10 | Planned | `url_codec` | [url_codec.rs](projects/url_codec.rs) | Encode and decode URL components |
-| 14 | ⭐ 3/10 | Completed | `url_shortener` | [url_shortener.rs](projects/url_shortener.rs) | Data modeling |
-| 15 | ⭐ 3/10 | Completed | `lru_cache` | [lru_cache.rs](projects/lru_cache.rs) | Ownership thinking |
-| 16 | ⭐ 3/10 | Planned | `unit_converter` | [unit_converter.rs](projects/unit_converter.rs) | Simple unit conversions from CLI input |
-| 17 | ⭐ 3/10 | Planned | `checksum_tool` | [checksum_tool.rs](projects/checksum_tool.rs) | File hashing + checksum verification |
-| 18 | ⭐ 3/10 | Planned | `weather_cli` | [weather_cli.rs](projects/weather_cli.rs) | Current weather + short forecast output |
-| 19 | ⭐ 3/10 | Planned | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/duplicate_line_filter.rs) | Remove or count repeated lines |
-| 20 | ⭐ 3/10 | Planned | `json_viewer` | [json_viewer.rs](projects/json_viewer.rs) | Pretty-print JSON data |
-| 21 | ⭐ 3/10 | Planned | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/csv_pretty_printer.rs) | Render CSV as aligned tables |
-| 22 | ⭐ 3/10 | Planned | `file_splitter` | [file_splitter.rs](projects/file_splitter.rs) | Split files by size or lines |
-| 23 | ⭐ 3/10 | Planned | `env_linter` | [env_linter.rs](projects/env_linter.rs) | Detect common `.env` file issues |
-| 24 | ⭐ 3/10 | Planned | `hex_viewer` | [hex_viewer.rs](projects/hex_viewer.rs) | Inspect binary files in hex |
-| 25 | ⭐ 3/10 | Planned | `file_finder` | [file_finder.rs](projects/file_finder.rs) | Recursively search files by pattern |
-| 26 | ⭐ 3/10 | Planned | `line_ending_converter` | [line_ending_converter.rs](projects/line_ending_converter.rs) | Convert text line endings |
-| 27 | ⭐ 3/10 | Planned | `notes_cli` | [notes_cli.rs](projects/notes_cli.rs) | Store and manage simple notes |
-| 28 | ⭐ 4/10 | Completed | `watchdir` | [file_watcher_cli.rs](projects/file_watcher_cli.rs) | Filesystem events + channels + debounce |
-| 29 | ⭐ 4/10 | Completed | `logparse` | [log_parser_cli.rs](projects/log_parser_cli.rs) | Iterators + parsing + aggregation |
-| 30 | ⭐ 4/10 | Planned | `qr_tool` | [qr_tool.rs](projects/qr_tool.rs) | QR encode/decode utility |
-| 31 | ⭐ 4/10 | Planned | `batch_renamer` | [batch_renamer.rs](projects/batch_renamer.rs) | Safe bulk filename transformation |
-| 32 | ⭐ 4/10 | Planned | `markdown_reader` | [markdown_reader.rs](projects/markdown_reader.rs) | Terminal markdown viewing |
-| 33 | ⭐ 4/10 | Planned | `totp_manager` | [totp_manager.rs](projects/totp_manager.rs) | Local TOTP code generator |
-| 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/password_store_cli.rs) | Simple encrypted secret storage |
-| 35 | ⭐ 4/10 | Planned | `text_diff_cli` | [text_diff_cli.rs](projects/text_diff_cli.rs) | Line-by-line text comparison |
-| 36 | ⭐ 4/10 | Planned | `http_client_cli` | [http_client_cli.rs](projects/http_client_cli.rs) | Send simple HTTP requests |
-| 37 | ⭐ 4/10 | Planned | `archive_extractor` | [archive_extractor.rs](projects/archive_extractor.rs) | List and extract simple archives |
-| 38 | ⭐ 4/10 | Planned | `ini_inspector` | [ini_inspector.rs](projects/ini_inspector.rs) | Inspect and query INI files |
-| 39 | ⭐ 4/10 | Planned | `date_calculator` | [date_calculator.rs](projects/date_calculator.rs) | Perform simple date arithmetic |
-| 40 | ⭐ 5/10 | Planned | `rest_api` | [rest_api.rs](projects/rest_api.rs) | Production backend |
-| 41 | ⭐ 5/10 | Planned | `crawler` | [web_crawler.rs](projects/web_crawler.rs) | Async mindset |
-| 42 | ⭐ 5/10 | Planned | `dns_toolkit` | [dns_toolkit.rs](projects/dns_toolkit.rs) | Binary protocol + UDP networking |
-| 43 | ⭐ 5/10 | Planned | `mini_git` | [mini_git.rs](projects/mini_git.rs) | Content-addressed storage |
-| 44 | ⭐ 5/10 | Planned | `loadtest` | [http_load_tester.rs](projects/http_load_tester.rs) | Performance testing + latency stats |
-| 45 | ⭐ 5/10 | Planned | `markdown_parser` | [markdown_parser.rs](projects/markdown_parser.rs) | Text format parsing |
-| 46 | ⭐ 5/10 | Planned | `spell_checker` | [spell_checker.rs](projects/spell_checker.rs) | String processing + suggestion ranking |
-| 47 | ⭐ 5/10 | Planned | `cron_scheduler` | [cron_scheduler.rs](projects/cron_scheduler.rs) | Run jobs on cron-like schedules |
-| 48 | ⭐ 5/10 | Planned | `api_mock_server` | [api_mock_server.rs](projects/api_mock_server.rs) | Serve configurable mock API responses |
-| 49 | ⭐ 5/10 | Planned | `notification_hub` | [notification_hub.rs](projects/notification_hub.rs) | Route notifications to multiple sinks |
-| 50 | ⭐ 5/10 | Planned | `artifact_signer` | [artifact_signer.rs](projects/artifact_signer.rs) | Sign and verify build artifacts |
-| 51 | ⭐ 5/10 | Planned | `quota_service` | [quota_service.rs](projects/quota_service.rs) | Enforce tenant and endpoint quotas |
-| 52 | ⭐ 5/10 | Planned | `session_store` | [session_store.rs](projects/session_store.rs) | Manage expiring user sessions safely |
-| 53 | ⭐ 5/10 | Planned | `synthetic_probe` | [synthetic_probe.rs](projects/synthetic_probe.rs) | Run scheduled probes and health checks |
-| 54 | ⭐ 5/10 | Planned | `incident_timeline` | [incident_timeline.rs](projects/incident_timeline.rs) | Build incident timelines from event streams |
-| 55 | ⭐ 5/10 | Planned | `runtime_profiler` | [runtime_profiler.rs](projects/runtime_profiler.rs) | Summarize runtime hotspots and regressions |
-| 56 | ⭐ 5/10 | Planned | `incident_postmortem` | [incident_postmortem.rs](projects/incident_postmortem.rs) | Generate postmortems from incident records |
-| 57 | ⭐ 5/10 | Planned | `uptime_sla_tracker` | [uptime_sla_tracker.rs](projects/uptime_sla_tracker.rs) | Measure SLA compliance and error budgets |
-| 58 | ⭐ 5/10 | Planned | `api_deprecation_tracker` | [api_deprecation_tracker.rs](projects/api_deprecation_tracker.rs) | Track API sunset timelines and usage risk |
-| 59 | ⭐ 5/10 | Planned | `maintenance_window_manager` | [maintenance_window_manager.rs](projects/maintenance_window_manager.rs) | Plan and validate maintenance windows |
-| 60 | ⭐ 6/10 | Planned | `redis_clone` | [redis_clone.rs](projects/redis_clone.rs) | Network + memory |
-| 61 | ⭐ 6/10 | Planned | `metrics_collector` | [metrics_collector.rs](projects/metrics_collector.rs) | Observability |
-| 62 | ⭐ 6/10 | Planned | `job_queue` | [job_queue.rs](projects/job_queue.rs) | Retries, DLQ, worker orchestration |
-| 63 | ⭐ 6/10 | Planned | `inv_index` | [inverted_index.rs](projects/inverted_index.rs) | Search indexing + ranking |
-| 64 | ⭐ 6/10 | Planned | `mini_shell` | [mini_shell.rs](projects/mini_shell.rs) | Process control + pipes |
-| 65 | ⭐ 6/10 | WIP | `invaders` | [invaders.rs](projects/invaders.rs) | Terminal game loop + rendering |
-| 66 | ⭐ 6/10 | Planned | `auth_service` | [auth_service.rs](projects/auth_service.rs) | Authentication and session design |
-| 67 | ⭐ 6/10 | Planned | `wasm_game_of_life` | [wasm_game_of_life.rs](projects/wasm_game_of_life.rs) | Rust + WebAssembly UI loop |
-| 68 | ⭐ 6/10 | Planned | `feature_flag_server` | [feature_flag_server.rs](projects/feature_flag_server.rs) | Rollout targeting + evaluation API |
-| 69 | ⭐ 6/10 | Planned | `image_optimizer` | [image_optimizer.rs](projects/image_optimizer.rs) | Lossless compression + batch processing |
-| 70 | ⭐ 6/10 | Planned | `power_monitor` | [power_monitor.rs](projects/power_monitor.rs) | Host energy sampling + trend reporting |
-| 71 | ⭐ 6/10 | Planned | `rss_pipeline` | [rss_pipeline.rs](projects/rss_pipeline.rs) | Feed ingestion + transform pipeline |
-| 72 | ⭐ 6/10 | Planned | `feature_flag_service` | [feature_flag_service.rs](projects/feature_flag_service.rs) | Evaluate feature flags over an API |
-| 73 | ⭐ 6/10 | Planned | `backup_tool` | [backup_tool.rs](projects/backup_tool.rs) | Create and restore filesystem snapshots |
-| 74 | ⭐ 6/10 | Planned | `metrics_dashboard` | [metrics_dashboard.rs](projects/metrics_dashboard.rs) | Aggregate and visualize runtime metrics |
-| 75 | ⭐ 6/10 | Planned | `config_deployer` | [config_deployer.rs](projects/config_deployer.rs) | Validate and roll out configuration changes |
-| 76 | ⭐ 6/10 | Planned | `webhook_dispatcher` | [webhook_dispatcher.rs](projects/webhook_dispatcher.rs) | Deliver webhooks with retry/backoff |
-| 77 | ⭐ 6/10 | Planned | `incident_router` | [incident_router.rs](projects/incident_router.rs) | Route incidents with escalation policies |
-| 78 | ⭐ 6/10 | Planned | `edge_cache` | [edge_cache.rs](projects/edge_cache.rs) | Cache and revalidate edge responses |
-| 79 | ⭐ 6/10 | Planned | `audit_trail_store` | [audit_trail_store.rs](projects/audit_trail_store.rs) | Append-only audit event storage |
-| 80 | ⭐ 6/10 | Planned | `api_contract_tester` | [api_contract_tester.rs](projects/api_contract_tester.rs) | Validate APIs against contract expectations |
-| 81 | ⭐ 6/10 | Planned | `cache_invalidator` | [cache_invalidator.rs](projects/cache_invalidator.rs) | Coordinate distributed cache invalidation |
-| 82 | ⭐ 6/10 | Planned | `release_train` | [release_train.rs](projects/release_train.rs) | Coordinate gated release train promotions |
-| 83 | ⭐ 6/10 | Planned | `policy_simulator` | [policy_simulator.rs](projects/policy_simulator.rs) | Dry-run policy changes with explain traces |
-| 84 | ⭐ 6/10 | Planned | `tenant_billing_meter` | [tenant_billing_meter.rs](projects/tenant_billing_meter.rs) | Meter tenant usage for billing pipelines |
-| 85 | ⭐ 6/10 | Planned | `service_catalog` | [service_catalog.rs](projects/service_catalog.rs) | Maintain service metadata and dependencies |
-| 86 | ⭐ 6/10 | Planned | `capacity_planner` | [capacity_planner.rs](projects/capacity_planner.rs) | Forecast capacity and recommend scaling actions |
-| 87 | ⭐ 6/10 | Planned | `config_diff_auditor` | [config_diff_auditor.rs](projects/config_diff_auditor.rs) | Audit semantic configuration changes |
-| 88 | ⭐ 6/10 | Planned | `log_redaction_gateway` | [log_redaction_gateway.rs](projects/log_redaction_gateway.rs) | Redact sensitive fields from log streams |
-| 89 | ⭐ 6/10 | Planned | `incident_simulator` | [incident_simulator.rs](projects/incident_simulator.rs) | Simulate incident scenarios and response timings |
-| 90 | ⭐ 6/10 | Planned | `workload_forecaster` | [workload_forecaster.rs](projects/workload_forecaster.rs) | Forecast workload demand and variance |
-| 91 | ⭐ 6/10 | Planned | `credential_inventory` | [credential_inventory.rs](projects/credential_inventory.rs) | Inventory credentials and detect stale access |
-| 92 | ⭐ 6/10 | Planned | `runbook_recommender` | [runbook_recommender.rs](projects/runbook_recommender.rs) | Recommend operational runbooks for incidents |
-| 93 | ⭐ 6/10 | Planned | `latency_budget_planner` | [latency_budget_planner.rs](projects/latency_budget_planner.rs) | Allocate and track end-to-end latency budgets |
-| 94 | ⭐ 6/10 | Planned | `dependency_risk_heatmap` | [dependency_risk_heatmap.rs](projects/dependency_risk_heatmap.rs) | Visualize dependency risk concentration |
-| 95 | ⭐ 6/10 | Planned | `incident_comms_broker` | [incident_comms_broker.rs](projects/incident_comms_broker.rs) | Broker incident updates across channels |
-| 96 | ⭐ 7/10 | Completed | `api_gateway` | [api_gateway.rs](projects/api_gateway.rs) | Architecture |
-| 97 | ⭐ 7/10 | Planned | `kafka_consumer` | [kafka_consumer.rs](projects/kafka_consumer.rs) | Enterprise patterns |
-| 98 | ⭐ 7/10 | Planned | `textedit` | [text_editor.rs](projects/text_editor.rs) | Terminal UI + buffer editing |
-| 99 | ⭐ 7/10 | Planned | `socks5_proxy` | [socks5_proxy.rs](projects/socks5_proxy.rs) | Protocol parsing + TCP proxying |
-| 100 | ⭐ 7/10 | Planned | `ws_broker` | [websocket_broker.rs](projects/websocket_broker.rs) | Realtime pub/sub patterns |
-| 101 | ⭐ 7/10 | Planned | `rate_limiter` | [rate_limiter.rs](projects/rate_limiter.rs) | Traffic shaping algorithms |
-| 102 | ⭐ 7/10 | Planned | `tcp_stack` | [tcp_stack.rs](projects/tcp_stack.rs) | Network stack internals |
-| 103 | ⭐ 7/10 | Planned | `mqtt_broker` | [mqtt_broker.rs](projects/mqtt_broker.rs) | Pub/sub protocol server design |
-| 104 | ⭐ 7/10 | Planned | `chip8` | [chip8.rs](projects/chip8.rs) | Emulator architecture |
-| 105 | ⭐ 7/10 | Planned | `ray_tracer` | [ray_tracer.rs](projects/ray_tracer.rs) | Graphics math + rendering |
-| 106 | ⭐ 7/10 | Planned | `image_codec` | [image_codec.rs](projects/image_codec.rs) | Binary file formats |
-| 107 | ⭐ 7/10 | Planned | `terminal_emulator` | [terminal_emulator.rs](projects/terminal_emulator.rs) | PTY handling + ANSI parsing |
-| 108 | ⭐ 7/10 | Planned | `ci_system` | [ci_system.rs](projects/ci_system.rs) | Pipeline orchestration + workers |
-| 109 | ⭐ 7/10 | Planned | `build_system` | [build_system.rs](projects/build_system.rs) | DAG execution + incremental builds |
-| 110 | ⭐ 7/10 | Planned | `secret_scanner` | [secret_scanner.rs](projects/secret_scanner.rs) | Credential detection + risk reporting |
-| 111 | ⭐ 7/10 | Planned | `policy_engine` | [policy_engine.rs](projects/policy_engine.rs) | Authorization rules + decision traces |
-| 112 | ⭐ 7/10 | Planned | `spreadsheet_engine` | [spreadsheet_engine.rs](projects/spreadsheet_engine.rs) | Formula graphs + recalculation |
-| 113 | ⭐ 7/10 | Planned | `webhook_gateway` | [webhook_gateway.rs](projects/webhook_gateway.rs) | Signed delivery + retry queues |
-| 114 | ⭐ 7/10 | Planned | `config_manager` | [config_manager.rs](projects/config_manager.rs) | Declarative state reconciliation |
-| 115 | ⭐ 7/10 | Planned | `irc_server` | [irc_server.rs](projects/irc_server.rs) | Realtime chat protocol server |
-| 116 | ⭐ 7/10 | Planned | `workflow_scheduler` | [workflow_scheduler.rs](projects/workflow_scheduler.rs) | Timed triggers + durable retries |
-| 117 | ⭐ 7/10 | Planned | `dns_resolver` | [dns_resolver.rs](projects/dns_resolver.rs) | Recursive lookups + TTL caching |
-| 118 | ⭐ 7/10 | Planned | `ftp_server` | [ftp_server.rs](projects/ftp_server.rs) | Control/data channel protocol handling |
-| 119 | ⭐ 7/10 | Planned | `release_engineering` | [release_engineering.rs](projects/release_engineering.rs) | Versioning + artifact promotion |
-| 120 | ⭐ 7/10 | Planned | `dedup_engine` | [dedup_engine.rs](projects/dedup_engine.rs) | File deduplication + reclaim planning |
-| 121 | ⭐ 7/10 | Planned | `crash_reporter` | [crash_reporter.rs](projects/crash_reporter.rs) | Crash event intake + issue grouping |
-| 122 | ⭐ 7/10 | Planned | `bot_framework` | [bot_framework.rs](projects/bot_framework.rs) | Event-driven bot runtime + adapters |
-| 123 | ⭐ 7/10 | Planned | `wiki_engine` | [wiki_engine.rs](projects/wiki_engine.rs) | Revisioned pages + internal link graph |
-| 124 | ⭐ 7/10 | Planned | `torrent_tracker` | [torrent_tracker.rs](projects/torrent_tracker.rs) | Peer announce handling + swarm coordination |
-| 125 | ⭐ 7/10 | Planned | `statsd_server` | [statsd_server.rs](projects/statsd_server.rs) | Metrics line ingestion + timed aggregation |
-| 126 | ⭐ 7/10 | Planned | `notebook_sync_engine` | [notebook_sync_engine.rs](projects/notebook_sync_engine.rs) | Sync notebooks and detect conflicts |
-| 127 | ⭐ 7/10 | Planned | `search_indexer` | [search_indexer.rs](projects/search_indexer.rs) | Build and query an inverted search index |
-| 128 | ⭐ 7/10 | Planned | `media_library_server` | [media_library_server.rs](projects/media_library_server.rs) | Catalog and browse a media library |
-| 129 | ⭐ 7/10 | Planned | `ci_runner` | [ci_runner.rs](projects/ci_runner.rs) | Execute CI jobs with isolated steps |
-| 130 | ⭐ 7/10 | Planned | `job_queue_server` | [job_queue_server.rs](projects/job_queue_server.rs) | Manage durable queues and worker leases |
-| 131 | ⭐ 7/10 | Planned | `sbom_scanner` | [sbom_scanner.rs](projects/sbom_scanner.rs) | Build SBOM reports and risk summaries |
-| 132 | ⭐ 7/10 | Planned | `rollout_manager` | [rollout_manager.rs](projects/rollout_manager.rs) | Execute staged feature rollouts safely |
-| 133 | ⭐ 7/10 | Planned | `dependency_mirror` | [dependency_mirror.rs](projects/dependency_mirror.rs) | Mirror dependency metadata and artifacts |
-| 134 | ⭐ 7/10 | Planned | `compliance_checker` | [compliance_checker.rs](projects/compliance_checker.rs) | Evaluate resources against policy controls |
-| 135 | ⭐ 7/10 | Planned | `tenant_provisioner` | [tenant_provisioner.rs](projects/tenant_provisioner.rs) | Provision tenant resources with rollback safety |
-| 136 | ⭐ 7/10 | Planned | `dependency_auditor` | [dependency_auditor.rs](projects/dependency_auditor.rs) | Audit dependency graphs against policy |
-| 137 | ⭐ 7/10 | Planned | `traffic_replayer` | [traffic_replayer.rs](projects/traffic_replayer.rs) | Replay production-like request traffic safely |
-| 138 | ⭐ 7/10 | Planned | `access_review_engine` | [access_review_engine.rs](projects/access_review_engine.rs) | Run periodic entitlement access reviews |
-| 139 | ⭐ 7/10 | Planned | `secret_rotation_service` | [secret_rotation_service.rs](projects/secret_rotation_service.rs) | Coordinate scheduled secret rotations safely |
-| 140 | ⭐ 7/10 | Planned | `api_replay_harness` | [api_replay_harness.rs](projects/api_replay_harness.rs) | Replay API sessions and compare baselines |
-| 141 | ⭐ 7/10 | Planned | `change_approval_engine` | [change_approval_engine.rs](projects/change_approval_engine.rs) | Evaluate and route change approvals |
-| 142 | ⭐ 7/10 | Planned | `delivery_slo_guard` | [delivery_slo_guard.rs](projects/delivery_slo_guard.rs) | Guard delivery SLOs with burn-rate signals |
-| 143 | ⭐ 7/10 | Planned | `blast_radius_analyzer` | [blast_radius_analyzer.rs](projects/blast_radius_analyzer.rs) | Estimate impact scope from dependency graphs |
-| 144 | ⭐ 7/10 | Planned | `release_guardrail` | [release_guardrail.rs](projects/release_guardrail.rs) | Enforce release readiness guard checks |
-| 145 | ⭐ 8/10 | Planned | `workflow_engine` | [workflow_engine.rs](projects/workflow_engine.rs) | State machines + DAG |
-| 146 | ⭐ 8/10 | Planned | `otel_collector` | [otel_collector.rs](projects/otel_collector.rs) | Infra + streaming |
-| 147 | ⭐ 8/10 | Planned | `lsm_kv` | [lsm_kv.rs](projects/lsm_kv.rs) | Storage engine internals |
-| 148 | ⭐ 8/10 | Planned | `bloom_hll` | [bloom_hll.rs](projects/bloom_hll.rs) | Probabilistic data structures |
-| 149 | ⭐ 8/10 | Planned | `file_sync` | [file_sync.rs](projects/file_sync.rs) | Filesystem diff + sync engine |
-| 150 | ⭐ 8/10 | Planned | `template_engine` | [template_engine.rs](projects/template_engine.rs) | Parsing + AST + rendering |
-| 151 | ⭐ 8/10 | Planned | `browser_engine` | [browser_engine.rs](projects/browser_engine.rs) | Parsing + layout + rendering pipeline |
-| 152 | ⭐ 8/10 | Planned | `bytecode_vm` | [bytecode_vm.rs](projects/bytecode_vm.rs) | Interpreter internals |
-| 153 | ⭐ 8/10 | Planned | `mini_compiler` | [mini_compiler.rs](projects/mini_compiler.rs) | Language design + codegen |
-| 154 | ⭐ 8/10 | Planned | `packet_sniffer` | [packet_sniffer.rs](projects/packet_sniffer.rs) | Packet parsing + traffic analysis |
-| 155 | ⭐ 8/10 | Planned | `static_site_gen` | [static_site_gen.rs](projects/static_site_gen.rs) | Build pipeline + content generation |
-| 156 | ⭐ 8/10 | Planned | `toy_debugger` | [toy_debugger.rs](projects/toy_debugger.rs) | Process introspection + breakpoints |
-| 157 | ⭐ 8/10 | Planned | `nes_emulator` | [nes_emulator.rs](projects/nes_emulator.rs) | Hardware emulation + timing |
-| 158 | ⭐ 8/10 | Planned | `memory_allocator` | [memory_allocator.rs](projects/memory_allocator.rs) | Allocation strategies + invariants |
-| 159 | ⭐ 8/10 | Planned | `physics_engine` | [physics_engine.rs](projects/physics_engine.rs) | Simulation + collision resolution |
-| 160 | ⭐ 8/10 | Planned | `fuse_fs` | [fuse_fs.rs](projects/fuse_fs.rs) | Filesystem semantics + inode modeling |
-| 161 | ⭐ 8/10 | Planned | `search_engine` | [search_engine.rs](projects/search_engine.rs) | Indexing + relevance ranking |
-| 162 | ⭐ 8/10 | Planned | `package_manager` | [package_manager.rs](projects/package_manager.rs) | Dependency resolution + artifact lifecycle |
-| 163 | ⭐ 8/10 | Planned | `message_queue` | [message_queue.rs](projects/message_queue.rs) | Durable pub/sub + consumer groups |
-| 164 | ⭐ 8/10 | Planned | `smtp_server` | [smtp_server.rs](projects/smtp_server.rs) | Mail transport + delivery queue |
-| 165 | ⭐ 8/10 | Planned | `backup_engine` | [backup_engine.rs](projects/backup_engine.rs) | Snapshots + dedup + restore |
-| 166 | ⭐ 8/10 | Planned | `cargo_registry` | [cargo_registry.rs](projects/cargo_registry.rs) | Package index + artifact publishing |
-| 167 | ⭐ 8/10 | Planned | `language_server` | [language_server.rs](projects/language_server.rs) | LSP protocol + incremental diagnostics |
-| 168 | ⭐ 8/10 | Planned | `container_registry` | [container_registry.rs](projects/container_registry.rs) | OCI manifests + blob lifecycle |
-| 169 | ⭐ 8/10 | Planned | `map_tile_server` | [map_tile_server.rs](projects/map_tile_server.rs) | Geospatial tile serving + cache |
-| 170 | ⭐ 8/10 | Planned | `service_discovery` | [service_discovery.rs](projects/service_discovery.rs) | Dynamic registry + health watches |
-| 171 | ⭐ 8/10 | Planned | `tracing_backend` | [tracing_backend.rs](projects/tracing_backend.rs) | Trace ingest + search backend |
-| 172 | ⭐ 8/10 | Planned | `mailing_list_manager` | [mailing_list_manager.rs](projects/mailing_list_manager.rs) | Subscription lifecycle + moderated delivery |
-| 173 | ⭐ 8/10 | Planned | `ocr_engine` | [ocr_engine.rs](projects/ocr_engine.rs) | Image preprocessing + text recognition |
-| 174 | ⭐ 8/10 | Planned | `video_transcoder` | [video_transcoder.rs](projects/video_transcoder.rs) | Media job orchestration + progress tracking |
-| 175 | ⭐ 8/10 | Planned | `static_analyzer` | [static_analyzer.rs](projects/static_analyzer.rs) | Rule engine + source diagnostics |
-| 176 | ⭐ 8/10 | Planned | `browser_automation` | [browser_automation.rs](projects/browser_automation.rs) | Session orchestration + DOM actions |
-| 177 | ⭐ 8/10 | Planned | `schema_registry` | [schema_registry.rs](projects/schema_registry.rs) | Schema evolution + compatibility checks |
-| 178 | ⭐ 8/10 | Planned | `secrets_manager` | [secrets_manager.rs](projects/secrets_manager.rs) | Encrypted secret storage + policy control |
-| 179 | ⭐ 8/10 | Planned | `sip_proxy` | [sip_proxy.rs](projects/sip_proxy.rs) | VoIP signaling routing + registration |
-| 180 | ⭐ 8/10 | Planned | `reverse_tunnel` | [reverse_tunnel.rs](projects/reverse_tunnel.rs) | Secure port exposure + multiplexed forwarding |
-| 181 | ⭐ 8/10 | Planned | `live_stream_server` | [live_stream_server.rs](projects/live_stream_server.rs) | Live ingest + segment serving pipeline |
-| 182 | ⭐ 8/10 | Planned | `imap_server` | [imap_server.rs](projects/imap_server.rs) | Mailbox protocol server + sync semantics |
-| 183 | ⭐ 8/10 | Planned | `modbus_gateway` | [modbus_gateway.rs](projects/modbus_gateway.rs) | Industrial protocol bridge + polling |
-| 184 | ⭐ 8/10 | Planned | `graphql_gateway` | [graphql_gateway.rs](projects/graphql_gateway.rs) | Schema composition + resolver orchestration |
-| 185 | ⭐ 8/10 | Planned | `terminal_multiplexer` | [terminal_multiplexer.rs](projects/terminal_multiplexer.rs) | PTY sessions + pane layout control |
-| 186 | ⭐ 8/10 | Planned | `ldap_server` | [ldap_server.rs](projects/ldap_server.rs) | Directory service + LDAP query handling |
-| 187 | ⭐ 8/10 | Planned | `mail_archive` | [mail_archive.rs](projects/mail_archive.rs) | MIME archival + searchable retention |
-| 188 | ⭐ 8/10 | Planned | `artifact_proxy` | [artifact_proxy.rs](projects/artifact_proxy.rs) | Upstream package proxy + integrity cache |
-| 189 | ⭐ 8/10 | Planned | `dns_authority` | [dns_authority.rs](projects/dns_authority.rs) | Authoritative zone serving + delegation rules |
-| 190 | ⭐ 8/10 | Planned | `package_registry` | [package_registry.rs](projects/package_registry.rs) | Publish and fetch package artifacts |
-| 191 | ⭐ 8/10 | Planned | `plugin_runtime` | [plugin_runtime.rs](projects/plugin_runtime.rs) | Load and run sandboxed plugins |
-| 192 | ⭐ 8/10 | Planned | `canary_controller` | [canary_controller.rs](projects/canary_controller.rs) | Automate canary promotion and rollback |
-| 193 | ⭐ 8/10 | Planned | `chaos_orchestrator` | [chaos_orchestrator.rs](projects/chaos_orchestrator.rs) | Run controlled fault injection experiments |
-| 194 | ⭐ 8/10 | Planned | `threat_feed_aggregator` | [threat_feed_aggregator.rs](projects/threat_feed_aggregator.rs) | Aggregate and score threat intelligence feeds |
-| 195 | ⭐ 8/10 | Planned | `failover_coordinator` | [failover_coordinator.rs](projects/failover_coordinator.rs) | Orchestrate failover and safe failback decisions |
-| 196 | ⭐ 8/10 | Planned | `schema_migration_planner` | [schema_migration_planner.rs](projects/schema_migration_planner.rs) | Plan safe schema migrations with rollbacks |
-| 197 | ⭐ 8/10 | Planned | `authz_drift_detector` | [authz_drift_detector.rs](projects/authz_drift_detector.rs) | Detect authorization drift from desired state |
+| 1 | ⭐ 1/10 | Completed | `genpass` | [random_password_cli.rs](projects/completed/random_password_cli.rs) | Rust basics |
+| 2 | ⭐ 2/10 | Completed | `jsonfmt` | [json_formatter_cli.rs](projects/completed/json_formatter_cli.rs) | Serialization with serde |
+| 3 | ⭐ 2/10 | Completed | `rgrep` | [mini_grep_cli.rs](projects/completed/mini_grep_cli.rs) | Ownership + iterators |
+| 4 | ⭐ 2/10 | Planned | `calculator_cli` | [calculator_cli.rs](projects/planned/rating_2/calculator_cli.rs) | Evaluate basic arithmetic expressions |
+| 5 | ⭐ 2/10 | Planned | `timer_cli` | [timer_cli.rs](projects/planned/rating_2/timer_cli.rs) | Countdown and stopwatch utility |
+| 6 | ⭐ 2/10 | Planned | `base64_cli` | [base64_cli.rs](projects/planned/rating_2/base64_cli.rs) | Encode and decode Base64 data |
+| 7 | ⭐ 2/10 | Planned | `uuid_generator` | [uuid_generator.rs](projects/planned/rating_2/uuid_generator.rs) | Generate UUIDs from CLI |
+| 8 | ⭐ 2/10 | Planned | `gitignore_gen` | [gitignore_gen.rs](projects/planned/rating_2/gitignore_gen.rs) | Generate `.gitignore` presets |
+| 9 | ⭐ 2/10 | Planned | `color_preview` | [color_preview.rs](projects/planned/rating_2/color_preview.rs) | Preview colors in the terminal |
+| 10 | ⭐ 2/10 | Planned | `wc_clone` | [wc_clone.rs](projects/planned/rating_2/wc_clone.rs) | Count lines, words, and bytes |
+| 11 | ⭐ 2/10 | Planned | `slug_generator` | [slug_generator.rs](projects/planned/rating_2/slug_generator.rs) | Generate URL-friendly slugs |
+| 12 | ⭐ 2/10 | Planned | `ascii_table` | [ascii_table.rs](projects/planned/rating_2/ascii_table.rs) | Print an ASCII reference table |
+| 13 | ⭐ 2/10 | Planned | `url_codec` | [url_codec.rs](projects/planned/rating_2/url_codec.rs) | Encode and decode URL components |
+| 14 | ⭐ 3/10 | Completed | `url_shortener` | [url_shortener.rs](projects/completed/url_shortener.rs) | Data modeling |
+| 15 | ⭐ 3/10 | Completed | `lru_cache` | [lru_cache.rs](projects/completed/lru_cache.rs) | Ownership thinking |
+| 16 | ⭐ 3/10 | Planned | `unit_converter` | [unit_converter.rs](projects/planned/rating_3/unit_converter.rs) | Simple unit conversions from CLI input |
+| 17 | ⭐ 3/10 | Planned | `checksum_tool` | [checksum_tool.rs](projects/planned/rating_3/checksum_tool.rs) | File hashing + checksum verification |
+| 18 | ⭐ 3/10 | Planned | `weather_cli` | [weather_cli.rs](projects/planned/rating_3/weather_cli.rs) | Current weather + short forecast output |
+| 19 | ⭐ 3/10 | Planned | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/planned/rating_3/duplicate_line_filter.rs) | Remove or count repeated lines |
+| 20 | ⭐ 3/10 | Planned | `json_viewer` | [json_viewer.rs](projects/planned/rating_3/json_viewer.rs) | Pretty-print JSON data |
+| 21 | ⭐ 3/10 | Planned | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/planned/rating_3/csv_pretty_printer.rs) | Render CSV as aligned tables |
+| 22 | ⭐ 3/10 | Planned | `file_splitter` | [file_splitter.rs](projects/planned/rating_3/file_splitter.rs) | Split files by size or lines |
+| 23 | ⭐ 3/10 | Planned | `env_linter` | [env_linter.rs](projects/planned/rating_3/env_linter.rs) | Detect common `.env` file issues |
+| 24 | ⭐ 3/10 | Planned | `hex_viewer` | [hex_viewer.rs](projects/planned/rating_3/hex_viewer.rs) | Inspect binary files in hex |
+| 25 | ⭐ 3/10 | Planned | `file_finder` | [file_finder.rs](projects/planned/rating_3/file_finder.rs) | Recursively search files by pattern |
+| 26 | ⭐ 3/10 | Planned | `line_ending_converter` | [line_ending_converter.rs](projects/planned/rating_3/line_ending_converter.rs) | Convert text line endings |
+| 27 | ⭐ 3/10 | Planned | `notes_cli` | [notes_cli.rs](projects/planned/rating_3/notes_cli.rs) | Store and manage simple notes |
+| 28 | ⭐ 4/10 | Completed | `watchdir` | [file_watcher_cli.rs](projects/completed/file_watcher_cli.rs) | Filesystem events + channels + debounce |
+| 29 | ⭐ 4/10 | Completed | `logparse` | [log_parser_cli.rs](projects/completed/log_parser_cli.rs) | Iterators + parsing + aggregation |
+| 30 | ⭐ 4/10 | Planned | `qr_tool` | [qr_tool.rs](projects/planned/rating_4/qr_tool.rs) | QR encode/decode utility |
+| 31 | ⭐ 4/10 | Planned | `batch_renamer` | [batch_renamer.rs](projects/planned/rating_4/batch_renamer.rs) | Safe bulk filename transformation |
+| 32 | ⭐ 4/10 | Planned | `markdown_reader` | [markdown_reader.rs](projects/planned/rating_4/markdown_reader.rs) | Terminal markdown viewing |
+| 33 | ⭐ 4/10 | Planned | `totp_manager` | [totp_manager.rs](projects/planned/rating_4/totp_manager.rs) | Local TOTP code generator |
+| 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/planned/rating_4/password_store_cli.rs) | Simple encrypted secret storage |
+| 35 | ⭐ 4/10 | Planned | `text_diff_cli` | [text_diff_cli.rs](projects/planned/rating_4/text_diff_cli.rs) | Line-by-line text comparison |
+| 36 | ⭐ 4/10 | Planned | `http_client_cli` | [http_client_cli.rs](projects/planned/rating_4/http_client_cli.rs) | Send simple HTTP requests |
+| 37 | ⭐ 4/10 | Planned | `archive_extractor` | [archive_extractor.rs](projects/planned/rating_4/archive_extractor.rs) | List and extract simple archives |
+| 38 | ⭐ 4/10 | Planned | `ini_inspector` | [ini_inspector.rs](projects/planned/rating_4/ini_inspector.rs) | Inspect and query INI files |
+| 39 | ⭐ 4/10 | Planned | `date_calculator` | [date_calculator.rs](projects/planned/rating_4/date_calculator.rs) | Perform simple date arithmetic |
+| 40 | ⭐ 5/10 | Planned | `rest_api` | [rest_api.rs](projects/planned/rating_5/rest_api.rs) | Production backend |
+| 41 | ⭐ 5/10 | Planned | `crawler` | [web_crawler.rs](projects/planned/rating_5/web_crawler.rs) | Async mindset |
+| 42 | ⭐ 5/10 | Planned | `dns_toolkit` | [dns_toolkit.rs](projects/planned/rating_5/dns_toolkit.rs) | Binary protocol + UDP networking |
+| 43 | ⭐ 5/10 | Planned | `mini_git` | [mini_git.rs](projects/planned/rating_5/mini_git.rs) | Content-addressed storage |
+| 44 | ⭐ 5/10 | Planned | `loadtest` | [http_load_tester.rs](projects/planned/rating_5/http_load_tester.rs) | Performance testing + latency stats |
+| 45 | ⭐ 5/10 | Planned | `markdown_parser` | [markdown_parser.rs](projects/planned/rating_5/markdown_parser.rs) | Text format parsing |
+| 46 | ⭐ 5/10 | Planned | `spell_checker` | [spell_checker.rs](projects/planned/rating_5/spell_checker.rs) | String processing + suggestion ranking |
+| 47 | ⭐ 5/10 | Planned | `cron_scheduler` | [cron_scheduler.rs](projects/planned/rating_5/cron_scheduler.rs) | Run jobs on cron-like schedules |
+| 48 | ⭐ 5/10 | Planned | `api_mock_server` | [api_mock_server.rs](projects/planned/rating_5/api_mock_server.rs) | Serve configurable mock API responses |
+| 49 | ⭐ 5/10 | Planned | `notification_hub` | [notification_hub.rs](projects/planned/rating_5/notification_hub.rs) | Route notifications to multiple sinks |
+| 50 | ⭐ 5/10 | Planned | `artifact_signer` | [artifact_signer.rs](projects/planned/rating_5/artifact_signer.rs) | Sign and verify build artifacts |
+| 51 | ⭐ 5/10 | Planned | `quota_service` | [quota_service.rs](projects/planned/rating_5/quota_service.rs) | Enforce tenant and endpoint quotas |
+| 52 | ⭐ 5/10 | Planned | `session_store` | [session_store.rs](projects/planned/rating_5/session_store.rs) | Manage expiring user sessions safely |
+| 53 | ⭐ 5/10 | Planned | `synthetic_probe` | [synthetic_probe.rs](projects/planned/rating_5/synthetic_probe.rs) | Run scheduled probes and health checks |
+| 54 | ⭐ 5/10 | Planned | `incident_timeline` | [incident_timeline.rs](projects/planned/rating_5/incident_timeline.rs) | Build incident timelines from event streams |
+| 55 | ⭐ 5/10 | Planned | `runtime_profiler` | [runtime_profiler.rs](projects/planned/rating_5/runtime_profiler.rs) | Summarize runtime hotspots and regressions |
+| 56 | ⭐ 5/10 | Planned | `incident_postmortem` | [incident_postmortem.rs](projects/planned/rating_5/incident_postmortem.rs) | Generate postmortems from incident records |
+| 57 | ⭐ 5/10 | Planned | `uptime_sla_tracker` | [uptime_sla_tracker.rs](projects/planned/rating_5/uptime_sla_tracker.rs) | Measure SLA compliance and error budgets |
+| 58 | ⭐ 5/10 | Planned | `api_deprecation_tracker` | [api_deprecation_tracker.rs](projects/planned/rating_5/api_deprecation_tracker.rs) | Track API sunset timelines and usage risk |
+| 59 | ⭐ 5/10 | Planned | `maintenance_window_manager` | [maintenance_window_manager.rs](projects/planned/rating_5/maintenance_window_manager.rs) | Plan and validate maintenance windows |
+| 60 | ⭐ 6/10 | Planned | `redis_clone` | [redis_clone.rs](projects/planned/rating_6/redis_clone.rs) | Network + memory |
+| 61 | ⭐ 6/10 | Planned | `metrics_collector` | [metrics_collector.rs](projects/planned/rating_6/metrics_collector.rs) | Observability |
+| 62 | ⭐ 6/10 | Planned | `job_queue` | [job_queue.rs](projects/planned/rating_6/job_queue.rs) | Retries, DLQ, worker orchestration |
+| 63 | ⭐ 6/10 | Planned | `inv_index` | [inverted_index.rs](projects/planned/rating_6/inverted_index.rs) | Search indexing + ranking |
+| 64 | ⭐ 6/10 | Planned | `mini_shell` | [mini_shell.rs](projects/planned/rating_6/mini_shell.rs) | Process control + pipes |
+| 65 | ⭐ 6/10 | WIP | `invaders` | [invaders.rs](projects/wip/invaders.rs) | Terminal game loop + rendering |
+| 66 | ⭐ 6/10 | Planned | `auth_service` | [auth_service.rs](projects/planned/rating_6/auth_service.rs) | Authentication and session design |
+| 67 | ⭐ 6/10 | Planned | `wasm_game_of_life` | [wasm_game_of_life.rs](projects/planned/rating_6/wasm_game_of_life.rs) | Rust + WebAssembly UI loop |
+| 68 | ⭐ 6/10 | Planned | `feature_flag_server` | [feature_flag_server.rs](projects/planned/rating_6/feature_flag_server.rs) | Rollout targeting + evaluation API |
+| 69 | ⭐ 6/10 | Planned | `image_optimizer` | [image_optimizer.rs](projects/planned/rating_6/image_optimizer.rs) | Lossless compression + batch processing |
+| 70 | ⭐ 6/10 | Planned | `power_monitor` | [power_monitor.rs](projects/planned/rating_6/power_monitor.rs) | Host energy sampling + trend reporting |
+| 71 | ⭐ 6/10 | Planned | `rss_pipeline` | [rss_pipeline.rs](projects/planned/rating_6/rss_pipeline.rs) | Feed ingestion + transform pipeline |
+| 72 | ⭐ 6/10 | Planned | `feature_flag_service` | [feature_flag_service.rs](projects/planned/rating_6/feature_flag_service.rs) | Evaluate feature flags over an API |
+| 73 | ⭐ 6/10 | Planned | `backup_tool` | [backup_tool.rs](projects/planned/rating_6/backup_tool.rs) | Create and restore filesystem snapshots |
+| 74 | ⭐ 6/10 | Planned | `metrics_dashboard` | [metrics_dashboard.rs](projects/planned/rating_6/metrics_dashboard.rs) | Aggregate and visualize runtime metrics |
+| 75 | ⭐ 6/10 | Planned | `config_deployer` | [config_deployer.rs](projects/planned/rating_6/config_deployer.rs) | Validate and roll out configuration changes |
+| 76 | ⭐ 6/10 | Planned | `webhook_dispatcher` | [webhook_dispatcher.rs](projects/planned/rating_6/webhook_dispatcher.rs) | Deliver webhooks with retry/backoff |
+| 77 | ⭐ 6/10 | Planned | `incident_router` | [incident_router.rs](projects/planned/rating_6/incident_router.rs) | Route incidents with escalation policies |
+| 78 | ⭐ 6/10 | Planned | `edge_cache` | [edge_cache.rs](projects/planned/rating_6/edge_cache.rs) | Cache and revalidate edge responses |
+| 79 | ⭐ 6/10 | Planned | `audit_trail_store` | [audit_trail_store.rs](projects/planned/rating_6/audit_trail_store.rs) | Append-only audit event storage |
+| 80 | ⭐ 6/10 | Planned | `api_contract_tester` | [api_contract_tester.rs](projects/planned/rating_6/api_contract_tester.rs) | Validate APIs against contract expectations |
+| 81 | ⭐ 6/10 | Planned | `cache_invalidator` | [cache_invalidator.rs](projects/planned/rating_6/cache_invalidator.rs) | Coordinate distributed cache invalidation |
+| 82 | ⭐ 6/10 | Planned | `release_train` | [release_train.rs](projects/planned/rating_6/release_train.rs) | Coordinate gated release train promotions |
+| 83 | ⭐ 6/10 | Planned | `policy_simulator` | [policy_simulator.rs](projects/planned/rating_6/policy_simulator.rs) | Dry-run policy changes with explain traces |
+| 84 | ⭐ 6/10 | Planned | `tenant_billing_meter` | [tenant_billing_meter.rs](projects/planned/rating_6/tenant_billing_meter.rs) | Meter tenant usage for billing pipelines |
+| 85 | ⭐ 6/10 | Planned | `service_catalog` | [service_catalog.rs](projects/planned/rating_6/service_catalog.rs) | Maintain service metadata and dependencies |
+| 86 | ⭐ 6/10 | Planned | `capacity_planner` | [capacity_planner.rs](projects/planned/rating_6/capacity_planner.rs) | Forecast capacity and recommend scaling actions |
+| 87 | ⭐ 6/10 | Planned | `config_diff_auditor` | [config_diff_auditor.rs](projects/planned/rating_6/config_diff_auditor.rs) | Audit semantic configuration changes |
+| 88 | ⭐ 6/10 | Planned | `log_redaction_gateway` | [log_redaction_gateway.rs](projects/planned/rating_6/log_redaction_gateway.rs) | Redact sensitive fields from log streams |
+| 89 | ⭐ 6/10 | Planned | `incident_simulator` | [incident_simulator.rs](projects/planned/rating_6/incident_simulator.rs) | Simulate incident scenarios and response timings |
+| 90 | ⭐ 6/10 | Planned | `workload_forecaster` | [workload_forecaster.rs](projects/planned/rating_6/workload_forecaster.rs) | Forecast workload demand and variance |
+| 91 | ⭐ 6/10 | Planned | `credential_inventory` | [credential_inventory.rs](projects/planned/rating_6/credential_inventory.rs) | Inventory credentials and detect stale access |
+| 92 | ⭐ 6/10 | Planned | `runbook_recommender` | [runbook_recommender.rs](projects/planned/rating_6/runbook_recommender.rs) | Recommend operational runbooks for incidents |
+| 93 | ⭐ 6/10 | Planned | `latency_budget_planner` | [latency_budget_planner.rs](projects/planned/rating_6/latency_budget_planner.rs) | Allocate and track end-to-end latency budgets |
+| 94 | ⭐ 6/10 | Planned | `dependency_risk_heatmap` | [dependency_risk_heatmap.rs](projects/planned/rating_6/dependency_risk_heatmap.rs) | Visualize dependency risk concentration |
+| 95 | ⭐ 6/10 | Planned | `incident_comms_broker` | [incident_comms_broker.rs](projects/planned/rating_6/incident_comms_broker.rs) | Broker incident updates across channels |
+| 96 | ⭐ 7/10 | Completed | `api_gateway` | [api_gateway.rs](projects/completed/api_gateway.rs) | Architecture |
+| 97 | ⭐ 7/10 | Planned | `kafka_consumer` | [kafka_consumer.rs](projects/planned/rating_7/kafka_consumer.rs) | Enterprise patterns |
+| 98 | ⭐ 7/10 | Planned | `textedit` | [text_editor.rs](projects/planned/rating_7/text_editor.rs) | Terminal UI + buffer editing |
+| 99 | ⭐ 7/10 | Planned | `socks5_proxy` | [socks5_proxy.rs](projects/planned/rating_7/socks5_proxy.rs) | Protocol parsing + TCP proxying |
+| 100 | ⭐ 7/10 | Planned | `ws_broker` | [websocket_broker.rs](projects/planned/rating_7/websocket_broker.rs) | Realtime pub/sub patterns |
+| 101 | ⭐ 7/10 | Planned | `rate_limiter` | [rate_limiter.rs](projects/planned/rating_7/rate_limiter.rs) | Traffic shaping algorithms |
+| 102 | ⭐ 7/10 | Planned | `tcp_stack` | [tcp_stack.rs](projects/planned/rating_7/tcp_stack.rs) | Network stack internals |
+| 103 | ⭐ 7/10 | Planned | `mqtt_broker` | [mqtt_broker.rs](projects/planned/rating_7/mqtt_broker.rs) | Pub/sub protocol server design |
+| 104 | ⭐ 7/10 | Planned | `chip8` | [chip8.rs](projects/planned/rating_7/chip8.rs) | Emulator architecture |
+| 105 | ⭐ 7/10 | Planned | `ray_tracer` | [ray_tracer.rs](projects/planned/rating_7/ray_tracer.rs) | Graphics math + rendering |
+| 106 | ⭐ 7/10 | Planned | `image_codec` | [image_codec.rs](projects/planned/rating_7/image_codec.rs) | Binary file formats |
+| 107 | ⭐ 7/10 | Planned | `terminal_emulator` | [terminal_emulator.rs](projects/planned/rating_7/terminal_emulator.rs) | PTY handling + ANSI parsing |
+| 108 | ⭐ 7/10 | Planned | `ci_system` | [ci_system.rs](projects/planned/rating_7/ci_system.rs) | Pipeline orchestration + workers |
+| 109 | ⭐ 7/10 | Planned | `build_system` | [build_system.rs](projects/planned/rating_7/build_system.rs) | DAG execution + incremental builds |
+| 110 | ⭐ 7/10 | Planned | `secret_scanner` | [secret_scanner.rs](projects/planned/rating_7/secret_scanner.rs) | Credential detection + risk reporting |
+| 111 | ⭐ 7/10 | Planned | `policy_engine` | [policy_engine.rs](projects/planned/rating_7/policy_engine.rs) | Authorization rules + decision traces |
+| 112 | ⭐ 7/10 | Planned | `spreadsheet_engine` | [spreadsheet_engine.rs](projects/planned/rating_7/spreadsheet_engine.rs) | Formula graphs + recalculation |
+| 113 | ⭐ 7/10 | Planned | `webhook_gateway` | [webhook_gateway.rs](projects/planned/rating_7/webhook_gateway.rs) | Signed delivery + retry queues |
+| 114 | ⭐ 7/10 | Planned | `config_manager` | [config_manager.rs](projects/planned/rating_7/config_manager.rs) | Declarative state reconciliation |
+| 115 | ⭐ 7/10 | Planned | `irc_server` | [irc_server.rs](projects/planned/rating_7/irc_server.rs) | Realtime chat protocol server |
+| 116 | ⭐ 7/10 | Planned | `workflow_scheduler` | [workflow_scheduler.rs](projects/planned/rating_7/workflow_scheduler.rs) | Timed triggers + durable retries |
+| 117 | ⭐ 7/10 | Planned | `dns_resolver` | [dns_resolver.rs](projects/planned/rating_7/dns_resolver.rs) | Recursive lookups + TTL caching |
+| 118 | ⭐ 7/10 | Planned | `ftp_server` | [ftp_server.rs](projects/planned/rating_7/ftp_server.rs) | Control/data channel protocol handling |
+| 119 | ⭐ 7/10 | Planned | `release_engineering` | [release_engineering.rs](projects/planned/rating_7/release_engineering.rs) | Versioning + artifact promotion |
+| 120 | ⭐ 7/10 | Planned | `dedup_engine` | [dedup_engine.rs](projects/planned/rating_7/dedup_engine.rs) | File deduplication + reclaim planning |
+| 121 | ⭐ 7/10 | Planned | `crash_reporter` | [crash_reporter.rs](projects/planned/rating_7/crash_reporter.rs) | Crash event intake + issue grouping |
+| 122 | ⭐ 7/10 | Planned | `bot_framework` | [bot_framework.rs](projects/planned/rating_7/bot_framework.rs) | Event-driven bot runtime + adapters |
+| 123 | ⭐ 7/10 | Planned | `wiki_engine` | [wiki_engine.rs](projects/planned/rating_7/wiki_engine.rs) | Revisioned pages + internal link graph |
+| 124 | ⭐ 7/10 | Planned | `torrent_tracker` | [torrent_tracker.rs](projects/planned/rating_7/torrent_tracker.rs) | Peer announce handling + swarm coordination |
+| 125 | ⭐ 7/10 | Planned | `statsd_server` | [statsd_server.rs](projects/planned/rating_7/statsd_server.rs) | Metrics line ingestion + timed aggregation |
+| 126 | ⭐ 7/10 | Planned | `notebook_sync_engine` | [notebook_sync_engine.rs](projects/planned/rating_7/notebook_sync_engine.rs) | Sync notebooks and detect conflicts |
+| 127 | ⭐ 7/10 | Planned | `search_indexer` | [search_indexer.rs](projects/planned/rating_7/search_indexer.rs) | Build and query an inverted search index |
+| 128 | ⭐ 7/10 | Planned | `media_library_server` | [media_library_server.rs](projects/planned/rating_7/media_library_server.rs) | Catalog and browse a media library |
+| 129 | ⭐ 7/10 | Planned | `ci_runner` | [ci_runner.rs](projects/planned/rating_7/ci_runner.rs) | Execute CI jobs with isolated steps |
+| 130 | ⭐ 7/10 | Planned | `job_queue_server` | [job_queue_server.rs](projects/planned/rating_7/job_queue_server.rs) | Manage durable queues and worker leases |
+| 131 | ⭐ 7/10 | Planned | `sbom_scanner` | [sbom_scanner.rs](projects/planned/rating_7/sbom_scanner.rs) | Build SBOM reports and risk summaries |
+| 132 | ⭐ 7/10 | Planned | `rollout_manager` | [rollout_manager.rs](projects/planned/rating_7/rollout_manager.rs) | Execute staged feature rollouts safely |
+| 133 | ⭐ 7/10 | Planned | `dependency_mirror` | [dependency_mirror.rs](projects/planned/rating_7/dependency_mirror.rs) | Mirror dependency metadata and artifacts |
+| 134 | ⭐ 7/10 | Planned | `compliance_checker` | [compliance_checker.rs](projects/planned/rating_7/compliance_checker.rs) | Evaluate resources against policy controls |
+| 135 | ⭐ 7/10 | Planned | `tenant_provisioner` | [tenant_provisioner.rs](projects/planned/rating_7/tenant_provisioner.rs) | Provision tenant resources with rollback safety |
+| 136 | ⭐ 7/10 | Planned | `dependency_auditor` | [dependency_auditor.rs](projects/planned/rating_7/dependency_auditor.rs) | Audit dependency graphs against policy |
+| 137 | ⭐ 7/10 | Planned | `traffic_replayer` | [traffic_replayer.rs](projects/planned/rating_7/traffic_replayer.rs) | Replay production-like request traffic safely |
+| 138 | ⭐ 7/10 | Planned | `access_review_engine` | [access_review_engine.rs](projects/planned/rating_7/access_review_engine.rs) | Run periodic entitlement access reviews |
+| 139 | ⭐ 7/10 | Planned | `secret_rotation_service` | [secret_rotation_service.rs](projects/planned/rating_7/secret_rotation_service.rs) | Coordinate scheduled secret rotations safely |
+| 140 | ⭐ 7/10 | Planned | `api_replay_harness` | [api_replay_harness.rs](projects/planned/rating_7/api_replay_harness.rs) | Replay API sessions and compare baselines |
+| 141 | ⭐ 7/10 | Planned | `change_approval_engine` | [change_approval_engine.rs](projects/planned/rating_7/change_approval_engine.rs) | Evaluate and route change approvals |
+| 142 | ⭐ 7/10 | Planned | `delivery_slo_guard` | [delivery_slo_guard.rs](projects/planned/rating_7/delivery_slo_guard.rs) | Guard delivery SLOs with burn-rate signals |
+| 143 | ⭐ 7/10 | Planned | `blast_radius_analyzer` | [blast_radius_analyzer.rs](projects/planned/rating_7/blast_radius_analyzer.rs) | Estimate impact scope from dependency graphs |
+| 144 | ⭐ 7/10 | Planned | `release_guardrail` | [release_guardrail.rs](projects/planned/rating_7/release_guardrail.rs) | Enforce release readiness guard checks |
+| 145 | ⭐ 8/10 | Planned | `workflow_engine` | [workflow_engine.rs](projects/planned/rating_8/workflow_engine.rs) | State machines + DAG |
+| 146 | ⭐ 8/10 | Planned | `otel_collector` | [otel_collector.rs](projects/planned/rating_8/otel_collector.rs) | Infra + streaming |
+| 147 | ⭐ 8/10 | Planned | `lsm_kv` | [lsm_kv.rs](projects/planned/rating_8/lsm_kv.rs) | Storage engine internals |
+| 148 | ⭐ 8/10 | Planned | `bloom_hll` | [bloom_hll.rs](projects/planned/rating_8/bloom_hll.rs) | Probabilistic data structures |
+| 149 | ⭐ 8/10 | Planned | `file_sync` | [file_sync.rs](projects/planned/rating_8/file_sync.rs) | Filesystem diff + sync engine |
+| 150 | ⭐ 8/10 | Planned | `template_engine` | [template_engine.rs](projects/planned/rating_8/template_engine.rs) | Parsing + AST + rendering |
+| 151 | ⭐ 8/10 | Planned | `browser_engine` | [browser_engine.rs](projects/planned/rating_8/browser_engine.rs) | Parsing + layout + rendering pipeline |
+| 152 | ⭐ 8/10 | Planned | `bytecode_vm` | [bytecode_vm.rs](projects/planned/rating_8/bytecode_vm.rs) | Interpreter internals |
+| 153 | ⭐ 8/10 | Planned | `mini_compiler` | [mini_compiler.rs](projects/planned/rating_8/mini_compiler.rs) | Language design + codegen |
+| 154 | ⭐ 8/10 | Planned | `packet_sniffer` | [packet_sniffer.rs](projects/planned/rating_8/packet_sniffer.rs) | Packet parsing + traffic analysis |
+| 155 | ⭐ 8/10 | Planned | `static_site_gen` | [static_site_gen.rs](projects/planned/rating_8/static_site_gen.rs) | Build pipeline + content generation |
+| 156 | ⭐ 8/10 | Planned | `toy_debugger` | [toy_debugger.rs](projects/planned/rating_8/toy_debugger.rs) | Process introspection + breakpoints |
+| 157 | ⭐ 8/10 | Planned | `nes_emulator` | [nes_emulator.rs](projects/planned/rating_8/nes_emulator.rs) | Hardware emulation + timing |
+| 158 | ⭐ 8/10 | Planned | `memory_allocator` | [memory_allocator.rs](projects/planned/rating_8/memory_allocator.rs) | Allocation strategies + invariants |
+| 159 | ⭐ 8/10 | Planned | `physics_engine` | [physics_engine.rs](projects/planned/rating_8/physics_engine.rs) | Simulation + collision resolution |
+| 160 | ⭐ 8/10 | Planned | `fuse_fs` | [fuse_fs.rs](projects/planned/rating_8/fuse_fs.rs) | Filesystem semantics + inode modeling |
+| 161 | ⭐ 8/10 | Planned | `search_engine` | [search_engine.rs](projects/planned/rating_8/search_engine.rs) | Indexing + relevance ranking |
+| 162 | ⭐ 8/10 | Planned | `package_manager` | [package_manager.rs](projects/planned/rating_8/package_manager.rs) | Dependency resolution + artifact lifecycle |
+| 163 | ⭐ 8/10 | Planned | `message_queue` | [message_queue.rs](projects/planned/rating_8/message_queue.rs) | Durable pub/sub + consumer groups |
+| 164 | ⭐ 8/10 | Planned | `smtp_server` | [smtp_server.rs](projects/planned/rating_8/smtp_server.rs) | Mail transport + delivery queue |
+| 165 | ⭐ 8/10 | Planned | `backup_engine` | [backup_engine.rs](projects/planned/rating_8/backup_engine.rs) | Snapshots + dedup + restore |
+| 166 | ⭐ 8/10 | Planned | `cargo_registry` | [cargo_registry.rs](projects/planned/rating_8/cargo_registry.rs) | Package index + artifact publishing |
+| 167 | ⭐ 8/10 | Planned | `language_server` | [language_server.rs](projects/planned/rating_8/language_server.rs) | LSP protocol + incremental diagnostics |
+| 168 | ⭐ 8/10 | Planned | `container_registry` | [container_registry.rs](projects/planned/rating_8/container_registry.rs) | OCI manifests + blob lifecycle |
+| 169 | ⭐ 8/10 | Planned | `map_tile_server` | [map_tile_server.rs](projects/planned/rating_8/map_tile_server.rs) | Geospatial tile serving + cache |
+| 170 | ⭐ 8/10 | Planned | `service_discovery` | [service_discovery.rs](projects/planned/rating_8/service_discovery.rs) | Dynamic registry + health watches |
+| 171 | ⭐ 8/10 | Planned | `tracing_backend` | [tracing_backend.rs](projects/planned/rating_8/tracing_backend.rs) | Trace ingest + search backend |
+| 172 | ⭐ 8/10 | Planned | `mailing_list_manager` | [mailing_list_manager.rs](projects/planned/rating_8/mailing_list_manager.rs) | Subscription lifecycle + moderated delivery |
+| 173 | ⭐ 8/10 | Planned | `ocr_engine` | [ocr_engine.rs](projects/planned/rating_8/ocr_engine.rs) | Image preprocessing + text recognition |
+| 174 | ⭐ 8/10 | Planned | `video_transcoder` | [video_transcoder.rs](projects/planned/rating_8/video_transcoder.rs) | Media job orchestration + progress tracking |
+| 175 | ⭐ 8/10 | Planned | `static_analyzer` | [static_analyzer.rs](projects/planned/rating_8/static_analyzer.rs) | Rule engine + source diagnostics |
+| 176 | ⭐ 8/10 | Planned | `browser_automation` | [browser_automation.rs](projects/planned/rating_8/browser_automation.rs) | Session orchestration + DOM actions |
+| 177 | ⭐ 8/10 | Planned | `schema_registry` | [schema_registry.rs](projects/planned/rating_8/schema_registry.rs) | Schema evolution + compatibility checks |
+| 178 | ⭐ 8/10 | Planned | `secrets_manager` | [secrets_manager.rs](projects/planned/rating_8/secrets_manager.rs) | Encrypted secret storage + policy control |
+| 179 | ⭐ 8/10 | Planned | `sip_proxy` | [sip_proxy.rs](projects/planned/rating_8/sip_proxy.rs) | VoIP signaling routing + registration |
+| 180 | ⭐ 8/10 | Planned | `reverse_tunnel` | [reverse_tunnel.rs](projects/planned/rating_8/reverse_tunnel.rs) | Secure port exposure + multiplexed forwarding |
+| 181 | ⭐ 8/10 | Planned | `live_stream_server` | [live_stream_server.rs](projects/planned/rating_8/live_stream_server.rs) | Live ingest + segment serving pipeline |
+| 182 | ⭐ 8/10 | Planned | `imap_server` | [imap_server.rs](projects/planned/rating_8/imap_server.rs) | Mailbox protocol server + sync semantics |
+| 183 | ⭐ 8/10 | Planned | `modbus_gateway` | [modbus_gateway.rs](projects/planned/rating_8/modbus_gateway.rs) | Industrial protocol bridge + polling |
+| 184 | ⭐ 8/10 | Planned | `graphql_gateway` | [graphql_gateway.rs](projects/planned/rating_8/graphql_gateway.rs) | Schema composition + resolver orchestration |
+| 185 | ⭐ 8/10 | Planned | `terminal_multiplexer` | [terminal_multiplexer.rs](projects/planned/rating_8/terminal_multiplexer.rs) | PTY sessions + pane layout control |
+| 186 | ⭐ 8/10 | Planned | `ldap_server` | [ldap_server.rs](projects/planned/rating_8/ldap_server.rs) | Directory service + LDAP query handling |
+| 187 | ⭐ 8/10 | Planned | `mail_archive` | [mail_archive.rs](projects/planned/rating_8/mail_archive.rs) | MIME archival + searchable retention |
+| 188 | ⭐ 8/10 | Planned | `artifact_proxy` | [artifact_proxy.rs](projects/planned/rating_8/artifact_proxy.rs) | Upstream package proxy + integrity cache |
+| 189 | ⭐ 8/10 | Planned | `dns_authority` | [dns_authority.rs](projects/planned/rating_8/dns_authority.rs) | Authoritative zone serving + delegation rules |
+| 190 | ⭐ 8/10 | Planned | `package_registry` | [package_registry.rs](projects/planned/rating_8/package_registry.rs) | Publish and fetch package artifacts |
+| 191 | ⭐ 8/10 | Planned | `plugin_runtime` | [plugin_runtime.rs](projects/planned/rating_8/plugin_runtime.rs) | Load and run sandboxed plugins |
+| 192 | ⭐ 8/10 | Planned | `canary_controller` | [canary_controller.rs](projects/planned/rating_8/canary_controller.rs) | Automate canary promotion and rollback |
+| 193 | ⭐ 8/10 | Planned | `chaos_orchestrator` | [chaos_orchestrator.rs](projects/planned/rating_8/chaos_orchestrator.rs) | Run controlled fault injection experiments |
+| 194 | ⭐ 8/10 | Planned | `threat_feed_aggregator` | [threat_feed_aggregator.rs](projects/planned/rating_8/threat_feed_aggregator.rs) | Aggregate and score threat intelligence feeds |
+| 195 | ⭐ 8/10 | Planned | `failover_coordinator` | [failover_coordinator.rs](projects/planned/rating_8/failover_coordinator.rs) | Orchestrate failover and safe failback decisions |
+| 196 | ⭐ 8/10 | Planned | `schema_migration_planner` | [schema_migration_planner.rs](projects/planned/rating_8/schema_migration_planner.rs) | Plan safe schema migrations with rollbacks |
+| 197 | ⭐ 8/10 | Planned | `authz_drift_detector` | [authz_drift_detector.rs](projects/planned/rating_8/authz_drift_detector.rs) | Detect authorization drift from desired state |
 | 198 | ⭐ 8/10 | WIP | `rust_engine_game` | [rust_engine_game.rs](projects/wip/rust_engine_game.rs) | 2D game loop + collision + scoring |
-| 199 | ⭐ 9/10 | Planned | `fake_sql_server` | [fake_sql_server.rs](projects/fake_sql_server.rs) | Protocol engineering |
-| 200 | ⭐ 9/10 | Planned | `sidecar` | [service_mesh_sidecar.rs](projects/service_mesh_sidecar.rs) | Networking mastery |
-| 201 | ⭐ 9/10 | Planned | `regex_engine` | [regex_engine.rs](projects/regex_engine.rs) | Automata theory in practice |
-| 202 | ⭐ 9/10 | Planned | `bittorrent` | [bittorrent.rs](projects/bittorrent.rs) | P2P protocols + piece scheduling |
-| 203 | ⭐ 9/10 | Planned | `iot_simulator` | [iot_simulator.rs](projects/iot_simulator.rs) | Distributed device simulation |
-| 204 | ⭐ 9/10 | Planned | `sqlite_clone` | [sqlite_clone.rs](projects/sqlite_clone.rs) | SQL engine + B-tree storage |
-| 205 | ⭐ 9/10 | Planned | `wasm_runtime` | [wasm_runtime.rs](projects/wasm_runtime.rs) | WebAssembly decoding + execution |
-| 206 | ⭐ 9/10 | Planned | `container_runtime` | [container_runtime.rs](projects/container_runtime.rs) | Isolation primitives + resource control |
-| 207 | ⭐ 9/10 | Planned | `vpn_tunnel` | [vpn_tunnel.rs](projects/vpn_tunnel.rs) | Secure tunneling + peer state |
-| 208 | ⭐ 9/10 | Planned | `graph_database` | [graph_database.rs](projects/graph_database.rs) | Property graph storage + query execution |
-| 209 | ⭐ 9/10 | Planned | `ebpf_monitor` | [ebpf_monitor.rs](projects/ebpf_monitor.rs) | Kernel telemetry pipeline design |
-| 210 | ⭐ 9/10 | Planned | `blockchain_node` | [blockchain_node.rs](projects/blockchain_node.rs) | Ledger validation + peer protocol |
-| 211 | ⭐ 9/10 | Planned | `object_store` | [object_store.rs](projects/object_store.rs) | Blob storage + metadata integrity |
-| 212 | ⭐ 9/10 | Planned | `coord_service` | [coord_service.rs](projects/coord_service.rs) | Coordination primitives + watches |
-| 213 | ⭐ 9/10 | Planned | `stream_processor` | [stream_processor.rs](projects/stream_processor.rs) | Stateful event windows + checkpoints |
-| 214 | ⭐ 9/10 | Planned | `time_series_db` | [time_series_db.rs](projects/time_series_db.rs) | Time-series ingestion + query engine |
-| 215 | ⭐ 9/10 | Planned | `vector_search_engine` | [vector_search_engine.rs](projects/vector_search_engine.rs) | Approximate nearest-neighbor indexing |
-| 216 | ⭐ 9/10 | Planned | `collaborative_editor` | [collaborative_editor.rs](projects/collaborative_editor.rs) | Shared editing + convergence rules |
-| 217 | ⭐ 9/10 | Planned | `event_sourcing_db` | [event_sourcing_db.rs](projects/event_sourcing_db.rs) | Append-only streams + projections |
-| 218 | ⭐ 9/10 | Planned | `activitypub_server` | [activitypub_server.rs](projects/activitypub_server.rs) | Federated social protocol server |
-| 219 | ⭐ 9/10 | Planned | `fuzzer_engine` | [fuzzer_engine.rs](projects/fuzzer_engine.rs) | Corpus mutation + feedback-guided execution |
-| 220 | ⭐ 9/10 | Planned | `code_sandbox` | [code_sandbox.rs](projects/code_sandbox.rs) | Policy-driven isolated execution |
-| 221 | ⭐ 10/10 | Planned | `dist_cache` | [dist_cache.rs](projects/dist_cache.rs) | Rust architect level |
-| 222 | ⭐ 10/10 | Planned | `mini_runtime` | [mini_runtime.rs](projects/mini_runtime.rs) | Deep Rust internals |
-| 223 | ⭐ 10/10 | Planned | `raft_consensus` | [raft_consensus.rs](projects/raft_consensus.rs) | Consensus algorithm implementation |
-| 224 | ⭐ 10/10 | Planned | `os_kernel` | [os_kernel.rs](projects/os_kernel.rs) | Bare-metal systems programming |
-| 225 | ⭐ 10/10 | Planned | `hdfs_clone` | [hdfs_clone.rs](projects/hdfs_clone.rs) | Namenode metadata + replicated blocks |
+| 199 | ⭐ 9/10 | Planned | `fake_sql_server` | [fake_sql_server.rs](projects/planned/rating_9/fake_sql_server.rs) | Protocol engineering |
+| 200 | ⭐ 9/10 | Planned | `sidecar` | [service_mesh_sidecar.rs](projects/planned/rating_9/service_mesh_sidecar.rs) | Networking mastery |
+| 201 | ⭐ 9/10 | Planned | `regex_engine` | [regex_engine.rs](projects/planned/rating_9/regex_engine.rs) | Automata theory in practice |
+| 202 | ⭐ 9/10 | Planned | `bittorrent` | [bittorrent.rs](projects/planned/rating_9/bittorrent.rs) | P2P protocols + piece scheduling |
+| 203 | ⭐ 9/10 | Planned | `iot_simulator` | [iot_simulator.rs](projects/planned/rating_9/iot_simulator.rs) | Distributed device simulation |
+| 204 | ⭐ 9/10 | Planned | `sqlite_clone` | [sqlite_clone.rs](projects/planned/rating_9/sqlite_clone.rs) | SQL engine + B-tree storage |
+| 205 | ⭐ 9/10 | Planned | `wasm_runtime` | [wasm_runtime.rs](projects/planned/rating_9/wasm_runtime.rs) | WebAssembly decoding + execution |
+| 206 | ⭐ 9/10 | Planned | `container_runtime` | [container_runtime.rs](projects/planned/rating_9/container_runtime.rs) | Isolation primitives + resource control |
+| 207 | ⭐ 9/10 | Planned | `vpn_tunnel` | [vpn_tunnel.rs](projects/planned/rating_9/vpn_tunnel.rs) | Secure tunneling + peer state |
+| 208 | ⭐ 9/10 | Planned | `graph_database` | [graph_database.rs](projects/planned/rating_9/graph_database.rs) | Property graph storage + query execution |
+| 209 | ⭐ 9/10 | Planned | `ebpf_monitor` | [ebpf_monitor.rs](projects/planned/rating_9/ebpf_monitor.rs) | Kernel telemetry pipeline design |
+| 210 | ⭐ 9/10 | Planned | `blockchain_node` | [blockchain_node.rs](projects/planned/rating_9/blockchain_node.rs) | Ledger validation + peer protocol |
+| 211 | ⭐ 9/10 | Planned | `object_store` | [object_store.rs](projects/planned/rating_9/object_store.rs) | Blob storage + metadata integrity |
+| 212 | ⭐ 9/10 | Planned | `coord_service` | [coord_service.rs](projects/planned/rating_9/coord_service.rs) | Coordination primitives + watches |
+| 213 | ⭐ 9/10 | Planned | `stream_processor` | [stream_processor.rs](projects/planned/rating_9/stream_processor.rs) | Stateful event windows + checkpoints |
+| 214 | ⭐ 9/10 | Planned | `time_series_db` | [time_series_db.rs](projects/planned/rating_9/time_series_db.rs) | Time-series ingestion + query engine |
+| 215 | ⭐ 9/10 | Planned | `vector_search_engine` | [vector_search_engine.rs](projects/planned/rating_9/vector_search_engine.rs) | Approximate nearest-neighbor indexing |
+| 216 | ⭐ 9/10 | Planned | `collaborative_editor` | [collaborative_editor.rs](projects/planned/rating_9/collaborative_editor.rs) | Shared editing + convergence rules |
+| 217 | ⭐ 9/10 | Planned | `event_sourcing_db` | [event_sourcing_db.rs](projects/planned/rating_9/event_sourcing_db.rs) | Append-only streams + projections |
+| 218 | ⭐ 9/10 | Planned | `activitypub_server` | [activitypub_server.rs](projects/planned/rating_9/activitypub_server.rs) | Federated social protocol server |
+| 219 | ⭐ 9/10 | Planned | `fuzzer_engine` | [fuzzer_engine.rs](projects/planned/rating_9/fuzzer_engine.rs) | Corpus mutation + feedback-guided execution |
+| 220 | ⭐ 9/10 | Planned | `code_sandbox` | [code_sandbox.rs](projects/planned/rating_9/code_sandbox.rs) | Policy-driven isolated execution |
+| 221 | ⭐ 10/10 | Planned | `dist_cache` | [dist_cache.rs](projects/planned/rating_10/dist_cache.rs) | Rust architect level |
+| 222 | ⭐ 10/10 | Planned | `mini_runtime` | [mini_runtime.rs](projects/planned/rating_10/mini_runtime.rs) | Deep Rust internals |
+| 223 | ⭐ 10/10 | Planned | `raft_consensus` | [raft_consensus.rs](projects/planned/rating_10/raft_consensus.rs) | Consensus algorithm implementation |
+| 224 | ⭐ 10/10 | Planned | `os_kernel` | [os_kernel.rs](projects/planned/rating_10/os_kernel.rs) | Bare-metal systems programming |
+| 225 | ⭐ 10/10 | Planned | `hdfs_clone` | [hdfs_clone.rs](projects/planned/rating_10/hdfs_clone.rs) | Namenode metadata + replicated blocks |
 
 ---
 
@@ -801,7 +801,7 @@ Learn:
 
 Guide:
 
-- [dns_toolkit_TODO.md](projects/dns_toolkit_TODO.md)
+- [dns_toolkit_TODO.md](projects/planned/rating_5/dns_toolkit_TODO.md)
 
 ---
 
@@ -824,7 +824,7 @@ Learn:
 
 Guide:
 
-- [mini_git_TODO.md](projects/mini_git_TODO.md)
+- [mini_git_TODO.md](projects/planned/rating_5/mini_git_TODO.md)
 
 ---
 
@@ -847,7 +847,7 @@ Learn:
 
 Guide:
 
-- [http_load_tester_TODO.md](projects/http_load_tester_TODO.md)
+- [http_load_tester_TODO.md](projects/planned/rating_5/http_load_tester_TODO.md)
 
 ---
 
@@ -870,7 +870,7 @@ Learn:
 
 Guide:
 
-- [job_queue_TODO.md](projects/job_queue_TODO.md)
+- [job_queue_TODO.md](projects/planned/rating_6/job_queue_TODO.md)
 
 ---
 
@@ -893,7 +893,7 @@ Learn:
 
 Guide:
 
-- [inverted_index_TODO.md](projects/inverted_index_TODO.md)
+- [inverted_index_TODO.md](projects/planned/rating_6/inverted_index_TODO.md)
 
 ---
 
@@ -916,7 +916,7 @@ Learn:
 
 Guide:
 
-- [mini_shell_TODO.md](projects/mini_shell_TODO.md)
+- [mini_shell_TODO.md](projects/planned/rating_6/mini_shell_TODO.md)
 
 ---
 
@@ -939,7 +939,7 @@ Learn:
 
 Guide:
 
-- [text_editor_TODO.md](projects/text_editor_TODO.md)
+- [text_editor_TODO.md](projects/planned/rating_7/text_editor_TODO.md)
 
 ---
 
@@ -962,7 +962,7 @@ Learn:
 
 Guide:
 
-- [socks5_proxy_TODO.md](projects/socks5_proxy_TODO.md)
+- [socks5_proxy_TODO.md](projects/planned/rating_7/socks5_proxy_TODO.md)
 
 ---
 
@@ -985,7 +985,7 @@ Learn:
 
 Guide:
 
-- [websocket_broker_TODO.md](projects/websocket_broker_TODO.md)
+- [websocket_broker_TODO.md](projects/planned/rating_7/websocket_broker_TODO.md)
 
 ---
 
@@ -1008,7 +1008,7 @@ Learn:
 
 Guide:
 
-- [rate_limiter_TODO.md](projects/rate_limiter_TODO.md)
+- [rate_limiter_TODO.md](projects/planned/rating_7/rate_limiter_TODO.md)
 
 ---
 
@@ -1031,7 +1031,7 @@ Learn:
 
 Guide:
 
-- [lsm_kv_TODO.md](projects/lsm_kv_TODO.md)
+- [lsm_kv_TODO.md](projects/planned/rating_8/lsm_kv_TODO.md)
 
 ---
 
@@ -1054,7 +1054,7 @@ Learn:
 
 Guide:
 
-- [bloom_hll_TODO.md](projects/bloom_hll_TODO.md)
+- [bloom_hll_TODO.md](projects/planned/rating_8/bloom_hll_TODO.md)
 
 ---
 
@@ -1077,7 +1077,7 @@ Learn:
 
 Guide:
 
-- [file_sync_TODO.md](projects/file_sync_TODO.md)
+- [file_sync_TODO.md](projects/planned/rating_8/file_sync_TODO.md)
 
 ---
 
@@ -1100,7 +1100,7 @@ Learn:
 
 Guide:
 
-- [template_engine_TODO.md](projects/template_engine_TODO.md)
+- [template_engine_TODO.md](projects/planned/rating_8/template_engine_TODO.md)
 
 ---
 
@@ -1123,7 +1123,7 @@ Learn:
 
 Guide:
 
-- [regex_engine_TODO.md](projects/regex_engine_TODO.md)
+- [regex_engine_TODO.md](projects/planned/rating_9/regex_engine_TODO.md)
 
 ---
 
@@ -1146,7 +1146,7 @@ Learn:
 
 Guide:
 
-- [bittorrent_TODO.md](projects/bittorrent_TODO.md)
+- [bittorrent_TODO.md](projects/planned/rating_9/bittorrent_TODO.md)
 
 ---
 
@@ -1169,7 +1169,7 @@ Learn:
 
 Guide:
 
-- [tcp_stack_TODO.md](projects/tcp_stack_TODO.md)
+- [tcp_stack_TODO.md](projects/planned/rating_7/tcp_stack_TODO.md)
 
 ---
 
@@ -1192,7 +1192,7 @@ Learn:
 
 Guide:
 
-- [mqtt_broker_TODO.md](projects/mqtt_broker_TODO.md)
+- [mqtt_broker_TODO.md](projects/planned/rating_7/mqtt_broker_TODO.md)
 
 ---
 
@@ -1215,7 +1215,7 @@ Learn:
 
 Guide:
 
-- [chip8_TODO.md](projects/chip8_TODO.md)
+- [chip8_TODO.md](projects/planned/rating_7/chip8_TODO.md)
 
 ---
 
@@ -1238,7 +1238,7 @@ Learn:
 
 Guide:
 
-- [browser_engine_TODO.md](projects/browser_engine_TODO.md)
+- [browser_engine_TODO.md](projects/planned/rating_8/browser_engine_TODO.md)
 
 ---
 
@@ -1261,7 +1261,7 @@ Learn:
 
 Guide:
 
-- [bytecode_vm_TODO.md](projects/bytecode_vm_TODO.md)
+- [bytecode_vm_TODO.md](projects/planned/rating_8/bytecode_vm_TODO.md)
 
 ---
 
@@ -1284,7 +1284,7 @@ Learn:
 
 Guide:
 
-- [mini_compiler_TODO.md](projects/mini_compiler_TODO.md)
+- [mini_compiler_TODO.md](projects/planned/rating_8/mini_compiler_TODO.md)
 
 ---
 
@@ -1307,7 +1307,7 @@ Learn:
 
 Guide:
 
-- [packet_sniffer_TODO.md](projects/packet_sniffer_TODO.md)
+- [packet_sniffer_TODO.md](projects/planned/rating_8/packet_sniffer_TODO.md)
 
 ---
 
@@ -1330,7 +1330,7 @@ Learn:
 
 Guide:
 
-- [static_site_gen_TODO.md](projects/static_site_gen_TODO.md)
+- [static_site_gen_TODO.md](projects/planned/rating_8/static_site_gen_TODO.md)
 
 ---
 
@@ -1353,7 +1353,7 @@ Learn:
 
 Guide:
 
-- [iot_simulator_TODO.md](projects/iot_simulator_TODO.md)
+- [iot_simulator_TODO.md](projects/planned/rating_9/iot_simulator_TODO.md)
 
 ---
 
@@ -1376,7 +1376,7 @@ Learn:
 
 Guide:
 
-- [raft_consensus_TODO.md](projects/raft_consensus_TODO.md)
+- [raft_consensus_TODO.md](projects/planned/rating_10/raft_consensus_TODO.md)
 
 ---
 
@@ -1399,7 +1399,7 @@ Learn:
 
 Guide:
 
-- [markdown_parser_TODO.md](projects/markdown_parser_TODO.md)
+- [markdown_parser_TODO.md](projects/planned/rating_5/markdown_parser_TODO.md)
 
 ---
 
@@ -1422,7 +1422,7 @@ Learn:
 
 Guide:
 
-- [auth_service_TODO.md](projects/auth_service_TODO.md)
+- [auth_service_TODO.md](projects/planned/rating_6/auth_service_TODO.md)
 
 ---
 
@@ -1445,7 +1445,7 @@ Learn:
 
 Guide:
 
-- [ray_tracer_TODO.md](projects/ray_tracer_TODO.md)
+- [ray_tracer_TODO.md](projects/planned/rating_7/ray_tracer_TODO.md)
 
 ---
 
@@ -1468,7 +1468,7 @@ Learn:
 
 Guide:
 
-- [image_codec_TODO.md](projects/image_codec_TODO.md)
+- [image_codec_TODO.md](projects/planned/rating_7/image_codec_TODO.md)
 
 ---
 
@@ -1491,7 +1491,7 @@ Learn:
 
 Guide:
 
-- [toy_debugger_TODO.md](projects/toy_debugger_TODO.md)
+- [toy_debugger_TODO.md](projects/planned/rating_8/toy_debugger_TODO.md)
 
 ---
 
@@ -1514,7 +1514,7 @@ Learn:
 
 Guide:
 
-- [sqlite_clone_TODO.md](projects/sqlite_clone_TODO.md)
+- [sqlite_clone_TODO.md](projects/planned/rating_9/sqlite_clone_TODO.md)
 
 ---
 
@@ -1537,7 +1537,7 @@ Learn:
 
 Guide:
 
-- [wasm_runtime_TODO.md](projects/wasm_runtime_TODO.md)
+- [wasm_runtime_TODO.md](projects/planned/rating_9/wasm_runtime_TODO.md)
 
 ---
 
@@ -1560,7 +1560,7 @@ Learn:
 
 Guide:
 
-- [container_runtime_TODO.md](projects/container_runtime_TODO.md)
+- [container_runtime_TODO.md](projects/planned/rating_9/container_runtime_TODO.md)
 
 ---
 
@@ -1583,7 +1583,7 @@ Learn:
 
 Guide:
 
-- [wasm_game_of_life_TODO.md](projects/wasm_game_of_life_TODO.md)
+- [wasm_game_of_life_TODO.md](projects/planned/rating_6/wasm_game_of_life_TODO.md)
 
 ---
 
@@ -1606,7 +1606,7 @@ Learn:
 
 Guide:
 
-- [spell_checker_TODO.md](projects/spell_checker_TODO.md)
+- [spell_checker_TODO.md](projects/planned/rating_5/spell_checker_TODO.md)
 
 ---
 
@@ -1629,7 +1629,7 @@ Learn:
 
 Guide:
 
-- [terminal_emulator_TODO.md](projects/terminal_emulator_TODO.md)
+- [terminal_emulator_TODO.md](projects/planned/rating_7/terminal_emulator_TODO.md)
 
 ---
 
@@ -1652,7 +1652,7 @@ Learn:
 
 Guide:
 
-- [nes_emulator_TODO.md](projects/nes_emulator_TODO.md)
+- [nes_emulator_TODO.md](projects/planned/rating_8/nes_emulator_TODO.md)
 
 ---
 
@@ -1675,7 +1675,7 @@ Learn:
 
 Guide:
 
-- [memory_allocator_TODO.md](projects/memory_allocator_TODO.md)
+- [memory_allocator_TODO.md](projects/planned/rating_8/memory_allocator_TODO.md)
 
 ---
 
@@ -1698,7 +1698,7 @@ Learn:
 
 Guide:
 
-- [physics_engine_TODO.md](projects/physics_engine_TODO.md)
+- [physics_engine_TODO.md](projects/planned/rating_8/physics_engine_TODO.md)
 
 ---
 
@@ -1721,7 +1721,7 @@ Learn:
 
 Guide:
 
-- [fuse_fs_TODO.md](projects/fuse_fs_TODO.md)
+- [fuse_fs_TODO.md](projects/planned/rating_8/fuse_fs_TODO.md)
 
 ---
 
@@ -1744,7 +1744,7 @@ Learn:
 
 Guide:
 
-- [os_kernel_TODO.md](projects/os_kernel_TODO.md)
+- [os_kernel_TODO.md](projects/planned/rating_10/os_kernel_TODO.md)
 
 ---
 
@@ -1767,7 +1767,7 @@ Learn:
 
 Guide:
 
-- [ci_system_TODO.md](projects/ci_system_TODO.md)
+- [ci_system_TODO.md](projects/planned/rating_7/ci_system_TODO.md)
 
 ---
 
@@ -1790,7 +1790,7 @@ Learn:
 
 Guide:
 
-- [vpn_tunnel_TODO.md](projects/vpn_tunnel_TODO.md)
+- [vpn_tunnel_TODO.md](projects/planned/rating_9/vpn_tunnel_TODO.md)
 
 ---
 
@@ -1813,7 +1813,7 @@ Learn:
 
 Guide:
 
-- [search_engine_TODO.md](projects/search_engine_TODO.md)
+- [search_engine_TODO.md](projects/planned/rating_8/search_engine_TODO.md)
 
 ---
 
@@ -1836,7 +1836,7 @@ Learn:
 
 Guide:
 
-- [package_manager_TODO.md](projects/package_manager_TODO.md)
+- [package_manager_TODO.md](projects/planned/rating_8/package_manager_TODO.md)
 
 ---
 
@@ -1859,7 +1859,7 @@ Learn:
 
 Guide:
 
-- [graph_database_TODO.md](projects/graph_database_TODO.md)
+- [graph_database_TODO.md](projects/planned/rating_9/graph_database_TODO.md)
 
 ---
 
@@ -1882,7 +1882,7 @@ Learn:
 
 Guide:
 
-- [invaders_TODO.md](projects/invaders_TODO.md)
+- [invaders_TODO.md](projects/wip/invaders_TODO.md)
 
 ---
 
@@ -1905,7 +1905,7 @@ Learn:
 
 Guide:
 
-- [message_queue_TODO.md](projects/message_queue_TODO.md)
+- [message_queue_TODO.md](projects/planned/rating_8/message_queue_TODO.md)
 
 ---
 
@@ -1928,7 +1928,7 @@ Learn:
 
 Guide:
 
-- [build_system_TODO.md](projects/build_system_TODO.md)
+- [build_system_TODO.md](projects/planned/rating_7/build_system_TODO.md)
 
 ---
 
@@ -1951,7 +1951,7 @@ Learn:
 
 Guide:
 
-- [secret_scanner_TODO.md](projects/secret_scanner_TODO.md)
+- [secret_scanner_TODO.md](projects/planned/rating_7/secret_scanner_TODO.md)
 
 ---
 
@@ -1974,7 +1974,7 @@ Learn:
 
 Guide:
 
-- [ebpf_monitor_TODO.md](projects/ebpf_monitor_TODO.md)
+- [ebpf_monitor_TODO.md](projects/planned/rating_9/ebpf_monitor_TODO.md)
 
 ---
 
@@ -1997,7 +1997,7 @@ Learn:
 
 Guide:
 
-- [blockchain_node_TODO.md](projects/blockchain_node_TODO.md)
+- [blockchain_node_TODO.md](projects/planned/rating_9/blockchain_node_TODO.md)
 
 ---
 
@@ -2020,7 +2020,7 @@ Learn:
 
 Guide:
 
-- [object_store_TODO.md](projects/object_store_TODO.md)
+- [object_store_TODO.md](projects/planned/rating_9/object_store_TODO.md)
 
 ---
 
@@ -2043,7 +2043,7 @@ Learn:
 
 Guide:
 
-- [smtp_server_TODO.md](projects/smtp_server_TODO.md)
+- [smtp_server_TODO.md](projects/planned/rating_8/smtp_server_TODO.md)
 
 ---
 
@@ -2066,7 +2066,7 @@ Learn:
 
 Guide:
 
-- [coord_service_TODO.md](projects/coord_service_TODO.md)
+- [coord_service_TODO.md](projects/planned/rating_9/coord_service_TODO.md)
 
 ---
 
@@ -2089,7 +2089,7 @@ Learn:
 
 Guide:
 
-- [policy_engine_TODO.md](projects/policy_engine_TODO.md)
+- [policy_engine_TODO.md](projects/planned/rating_7/policy_engine_TODO.md)
 
 ---
 
@@ -2112,7 +2112,7 @@ Learn:
 
 Guide:
 
-- [stream_processor_TODO.md](projects/stream_processor_TODO.md)
+- [stream_processor_TODO.md](projects/planned/rating_9/stream_processor_TODO.md)
 
 ---
 
@@ -2135,7 +2135,7 @@ Learn:
 
 Guide:
 
-- [backup_engine_TODO.md](projects/backup_engine_TODO.md)
+- [backup_engine_TODO.md](projects/planned/rating_8/backup_engine_TODO.md)
 
 ---
 
@@ -2158,7 +2158,7 @@ Learn:
 
 Guide:
 
-- [cargo_registry_TODO.md](projects/cargo_registry_TODO.md)
+- [cargo_registry_TODO.md](projects/planned/rating_8/cargo_registry_TODO.md)
 
 ---
 
@@ -2181,7 +2181,7 @@ Learn:
 
 Guide:
 
-- [spreadsheet_engine_TODO.md](projects/spreadsheet_engine_TODO.md)
+- [spreadsheet_engine_TODO.md](projects/planned/rating_7/spreadsheet_engine_TODO.md)
 
 ---
 
@@ -2204,7 +2204,7 @@ Learn:
 
 Guide:
 
-- [language_server_TODO.md](projects/language_server_TODO.md)
+- [language_server_TODO.md](projects/planned/rating_8/language_server_TODO.md)
 
 ---
 
@@ -2227,7 +2227,7 @@ Learn:
 
 Guide:
 
-- [webhook_gateway_TODO.md](projects/webhook_gateway_TODO.md)
+- [webhook_gateway_TODO.md](projects/planned/rating_7/webhook_gateway_TODO.md)
 
 ---
 
@@ -2250,7 +2250,7 @@ Learn:
 
 Guide:
 
-- [time_series_db_TODO.md](projects/time_series_db_TODO.md)
+- [time_series_db_TODO.md](projects/planned/rating_9/time_series_db_TODO.md)
 
 ---
 
@@ -2273,7 +2273,7 @@ Learn:
 
 Guide:
 
-- [config_manager_TODO.md](projects/config_manager_TODO.md)
+- [config_manager_TODO.md](projects/planned/rating_7/config_manager_TODO.md)
 
 ---
 
@@ -2296,7 +2296,7 @@ Learn:
 
 Guide:
 
-- [container_registry_TODO.md](projects/container_registry_TODO.md)
+- [container_registry_TODO.md](projects/planned/rating_8/container_registry_TODO.md)
 
 ---
 
@@ -2319,7 +2319,7 @@ Learn:
 
 Guide:
 
-- [irc_server_TODO.md](projects/irc_server_TODO.md)
+- [irc_server_TODO.md](projects/planned/rating_7/irc_server_TODO.md)
 
 ---
 
@@ -2342,7 +2342,7 @@ Learn:
 
 Guide:
 
-- [feature_flag_server_TODO.md](projects/feature_flag_server_TODO.md)
+- [feature_flag_server_TODO.md](projects/planned/rating_6/feature_flag_server_TODO.md)
 
 ---
 
@@ -2365,7 +2365,7 @@ Learn:
 
 Guide:
 
-- [map_tile_server_TODO.md](projects/map_tile_server_TODO.md)
+- [map_tile_server_TODO.md](projects/planned/rating_8/map_tile_server_TODO.md)
 
 ---
 
@@ -2388,7 +2388,7 @@ Learn:
 
 Guide:
 
-- [service_discovery_TODO.md](projects/service_discovery_TODO.md)
+- [service_discovery_TODO.md](projects/planned/rating_8/service_discovery_TODO.md)
 
 ---
 
@@ -2411,7 +2411,7 @@ Learn:
 
 Guide:
 
-- [tracing_backend_TODO.md](projects/tracing_backend_TODO.md)
+- [tracing_backend_TODO.md](projects/planned/rating_8/tracing_backend_TODO.md)
 
 ---
 
@@ -2434,7 +2434,7 @@ Learn:
 
 Guide:
 
-- [vector_search_engine_TODO.md](projects/vector_search_engine_TODO.md)
+- [vector_search_engine_TODO.md](projects/planned/rating_9/vector_search_engine_TODO.md)
 
 ---
 
@@ -2457,7 +2457,7 @@ Learn:
 
 Guide:
 
-- [image_optimizer_TODO.md](projects/image_optimizer_TODO.md)
+- [image_optimizer_TODO.md](projects/planned/rating_6/image_optimizer_TODO.md)
 
 ---
 
@@ -2480,7 +2480,7 @@ Learn:
 
 Guide:
 
-- [workflow_scheduler_TODO.md](projects/workflow_scheduler_TODO.md)
+- [workflow_scheduler_TODO.md](projects/planned/rating_7/workflow_scheduler_TODO.md)
 
 ---
 
@@ -2503,7 +2503,7 @@ Learn:
 
 Guide:
 
-- [collaborative_editor_TODO.md](projects/collaborative_editor_TODO.md)
+- [collaborative_editor_TODO.md](projects/planned/rating_9/collaborative_editor_TODO.md)
 
 ---
 
@@ -2526,7 +2526,7 @@ Learn:
 
 Guide:
 
-- [mailing_list_manager_TODO.md](projects/mailing_list_manager_TODO.md)
+- [mailing_list_manager_TODO.md](projects/planned/rating_8/mailing_list_manager_TODO.md)
 
 ---
 
@@ -2549,7 +2549,7 @@ Learn:
 
 Guide:
 
-- [ocr_engine_TODO.md](projects/ocr_engine_TODO.md)
+- [ocr_engine_TODO.md](projects/planned/rating_8/ocr_engine_TODO.md)
 
 ---
 
@@ -2572,7 +2572,7 @@ Learn:
 
 Guide:
 
-- [dns_resolver_TODO.md](projects/dns_resolver_TODO.md)
+- [dns_resolver_TODO.md](projects/planned/rating_7/dns_resolver_TODO.md)
 
 ---
 
@@ -2595,7 +2595,7 @@ Learn:
 
 Guide:
 
-- [ftp_server_TODO.md](projects/ftp_server_TODO.md)
+- [ftp_server_TODO.md](projects/planned/rating_7/ftp_server_TODO.md)
 
 ---
 
@@ -2618,7 +2618,7 @@ Learn:
 
 Guide:
 
-- [video_transcoder_TODO.md](projects/video_transcoder_TODO.md)
+- [video_transcoder_TODO.md](projects/planned/rating_8/video_transcoder_TODO.md)
 
 ---
 
@@ -2641,7 +2641,7 @@ Learn:
 
 Guide:
 
-- [static_analyzer_TODO.md](projects/static_analyzer_TODO.md)
+- [static_analyzer_TODO.md](projects/planned/rating_8/static_analyzer_TODO.md)
 
 ---
 
@@ -2664,7 +2664,7 @@ Learn:
 
 Guide:
 
-- [release_engineering_TODO.md](projects/release_engineering_TODO.md)
+- [release_engineering_TODO.md](projects/planned/rating_7/release_engineering_TODO.md)
 
 ---
 
@@ -2687,7 +2687,7 @@ Learn:
 
 Guide:
 
-- [event_sourcing_db_TODO.md](projects/event_sourcing_db_TODO.md)
+- [event_sourcing_db_TODO.md](projects/planned/rating_9/event_sourcing_db_TODO.md)
 
 ---
 
@@ -2710,7 +2710,7 @@ Learn:
 
 Guide:
 
-- [browser_automation_TODO.md](projects/browser_automation_TODO.md)
+- [browser_automation_TODO.md](projects/planned/rating_8/browser_automation_TODO.md)
 
 ---
 
@@ -2733,7 +2733,7 @@ Learn:
 
 Guide:
 
-- [hdfs_clone_TODO.md](projects/hdfs_clone_TODO.md)
+- [hdfs_clone_TODO.md](projects/planned/rating_10/hdfs_clone_TODO.md)
 
 ---
 
@@ -2756,7 +2756,7 @@ Learn:
 
 Guide:
 
-- [schema_registry_TODO.md](projects/schema_registry_TODO.md)
+- [schema_registry_TODO.md](projects/planned/rating_8/schema_registry_TODO.md)
 
 ---
 
@@ -2779,7 +2779,7 @@ Learn:
 
 Guide:
 
-- [secrets_manager_TODO.md](projects/secrets_manager_TODO.md)
+- [secrets_manager_TODO.md](projects/planned/rating_8/secrets_manager_TODO.md)
 
 ---
 
@@ -2802,7 +2802,7 @@ Learn:
 
 Guide:
 
-- [activitypub_server_TODO.md](projects/activitypub_server_TODO.md)
+- [activitypub_server_TODO.md](projects/planned/rating_9/activitypub_server_TODO.md)
 
 ---
 
@@ -2825,7 +2825,7 @@ Learn:
 
 Guide:
 
-- [sip_proxy_TODO.md](projects/sip_proxy_TODO.md)
+- [sip_proxy_TODO.md](projects/planned/rating_8/sip_proxy_TODO.md)
 
 ---
 
@@ -2848,7 +2848,7 @@ Learn:
 
 Guide:
 
-- [reverse_tunnel_TODO.md](projects/reverse_tunnel_TODO.md)
+- [reverse_tunnel_TODO.md](projects/planned/rating_8/reverse_tunnel_TODO.md)
 
 ---
 
@@ -2871,7 +2871,7 @@ Learn:
 
 Guide:
 
-- [dedup_engine_TODO.md](projects/dedup_engine_TODO.md)
+- [dedup_engine_TODO.md](projects/planned/rating_7/dedup_engine_TODO.md)
 
 ---
 
@@ -2894,7 +2894,7 @@ Learn:
 
 Guide:
 
-- [live_stream_server_TODO.md](projects/live_stream_server_TODO.md)
+- [live_stream_server_TODO.md](projects/planned/rating_8/live_stream_server_TODO.md)
 
 ---
 
@@ -2917,7 +2917,7 @@ Learn:
 
 Guide:
 
-- [crash_reporter_TODO.md](projects/crash_reporter_TODO.md)
+- [crash_reporter_TODO.md](projects/planned/rating_7/crash_reporter_TODO.md)
 
 ---
 
@@ -2940,7 +2940,7 @@ Learn:
 
 Guide:
 
-- [imap_server_TODO.md](projects/imap_server_TODO.md)
+- [imap_server_TODO.md](projects/planned/rating_8/imap_server_TODO.md)
 
 ---
 
@@ -2963,7 +2963,7 @@ Learn:
 
 Guide:
 
-- [bot_framework_TODO.md](projects/bot_framework_TODO.md)
+- [bot_framework_TODO.md](projects/planned/rating_7/bot_framework_TODO.md)
 
 ---
 
@@ -2986,7 +2986,7 @@ Learn:
 
 Guide:
 
-- [wiki_engine_TODO.md](projects/wiki_engine_TODO.md)
+- [wiki_engine_TODO.md](projects/planned/rating_7/wiki_engine_TODO.md)
 
 ---
 
@@ -3009,7 +3009,7 @@ Learn:
 
 Guide:
 
-- [modbus_gateway_TODO.md](projects/modbus_gateway_TODO.md)
+- [modbus_gateway_TODO.md](projects/planned/rating_8/modbus_gateway_TODO.md)
 
 ---
 
@@ -3032,7 +3032,7 @@ Learn:
 
 Guide:
 
-- [graphql_gateway_TODO.md](projects/graphql_gateway_TODO.md)
+- [graphql_gateway_TODO.md](projects/planned/rating_8/graphql_gateway_TODO.md)
 
 ---
 
@@ -3055,7 +3055,7 @@ Learn:
 
 Guide:
 
-- [terminal_multiplexer_TODO.md](projects/terminal_multiplexer_TODO.md)
+- [terminal_multiplexer_TODO.md](projects/planned/rating_8/terminal_multiplexer_TODO.md)
 
 ---
 
@@ -3078,7 +3078,7 @@ Learn:
 
 Guide:
 
-- [power_monitor_TODO.md](projects/power_monitor_TODO.md)
+- [power_monitor_TODO.md](projects/planned/rating_6/power_monitor_TODO.md)
 
 ---
 
@@ -3101,7 +3101,7 @@ Learn:
 
 Guide:
 
-- [torrent_tracker_TODO.md](projects/torrent_tracker_TODO.md)
+- [torrent_tracker_TODO.md](projects/planned/rating_7/torrent_tracker_TODO.md)
 
 ---
 
@@ -3124,7 +3124,7 @@ Learn:
 
 Guide:
 
-- [ldap_server_TODO.md](projects/ldap_server_TODO.md)
+- [ldap_server_TODO.md](projects/planned/rating_8/ldap_server_TODO.md)
 
 ---
 
@@ -3147,7 +3147,7 @@ Learn:
 
 Guide:
 
-- [statsd_server_TODO.md](projects/statsd_server_TODO.md)
+- [statsd_server_TODO.md](projects/planned/rating_7/statsd_server_TODO.md)
 
 ---
 
@@ -3170,7 +3170,7 @@ Learn:
 
 Guide:
 
-- [mail_archive_TODO.md](projects/mail_archive_TODO.md)
+- [mail_archive_TODO.md](projects/planned/rating_8/mail_archive_TODO.md)
 
 ---
 
@@ -3193,7 +3193,7 @@ Learn:
 
 Guide:
 
-- [fuzzer_engine_TODO.md](projects/fuzzer_engine_TODO.md)
+- [fuzzer_engine_TODO.md](projects/planned/rating_9/fuzzer_engine_TODO.md)
 
 ---
 
@@ -3216,7 +3216,7 @@ Learn:
 
 Guide:
 
-- [code_sandbox_TODO.md](projects/code_sandbox_TODO.md)
+- [code_sandbox_TODO.md](projects/planned/rating_9/code_sandbox_TODO.md)
 
 ---
 
@@ -3239,7 +3239,7 @@ Learn:
 
 Guide:
 
-- [artifact_proxy_TODO.md](projects/artifact_proxy_TODO.md)
+- [artifact_proxy_TODO.md](projects/planned/rating_8/artifact_proxy_TODO.md)
 
 ---
 
@@ -3262,7 +3262,7 @@ Learn:
 
 Guide:
 
-- [rss_pipeline_TODO.md](projects/rss_pipeline_TODO.md)
+- [rss_pipeline_TODO.md](projects/planned/rating_6/rss_pipeline_TODO.md)
 
 ---
 
@@ -3285,7 +3285,7 @@ Learn:
 
 Guide:
 
-- [dns_authority_TODO.md](projects/dns_authority_TODO.md)
+- [dns_authority_TODO.md](projects/planned/rating_8/dns_authority_TODO.md)
 
 ---
 
@@ -3308,7 +3308,7 @@ Learn:
 
 Guide:
 
-- [unit_converter_TODO.md](projects/unit_converter_TODO.md)
+- [unit_converter_TODO.md](projects/planned/rating_3/unit_converter_TODO.md)
 
 ---
 
@@ -3331,7 +3331,7 @@ Learn:
 
 Guide:
 
-- [checksum_tool_TODO.md](projects/checksum_tool_TODO.md)
+- [checksum_tool_TODO.md](projects/planned/rating_3/checksum_tool_TODO.md)
 
 ---
 
@@ -3354,7 +3354,7 @@ Learn:
 
 Guide:
 
-- [qr_tool_TODO.md](projects/qr_tool_TODO.md)
+- [qr_tool_TODO.md](projects/planned/rating_4/qr_tool_TODO.md)
 
 ---
 
@@ -3377,7 +3377,7 @@ Learn:
 
 Guide:
 
-- [weather_cli_TODO.md](projects/weather_cli_TODO.md)
+- [weather_cli_TODO.md](projects/planned/rating_3/weather_cli_TODO.md)
 
 ---
 
@@ -3400,7 +3400,7 @@ Learn:
 
 Guide:
 
-- [batch_renamer_TODO.md](projects/batch_renamer_TODO.md)
+- [batch_renamer_TODO.md](projects/planned/rating_4/batch_renamer_TODO.md)
 
 ---
 
@@ -3423,7 +3423,7 @@ Learn:
 
 Guide:
 
-- [markdown_reader_TODO.md](projects/markdown_reader_TODO.md)
+- [markdown_reader_TODO.md](projects/planned/rating_4/markdown_reader_TODO.md)
 
 ---
 
@@ -3446,7 +3446,7 @@ Learn:
 
 Guide:
 
-- [duplicate_line_filter_TODO.md](projects/duplicate_line_filter_TODO.md)
+- [duplicate_line_filter_TODO.md](projects/planned/rating_3/duplicate_line_filter_TODO.md)
 
 ---
 
@@ -3469,7 +3469,7 @@ Learn:
 
 Guide:
 
-- [totp_manager_TODO.md](projects/totp_manager_TODO.md)
+- [totp_manager_TODO.md](projects/planned/rating_4/totp_manager_TODO.md)
 
 ---
 
@@ -3492,7 +3492,7 @@ Learn:
 
 Guide:
 
-- [calculator_cli_TODO.md](projects/calculator_cli_TODO.md)
+- [calculator_cli_TODO.md](projects/planned/rating_2/calculator_cli_TODO.md)
 
 ---
 
@@ -3515,7 +3515,7 @@ Learn:
 
 Guide:
 
-- [json_viewer_TODO.md](projects/json_viewer_TODO.md)
+- [json_viewer_TODO.md](projects/planned/rating_3/json_viewer_TODO.md)
 
 ---
 
@@ -3538,7 +3538,7 @@ Learn:
 
 Guide:
 
-- [timer_cli_TODO.md](projects/timer_cli_TODO.md)
+- [timer_cli_TODO.md](projects/planned/rating_2/timer_cli_TODO.md)
 
 ---
 
@@ -3561,7 +3561,7 @@ Learn:
 
 Guide:
 
-- [password_store_cli_TODO.md](projects/password_store_cli_TODO.md)
+- [password_store_cli_TODO.md](projects/planned/rating_4/password_store_cli_TODO.md)
 
 ---
 
@@ -3584,7 +3584,7 @@ Learn:
 
 Guide:
 
-- [csv_pretty_printer_TODO.md](projects/csv_pretty_printer_TODO.md)
+- [csv_pretty_printer_TODO.md](projects/planned/rating_3/csv_pretty_printer_TODO.md)
 
 ---
 
@@ -3607,7 +3607,7 @@ Learn:
 
 Guide:
 
-- [text_diff_cli_TODO.md](projects/text_diff_cli_TODO.md)
+- [text_diff_cli_TODO.md](projects/planned/rating_4/text_diff_cli_TODO.md)
 
 ---
 
@@ -3630,7 +3630,7 @@ Learn:
 
 Guide:
 
-- [file_splitter_TODO.md](projects/file_splitter_TODO.md)
+- [file_splitter_TODO.md](projects/planned/rating_3/file_splitter_TODO.md)
 
 ---
 
@@ -3653,7 +3653,7 @@ Learn:
 
 Guide:
 
-- [env_linter_TODO.md](projects/env_linter_TODO.md)
+- [env_linter_TODO.md](projects/planned/rating_3/env_linter_TODO.md)
 
 ---
 
@@ -3676,7 +3676,7 @@ Learn:
 
 Guide:
 
-- [base64_cli_TODO.md](projects/base64_cli_TODO.md)
+- [base64_cli_TODO.md](projects/planned/rating_2/base64_cli_TODO.md)
 
 ---
 
@@ -3699,7 +3699,7 @@ Learn:
 
 Guide:
 
-- [hex_viewer_TODO.md](projects/hex_viewer_TODO.md)
+- [hex_viewer_TODO.md](projects/planned/rating_3/hex_viewer_TODO.md)
 
 ---
 
@@ -3722,7 +3722,7 @@ Learn:
 
 Guide:
 
-- [uuid_generator_TODO.md](projects/uuid_generator_TODO.md)
+- [uuid_generator_TODO.md](projects/planned/rating_2/uuid_generator_TODO.md)
 
 ---
 
@@ -3745,7 +3745,7 @@ Learn:
 
 Guide:
 
-- [gitignore_gen_TODO.md](projects/gitignore_gen_TODO.md)
+- [gitignore_gen_TODO.md](projects/planned/rating_2/gitignore_gen_TODO.md)
 
 ---
 
@@ -3768,7 +3768,7 @@ Learn:
 
 Guide:
 
-- [http_client_cli_TODO.md](projects/http_client_cli_TODO.md)
+- [http_client_cli_TODO.md](projects/planned/rating_4/http_client_cli_TODO.md)
 
 ---
 
@@ -3791,7 +3791,7 @@ Learn:
 
 Guide:
 
-- [archive_extractor_TODO.md](projects/archive_extractor_TODO.md)
+- [archive_extractor_TODO.md](projects/planned/rating_4/archive_extractor_TODO.md)
 
 ---
 
@@ -3814,7 +3814,7 @@ Learn:
 
 Guide:
 
-- [file_finder_TODO.md](projects/file_finder_TODO.md)
+- [file_finder_TODO.md](projects/planned/rating_3/file_finder_TODO.md)
 
 ---
 
@@ -3837,7 +3837,7 @@ Learn:
 
 Guide:
 
-- [color_preview_TODO.md](projects/color_preview_TODO.md)
+- [color_preview_TODO.md](projects/planned/rating_2/color_preview_TODO.md)
 
 ---
 
@@ -3860,7 +3860,7 @@ Learn:
 
 Guide:
 
-- [wc_clone_TODO.md](projects/wc_clone_TODO.md)
+- [wc_clone_TODO.md](projects/planned/rating_2/wc_clone_TODO.md)
 
 ---
 
@@ -3883,7 +3883,7 @@ Learn:
 
 Guide:
 
-- [line_ending_converter_TODO.md](projects/line_ending_converter_TODO.md)
+- [line_ending_converter_TODO.md](projects/planned/rating_3/line_ending_converter_TODO.md)
 
 ---
 
@@ -3906,7 +3906,7 @@ Learn:
 
 Guide:
 
-- [slug_generator_TODO.md](projects/slug_generator_TODO.md)
+- [slug_generator_TODO.md](projects/planned/rating_2/slug_generator_TODO.md)
 
 ---
 
@@ -3929,7 +3929,7 @@ Learn:
 
 Guide:
 
-- [notes_cli_TODO.md](projects/notes_cli_TODO.md)
+- [notes_cli_TODO.md](projects/planned/rating_3/notes_cli_TODO.md)
 
 ---
 
@@ -3952,7 +3952,7 @@ Learn:
 
 Guide:
 
-- [ascii_table_TODO.md](projects/ascii_table_TODO.md)
+- [ascii_table_TODO.md](projects/planned/rating_2/ascii_table_TODO.md)
 
 ---
 
@@ -3975,7 +3975,7 @@ Learn:
 
 Guide:
 
-- [url_codec_TODO.md](projects/url_codec_TODO.md)
+- [url_codec_TODO.md](projects/planned/rating_2/url_codec_TODO.md)
 
 ---
 
@@ -3998,7 +3998,7 @@ Learn:
 
 Guide:
 
-- [ini_inspector_TODO.md](projects/ini_inspector_TODO.md)
+- [ini_inspector_TODO.md](projects/planned/rating_4/ini_inspector_TODO.md)
 
 ---
 
@@ -4021,7 +4021,7 @@ Learn:
 
 Guide:
 
-- [date_calculator_TODO.md](projects/date_calculator_TODO.md)
+- [date_calculator_TODO.md](projects/planned/rating_4/date_calculator_TODO.md)
 
 ---
 
@@ -4044,7 +4044,7 @@ Learn:
 
 Guide:
 
-- [feature_flag_service_TODO.md](projects/feature_flag_service_TODO.md)
+- [feature_flag_service_TODO.md](projects/planned/rating_6/feature_flag_service_TODO.md)
 
 ---
 
@@ -4067,7 +4067,7 @@ Learn:
 
 Guide:
 
-- [cron_scheduler_TODO.md](projects/cron_scheduler_TODO.md)
+- [cron_scheduler_TODO.md](projects/planned/rating_5/cron_scheduler_TODO.md)
 
 ---
 
@@ -4090,7 +4090,7 @@ Learn:
 
 Guide:
 
-- [api_mock_server_TODO.md](projects/api_mock_server_TODO.md)
+- [api_mock_server_TODO.md](projects/planned/rating_5/api_mock_server_TODO.md)
 
 ---
 
@@ -4113,7 +4113,7 @@ Learn:
 
 Guide:
 
-- [backup_tool_TODO.md](projects/backup_tool_TODO.md)
+- [backup_tool_TODO.md](projects/planned/rating_6/backup_tool_TODO.md)
 
 ---
 
@@ -4136,7 +4136,7 @@ Learn:
 
 Guide:
 
-- [notebook_sync_engine_TODO.md](projects/notebook_sync_engine_TODO.md)
+- [notebook_sync_engine_TODO.md](projects/planned/rating_7/notebook_sync_engine_TODO.md)
 
 ---
 
@@ -4159,7 +4159,7 @@ Learn:
 
 Guide:
 
-- [search_indexer_TODO.md](projects/search_indexer_TODO.md)
+- [search_indexer_TODO.md](projects/planned/rating_7/search_indexer_TODO.md)
 
 ---
 
@@ -4182,7 +4182,7 @@ Learn:
 
 Guide:
 
-- [media_library_server_TODO.md](projects/media_library_server_TODO.md)
+- [media_library_server_TODO.md](projects/planned/rating_7/media_library_server_TODO.md)
 
 ---
 
@@ -4205,7 +4205,7 @@ Learn:
 
 Guide:
 
-- [package_registry_TODO.md](projects/package_registry_TODO.md)
+- [package_registry_TODO.md](projects/planned/rating_8/package_registry_TODO.md)
 
 ---
 
@@ -4228,7 +4228,7 @@ Learn:
 
 Guide:
 
-- [ci_runner_TODO.md](projects/ci_runner_TODO.md)
+- [ci_runner_TODO.md](projects/planned/rating_7/ci_runner_TODO.md)
 
 ---
 
@@ -4251,7 +4251,7 @@ Learn:
 
 Guide:
 
-- [metrics_dashboard_TODO.md](projects/metrics_dashboard_TODO.md)
+- [metrics_dashboard_TODO.md](projects/planned/rating_6/metrics_dashboard_TODO.md)
 
 ---
 
@@ -4274,7 +4274,7 @@ Learn:
 
 Guide:
 
-- [plugin_runtime_TODO.md](projects/plugin_runtime_TODO.md)
+- [plugin_runtime_TODO.md](projects/planned/rating_8/plugin_runtime_TODO.md)
 
 ---
 
@@ -4297,7 +4297,7 @@ Learn:
 
 Guide:
 
-- [notification_hub_TODO.md](projects/notification_hub_TODO.md)
+- [notification_hub_TODO.md](projects/planned/rating_5/notification_hub_TODO.md)
 
 ---
 
@@ -4320,7 +4320,7 @@ Learn:
 
 Guide:
 
-- [config_deployer_TODO.md](projects/config_deployer_TODO.md)
+- [config_deployer_TODO.md](projects/planned/rating_6/config_deployer_TODO.md)
 
 ---
 
@@ -4343,7 +4343,7 @@ Learn:
 
 Guide:
 
-- [artifact_signer_TODO.md](projects/artifact_signer_TODO.md)
+- [artifact_signer_TODO.md](projects/planned/rating_5/artifact_signer_TODO.md)
 
 ---
 
@@ -4366,7 +4366,7 @@ Learn:
 
 Guide:
 
-- [job_queue_server_TODO.md](projects/job_queue_server_TODO.md)
+- [job_queue_server_TODO.md](projects/planned/rating_7/job_queue_server_TODO.md)
 
 ---
 
@@ -4389,7 +4389,7 @@ Learn:
 
 Guide:
 
-- [webhook_dispatcher_TODO.md](projects/webhook_dispatcher_TODO.md)
+- [webhook_dispatcher_TODO.md](projects/planned/rating_6/webhook_dispatcher_TODO.md)
 
 ---
 
@@ -4412,7 +4412,7 @@ Learn:
 
 Guide:
 
-- [incident_router_TODO.md](projects/incident_router_TODO.md)
+- [incident_router_TODO.md](projects/planned/rating_6/incident_router_TODO.md)
 
 ---
 
@@ -4435,7 +4435,7 @@ Learn:
 
 Guide:
 
-- [sbom_scanner_TODO.md](projects/sbom_scanner_TODO.md)
+- [sbom_scanner_TODO.md](projects/planned/rating_7/sbom_scanner_TODO.md)
 
 ---
 
@@ -4458,7 +4458,7 @@ Learn:
 
 Guide:
 
-- [edge_cache_TODO.md](projects/edge_cache_TODO.md)
+- [edge_cache_TODO.md](projects/planned/rating_6/edge_cache_TODO.md)
 
 ---
 
@@ -4481,7 +4481,7 @@ Learn:
 
 Guide:
 
-- [canary_controller_TODO.md](projects/canary_controller_TODO.md)
+- [canary_controller_TODO.md](projects/planned/rating_8/canary_controller_TODO.md)
 
 ---
 
@@ -4504,7 +4504,7 @@ Learn:
 
 Guide:
 
-- [quota_service_TODO.md](projects/quota_service_TODO.md)
+- [quota_service_TODO.md](projects/planned/rating_5/quota_service_TODO.md)
 
 ---
 
@@ -4527,7 +4527,7 @@ Learn:
 
 Guide:
 
-- [audit_trail_store_TODO.md](projects/audit_trail_store_TODO.md)
+- [audit_trail_store_TODO.md](projects/planned/rating_6/audit_trail_store_TODO.md)
 
 ---
 
@@ -4550,7 +4550,7 @@ Learn:
 
 Guide:
 
-- [rollout_manager_TODO.md](projects/rollout_manager_TODO.md)
+- [rollout_manager_TODO.md](projects/planned/rating_7/rollout_manager_TODO.md)
 
 ---
 
@@ -4573,7 +4573,7 @@ Learn:
 
 Guide:
 
-- [dependency_mirror_TODO.md](projects/dependency_mirror_TODO.md)
+- [dependency_mirror_TODO.md](projects/planned/rating_7/dependency_mirror_TODO.md)
 
 ---
 
@@ -4596,7 +4596,7 @@ Learn:
 
 Guide:
 
-- [chaos_orchestrator_TODO.md](projects/chaos_orchestrator_TODO.md)
+- [chaos_orchestrator_TODO.md](projects/planned/rating_8/chaos_orchestrator_TODO.md)
 
 ---
 
@@ -4619,7 +4619,7 @@ Learn:
 
 Guide:
 
-- [session_store_TODO.md](projects/session_store_TODO.md)
+- [session_store_TODO.md](projects/planned/rating_5/session_store_TODO.md)
 
 ---
 
@@ -4642,7 +4642,7 @@ Learn:
 
 Guide:
 
-- [api_contract_tester_TODO.md](projects/api_contract_tester_TODO.md)
+- [api_contract_tester_TODO.md](projects/planned/rating_6/api_contract_tester_TODO.md)
 
 ---
 
@@ -4665,7 +4665,7 @@ Learn:
 
 Guide:
 
-- [cache_invalidator_TODO.md](projects/cache_invalidator_TODO.md)
+- [cache_invalidator_TODO.md](projects/planned/rating_6/cache_invalidator_TODO.md)
 
 ---
 
@@ -4688,7 +4688,7 @@ Learn:
 
 Guide:
 
-- [compliance_checker_TODO.md](projects/compliance_checker_TODO.md)
+- [compliance_checker_TODO.md](projects/planned/rating_7/compliance_checker_TODO.md)
 
 ---
 
@@ -4711,7 +4711,7 @@ Learn:
 
 Guide:
 
-- [synthetic_probe_TODO.md](projects/synthetic_probe_TODO.md)
+- [synthetic_probe_TODO.md](projects/planned/rating_5/synthetic_probe_TODO.md)
 
 ---
 
@@ -4734,7 +4734,7 @@ Learn:
 
 Guide:
 
-- [threat_feed_aggregator_TODO.md](projects/threat_feed_aggregator_TODO.md)
+- [threat_feed_aggregator_TODO.md](projects/planned/rating_8/threat_feed_aggregator_TODO.md)
 
 ---
 
@@ -4757,7 +4757,7 @@ Learn:
 
 Guide:
 
-- [tenant_provisioner_TODO.md](projects/tenant_provisioner_TODO.md)
+- [tenant_provisioner_TODO.md](projects/planned/rating_7/tenant_provisioner_TODO.md)
 
 ---
 
@@ -4780,7 +4780,7 @@ Learn:
 
 Guide:
 
-- [release_train_TODO.md](projects/release_train_TODO.md)
+- [release_train_TODO.md](projects/planned/rating_6/release_train_TODO.md)
 
 ---
 
@@ -4803,7 +4803,7 @@ Learn:
 
 Guide:
 
-- [incident_timeline_TODO.md](projects/incident_timeline_TODO.md)
+- [incident_timeline_TODO.md](projects/planned/rating_5/incident_timeline_TODO.md)
 
 ---
 
@@ -4826,7 +4826,7 @@ Learn:
 
 Guide:
 
-- [policy_simulator_TODO.md](projects/policy_simulator_TODO.md)
+- [policy_simulator_TODO.md](projects/planned/rating_6/policy_simulator_TODO.md)
 
 ---
 
@@ -4849,7 +4849,7 @@ Learn:
 
 Guide:
 
-- [dependency_auditor_TODO.md](projects/dependency_auditor_TODO.md)
+- [dependency_auditor_TODO.md](projects/planned/rating_7/dependency_auditor_TODO.md)
 
 ---
 
@@ -4872,7 +4872,7 @@ Learn:
 
 Guide:
 
-- [traffic_replayer_TODO.md](projects/traffic_replayer_TODO.md)
+- [traffic_replayer_TODO.md](projects/planned/rating_7/traffic_replayer_TODO.md)
 
 ---
 
@@ -4895,7 +4895,7 @@ Learn:
 
 Guide:
 
-- [failover_coordinator_TODO.md](projects/failover_coordinator_TODO.md)
+- [failover_coordinator_TODO.md](projects/planned/rating_8/failover_coordinator_TODO.md)
 
 ---
 
@@ -4918,7 +4918,7 @@ Learn:
 
 Guide:
 
-- [tenant_billing_meter_TODO.md](projects/tenant_billing_meter_TODO.md)
+- [tenant_billing_meter_TODO.md](projects/planned/rating_6/tenant_billing_meter_TODO.md)
 
 ---
 
@@ -4941,7 +4941,7 @@ Learn:
 
 Guide:
 
-- [runtime_profiler_TODO.md](projects/runtime_profiler_TODO.md)
+- [runtime_profiler_TODO.md](projects/planned/rating_5/runtime_profiler_TODO.md)
 
 ---
 
@@ -4964,7 +4964,7 @@ Learn:
 
 Guide:
 
-- [service_catalog_TODO.md](projects/service_catalog_TODO.md)
+- [service_catalog_TODO.md](projects/planned/rating_6/service_catalog_TODO.md)
 
 ---
 
@@ -4987,7 +4987,7 @@ Learn:
 
 Guide:
 
-- [incident_postmortem_TODO.md](projects/incident_postmortem_TODO.md)
+- [incident_postmortem_TODO.md](projects/planned/rating_5/incident_postmortem_TODO.md)
 
 ---
 
@@ -5010,7 +5010,7 @@ Learn:
 
 Guide:
 
-- [access_review_engine_TODO.md](projects/access_review_engine_TODO.md)
+- [access_review_engine_TODO.md](projects/planned/rating_7/access_review_engine_TODO.md)
 
 ---
 
@@ -5033,7 +5033,7 @@ Learn:
 
 Guide:
 
-- [secret_rotation_service_TODO.md](projects/secret_rotation_service_TODO.md)
+- [secret_rotation_service_TODO.md](projects/planned/rating_7/secret_rotation_service_TODO.md)
 
 ---
 
@@ -5056,7 +5056,7 @@ Learn:
 
 Guide:
 
-- [capacity_planner_TODO.md](projects/capacity_planner_TODO.md)
+- [capacity_planner_TODO.md](projects/planned/rating_6/capacity_planner_TODO.md)
 
 ---
 
@@ -5079,7 +5079,7 @@ Learn:
 
 Guide:
 
-- [uptime_sla_tracker_TODO.md](projects/uptime_sla_tracker_TODO.md)
+- [uptime_sla_tracker_TODO.md](projects/planned/rating_5/uptime_sla_tracker_TODO.md)
 
 ---
 
@@ -5102,7 +5102,7 @@ Learn:
 
 Guide:
 
-- [config_diff_auditor_TODO.md](projects/config_diff_auditor_TODO.md)
+- [config_diff_auditor_TODO.md](projects/planned/rating_6/config_diff_auditor_TODO.md)
 
 ---
 
@@ -5125,7 +5125,7 @@ Learn:
 
 Guide:
 
-- [api_replay_harness_TODO.md](projects/api_replay_harness_TODO.md)
+- [api_replay_harness_TODO.md](projects/planned/rating_7/api_replay_harness_TODO.md)
 
 ---
 
@@ -5148,7 +5148,7 @@ Learn:
 
 Guide:
 
-- [change_approval_engine_TODO.md](projects/change_approval_engine_TODO.md)
+- [change_approval_engine_TODO.md](projects/planned/rating_7/change_approval_engine_TODO.md)
 
 ---
 
@@ -5171,7 +5171,7 @@ Learn:
 
 Guide:
 
-- [log_redaction_gateway_TODO.md](projects/log_redaction_gateway_TODO.md)
+- [log_redaction_gateway_TODO.md](projects/planned/rating_6/log_redaction_gateway_TODO.md)
 
 ---
 
@@ -5194,7 +5194,7 @@ Learn:
 
 Guide:
 
-- [schema_migration_planner_TODO.md](projects/schema_migration_planner_TODO.md)
+- [schema_migration_planner_TODO.md](projects/planned/rating_8/schema_migration_planner_TODO.md)
 
 ---
 
@@ -5217,7 +5217,7 @@ Learn:
 
 Guide:
 
-- [incident_simulator_TODO.md](projects/incident_simulator_TODO.md)
+- [incident_simulator_TODO.md](projects/planned/rating_6/incident_simulator_TODO.md)
 
 ---
 
@@ -5240,7 +5240,7 @@ Learn:
 
 Guide:
 
-- [api_deprecation_tracker_TODO.md](projects/api_deprecation_tracker_TODO.md)
+- [api_deprecation_tracker_TODO.md](projects/planned/rating_5/api_deprecation_tracker_TODO.md)
 
 ---
 
@@ -5263,7 +5263,7 @@ Learn:
 
 Guide:
 
-- [workload_forecaster_TODO.md](projects/workload_forecaster_TODO.md)
+- [workload_forecaster_TODO.md](projects/planned/rating_6/workload_forecaster_TODO.md)
 
 ---
 
@@ -5286,7 +5286,7 @@ Learn:
 
 Guide:
 
-- [credential_inventory_TODO.md](projects/credential_inventory_TODO.md)
+- [credential_inventory_TODO.md](projects/planned/rating_6/credential_inventory_TODO.md)
 
 ---
 
@@ -5309,7 +5309,7 @@ Learn:
 
 Guide:
 
-- [delivery_slo_guard_TODO.md](projects/delivery_slo_guard_TODO.md)
+- [delivery_slo_guard_TODO.md](projects/planned/rating_7/delivery_slo_guard_TODO.md)
 
 ---
 
@@ -5332,7 +5332,7 @@ Learn:
 
 Guide:
 
-- [blast_radius_analyzer_TODO.md](projects/blast_radius_analyzer_TODO.md)
+- [blast_radius_analyzer_TODO.md](projects/planned/rating_7/blast_radius_analyzer_TODO.md)
 
 ---
 
@@ -5355,7 +5355,7 @@ Learn:
 
 Guide:
 
-- [runbook_recommender_TODO.md](projects/runbook_recommender_TODO.md)
+- [runbook_recommender_TODO.md](projects/planned/rating_6/runbook_recommender_TODO.md)
 
 ---
 
@@ -5378,7 +5378,7 @@ Learn:
 
 Guide:
 
-- [maintenance_window_manager_TODO.md](projects/maintenance_window_manager_TODO.md)
+- [maintenance_window_manager_TODO.md](projects/planned/rating_5/maintenance_window_manager_TODO.md)
 
 ---
 
@@ -5401,7 +5401,7 @@ Learn:
 
 Guide:
 
-- [latency_budget_planner_TODO.md](projects/latency_budget_planner_TODO.md)
+- [latency_budget_planner_TODO.md](projects/planned/rating_6/latency_budget_planner_TODO.md)
 
 ---
 
@@ -5424,7 +5424,7 @@ Learn:
 
 Guide:
 
-- [release_guardrail_TODO.md](projects/release_guardrail_TODO.md)
+- [release_guardrail_TODO.md](projects/planned/rating_7/release_guardrail_TODO.md)
 
 ---
 
@@ -5447,7 +5447,7 @@ Learn:
 
 Guide:
 
-- [dependency_risk_heatmap_TODO.md](projects/dependency_risk_heatmap_TODO.md)
+- [dependency_risk_heatmap_TODO.md](projects/planned/rating_6/dependency_risk_heatmap_TODO.md)
 
 ---
 
@@ -5470,7 +5470,7 @@ Learn:
 
 Guide:
 
-- [authz_drift_detector_TODO.md](projects/authz_drift_detector_TODO.md)
+- [authz_drift_detector_TODO.md](projects/planned/rating_8/authz_drift_detector_TODO.md)
 
 ---
 
@@ -5493,4 +5493,4 @@ Learn:
 
 Guide:
 
-- [incident_comms_broker_TODO.md](projects/incident_comms_broker_TODO.md)
+- [incident_comms_broker_TODO.md](projects/planned/rating_6/incident_comms_broker_TODO.md)

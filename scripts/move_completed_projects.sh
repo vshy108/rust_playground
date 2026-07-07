@@ -19,7 +19,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "Unknown argument: $1" >&2
-      echo "Usage: $0 [--dry-run] [--mode completed|wip]" >&2
+      echo "Usage: $0 [--dry-run] [--mode completed|wip|planned]" >&2
       exit 1
       ;;
   esac
@@ -27,18 +27,27 @@ done
 
 case "$mode" in
   completed)
-    target_dir="projects/completed"
+    static_target_dir="projects/completed"
     ;;
   wip)
-    target_dir="projects/wip"
+    static_target_dir="projects/wip"
+    ;;
+  planned)
+    static_target_dir=""
     ;;
   *)
-    echo "Unsupported mode: $mode (expected: completed|wip)" >&2
+    echo "Unsupported mode: $mode (expected: completed|wip|planned)" >&2
     exit 1
     ;;
 esac
 
-mkdir -p "$target_dir"
+if [[ -n "$static_target_dir" ]]; then
+  mkdir -p "$static_target_dir"
+elif [[ "$mode" == "planned" ]]; then
+  for i in {1..10}; do
+    mkdir -p "projects/planned/rating_${i}"
+  done
+fi
 
 get_status() {
   awk '
@@ -52,6 +61,15 @@ get_status() {
   ' "$1"
 }
 
+get_rating() {
+  sed -nE '1s/.*\([^0-9]*([0-9]+)\/10\).*/\1/p' "$1"
+}
+
+is_wip_status() {
+  local status_lc="$1"
+  [[ "$status_lc" == "in progress" || "$status_lc" == "in-progress" || "$status_lc" == "wip" || "$status_lc" == "working" || "$status_lc" == "started" ]]
+}
+
 matches_mode() {
   local status_lc="$1"
 
@@ -60,7 +78,10 @@ matches_mode() {
       [[ "$status_lc" == "completed" ]]
       ;;
     wip)
-      [[ "$status_lc" == "in progress" || "$status_lc" == "in-progress" || "$status_lc" == "wip" || "$status_lc" == "working" || "$status_lc" == "started" ]]
+      is_wip_status "$status_lc"
+      ;;
+    planned)
+      [[ "$status_lc" != "completed" ]] && ! is_wip_status "$status_lc"
       ;;
   esac
 }
@@ -106,7 +127,8 @@ is_stub_source() {
 
 moved_count=0
 moved_dir_count=0
-declare -a moved_rs_files=()
+declare -a cargo_old_paths=()
+declare -a cargo_new_paths=()
 
 for todo in projects/*_TODO.md; do
   [[ -f "$todo" ]] || continue
@@ -114,6 +136,22 @@ for todo in projects/*_TODO.md; do
   status="$(get_status "$todo" || true)"
   status_lc="$(printf '%s' "$status" | tr '[:upper:]' '[:lower:]')"
   matches_mode "$status_lc" || continue
+
+  project_target_dir="$static_target_dir"
+  if [[ "$mode" == "planned" ]]; then
+    rating="$(get_rating "$todo" || true)"
+    if ! [[ "$rating" =~ ^([1-9]|10)$ ]]; then
+      if [[ "$dry_run" -eq 1 ]]; then
+        printf 'DRY-RUN skip unrated TODO: %s\n' "$todo"
+      else
+        printf 'Skip unrated TODO: %s\n' "$todo"
+      fi
+      continue
+    fi
+    project_target_dir="projects/planned/rating_${rating}"
+  fi
+
+  mkdir -p "$project_target_dir"
 
   todo_base="$(basename "$todo")"
   project_name="${todo_base%_TODO.md}"
@@ -152,7 +190,7 @@ for todo in projects/*_TODO.md; do
     if [[ "$src" == projects/*.rs ]]; then
       while IFS= read -r module_name; do
         module_src="projects/${module_name}"
-        module_dest="${target_dir}/${module_name}"
+        module_dest="${project_target_dir}/${module_name}"
 
         [[ -d "$module_src" ]] || continue
         [[ -e "$module_dest" ]] && continue
@@ -167,7 +205,7 @@ for todo in projects/*_TODO.md; do
       done < <(sed -nE 's/^[[:space:]]*mod[[:space:]]+([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*;[[:space:]]*$/\1/p' "$src")
     fi
 
-    dest="${target_dir}/$(basename "$src")"
+    dest="${project_target_dir}/$(basename "$src")"
     if [[ -e "$dest" ]]; then
       continue
     fi
@@ -180,17 +218,18 @@ for todo in projects/*_TODO.md; do
     fi
 
     moved_count=$((moved_count + 1))
-    if [[ "$src" == *.rs ]]; then
-      moved_rs_files+=("$(basename "$src")")
+    if [[ "$src" == projects/*.rs ]]; then
+      cargo_old_paths+=("path = \"${src}\"")
+      cargo_new_paths+=("path = \"${dest}\"")
     fi
   done
 done
 
 updated_paths=0
 if [[ -f Cargo.toml ]]; then
-  for rs_file in "${moved_rs_files[@]}"; do
-    old_path="path = \"projects/${rs_file}\""
-    new_path="path = \"${target_dir}/${rs_file}\""
+  for i in "${!cargo_old_paths[@]}"; do
+    old_path="${cargo_old_paths[$i]}"
+    new_path="${cargo_new_paths[$i]}"
 
     if grep -Fq "$old_path" Cargo.toml; then
       if [[ "$dry_run" -eq 1 ]]; then
@@ -208,7 +247,15 @@ if [[ "$dry_run" -eq 0 && -f Cargo.toml.bak ]]; then
 fi
 
 if [[ "$dry_run" -eq 1 ]]; then
-  printf 'Dry run complete (%s -> %s). Files matched for move: %d, module dirs matched: %d\n' "$mode" "$target_dir" "$moved_count" "$moved_dir_count"
+  if [[ "$mode" == "planned" ]]; then
+    printf 'Dry run complete (planned -> projects/planned/rating_<1..10>). Files matched for move: %d, module dirs matched: %d\n' "$moved_count" "$moved_dir_count"
+  else
+    printf 'Dry run complete (%s -> %s). Files matched for move: %d, module dirs matched: %d\n' "$mode" "$static_target_dir" "$moved_count" "$moved_dir_count"
+  fi
 else
-  printf 'Done (%s -> %s). Moved files: %d, moved module dirs: %d, Cargo path updates: %d\n' "$mode" "$target_dir" "$moved_count" "$moved_dir_count" "$updated_paths"
+  if [[ "$mode" == "planned" ]]; then
+    printf 'Done (planned -> projects/planned/rating_<1..10>). Moved files: %d, moved module dirs: %d, Cargo path updates: %d\n' "$moved_count" "$moved_dir_count" "$updated_paths"
+  else
+    printf 'Done (%s -> %s). Moved files: %d, moved module dirs: %d, Cargo path updates: %d\n' "$mode" "$static_target_dir" "$moved_count" "$moved_dir_count" "$updated_paths"
+  fi
 fi
