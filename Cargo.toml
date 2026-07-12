@@ -2,6 +2,7 @@
 name = "rust_playground"
 version = "0.1.0"
 edition = "2024"
+default-run = "rust_playground"
 
 # cargo build or run will help install
 # Dependencies are downloaded and compiled automatically on first `cargo build`.
