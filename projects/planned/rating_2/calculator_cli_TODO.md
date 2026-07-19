@@ -9,15 +9,15 @@ cargo test --bin calculator_cli
 
 ## Milestones
 
-- [ ] Parse simple expressions from CLI input.
-- [ ] Implement arithmetic operations with operator precedence.
-- [ ] Add clear error messages for malformed expressions.
-- [ ] Format numeric output predictably.
-- [ ] Add tests for arithmetic correctness and invalid expressions.
+- [x] Parse simple expressions from CLI input.
+- [x] Implement arithmetic operations with operator precedence.
+- [x] Add clear error messages for malformed expressions.
+- [x] Format numeric output predictably.
+- [x] Add tests for arithmetic correctness and invalid expressions.
 
 ## Extra
 
-- [ ] Add parentheses support.
+- [x] Add parentheses support.
 
 ## Tips
 

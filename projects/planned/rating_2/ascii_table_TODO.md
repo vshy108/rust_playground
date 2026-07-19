@@ -9,15 +9,15 @@ cargo test --bin ascii_table
 
 ## Milestones
 
-- [ ] Print the standard ASCII range in columns.
-- [ ] Show decimal, hex, and printable character forms.
-- [ ] Handle control characters with readable labels.
-- [ ] Support a numeric range filter.
-- [ ] Add snapshot-like tests for output formatting.
+- [x] Print the standard ASCII range in columns.
+- [x] Show decimal, hex, and printable character forms.
+- [x] Handle control characters with readable labels.
+- [x] Support a numeric range filter.
+- [x] Add snapshot-like tests for output formatting.
 
 ## Extra
 
-- [ ] Add an extended Latin-1 mode.
+- [x] Add an extended Latin-1 mode.
 
 ## Tips
 

@@ -9,15 +9,15 @@ cargo test --bin url_codec
 
 ## Milestones
 
-- [ ] Encode URL components from CLI input.
-- [ ] Decode percent-encoded strings.
-- [ ] Add explicit encode and decode modes.
-- [ ] Report malformed escape sequences clearly.
-- [ ] Add tests for spaces, symbols, and invalid inputs.
+- [x] Encode URL components from CLI input.
+- [x] Decode percent-encoded strings.
+- [x] Add explicit encode and decode modes.
+- [x] Report malformed escape sequences clearly.
+- [x] Add tests for spaces, symbols, and invalid inputs.
 
 ## Extra
 
-- [ ] Add query-string key/value formatting helpers.
+- [x] Add query-string key/value formatting helpers.
 
 ## Tips
 

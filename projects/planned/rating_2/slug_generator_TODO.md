@@ -9,15 +9,15 @@ cargo test --bin slug_generator
 
 ## Milestones
 
-- [ ] Accept text from args or stdin.
-- [ ] Lowercase and normalize separator characters.
-- [ ] Collapse duplicate separators.
-- [ ] Trim separators from both ends.
-- [ ] Add tests for punctuation-heavy inputs.
+- [x] Accept text from args or stdin.
+- [x] Lowercase and normalize separator characters.
+- [x] Collapse duplicate separators.
+- [x] Trim separators from both ends.
+- [x] Add tests for punctuation-heavy inputs.
 
 ## Extra
 
-- [ ] Add optional maximum slug length.
+- [x] Add optional maximum slug length.
 
 ## Tips
 

@@ -9,15 +9,15 @@ cargo test --bin base64_cli
 
 ## Milestones
 
-- [ ] Encode text or file input to Base64.
-- [ ] Add decode mode back to raw bytes or text.
-- [ ] Handle invalid Base64 input gracefully.
-- [ ] Support stdin/stdout streaming basics.
-- [ ] Add tests for encode/decode round-trips.
+- [x] Encode text or file input to Base64.
+- [x] Add decode mode back to raw bytes or text.
+- [x] Handle invalid Base64 input gracefully.
+- [x] Support stdin/stdout streaming basics.
+- [x] Add tests for encode/decode round-trips.
 
 ## Extra
 
-- [ ] Add URL-safe Base64 mode.
+- [x] Add URL-safe Base64 mode.
 
 ## Tips
 

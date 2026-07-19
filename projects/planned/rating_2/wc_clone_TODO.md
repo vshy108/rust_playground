@@ -9,15 +9,15 @@ cargo test --bin wc_clone
 
 ## Milestones
 
-- [ ] Read from a file path or stdin.
-- [ ] Count lines, words, and bytes.
-- [ ] Match a simple default output layout.
-- [ ] Add per-flag output selection.
-- [ ] Add fixture-based tests for counts.
+- [x] Read from a file path or stdin.
+- [x] Count lines, words, and bytes.
+- [x] Match a simple default output layout.
+- [x] Add per-flag output selection.
+- [x] Add fixture-based tests for counts.
 
 ## Extra
 
-- [ ] Add character counting for UTF-8 text.
+- [x] Add character counting for UTF-8 text.
 
 ## Tips
 

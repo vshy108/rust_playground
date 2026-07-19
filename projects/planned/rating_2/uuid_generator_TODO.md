@@ -9,15 +9,15 @@ cargo test --bin uuid_generator
 
 ## Milestones
 
-- [ ] Generate UUIDs from a simple CLI.
-- [ ] Add count or batch generation mode.
-- [ ] Support a couple of output formats such as plain or uppercase.
-- [ ] Validate output shape in tests.
-- [ ] Add tests for formatting and count behavior.
+- [x] Generate UUIDs from a simple CLI.
+- [x] Add count or batch generation mode.
+- [x] Support a couple of output formats such as plain or uppercase.
+- [x] Validate output shape in tests.
+- [x] Add tests for formatting and count behavior.
 
 ## Extra
 
-- [ ] Add namespace-based deterministic UUID mode.
+- [x] Add namespace-based deterministic UUID mode.
 
 ## Tips
 

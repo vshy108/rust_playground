@@ -9,15 +9,15 @@ cargo test --bin color_preview
 
 ## Milestones
 
-- [ ] Parse color input as hex or RGB values.
-- [ ] Render terminal color swatches and value summaries.
-- [ ] Add named-palette or multiple-color preview mode.
-- [ ] Validate malformed color input clearly.
-- [ ] Add tests for parsing and formatting helpers.
+- [x] Parse color input as hex or RGB values.
+- [x] Render terminal color swatches and value summaries.
+- [x] Add named-palette or multiple-color preview mode.
+- [x] Validate malformed color input clearly.
+- [x] Add tests for parsing and formatting helpers.
 
 ## Extra
 
-- [ ] Add ANSI 256-color lookup mode.
+- [x] Add ANSI 256-color lookup mode.
 
 ## Tips
 
