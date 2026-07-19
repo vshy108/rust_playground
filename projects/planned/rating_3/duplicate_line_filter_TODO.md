@@ -9,15 +9,15 @@ cargo test --bin duplicate_line_filter
 
 ## Milestones
 
-- [ ] Read lines from stdin or file input.
-- [ ] Track seen lines and filter duplicates.
-- [ ] Add options for case sensitivity or whitespace normalization.
-- [ ] Implement counts or keep-first/keep-last behavior.
-- [ ] Add tests for duplicate detection and normalization options.
+- [x] Read lines from stdin or file input.
+- [x] Track seen lines and filter duplicates.
+- [x] Add options for case sensitivity or whitespace normalization.
+- [x] Implement counts or keep-first/keep-last behavior.
+- [x] Add tests for duplicate detection and normalization options.
 
 ## Extra
 
-- [ ] Add streaming statistics output.
+- [x] Add streaming statistics output.
 
 ## Tips
 

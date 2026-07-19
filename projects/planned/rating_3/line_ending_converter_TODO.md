@@ -9,15 +9,15 @@ cargo test --bin line_ending_converter
 
 ## Milestones
 
-- [ ] Detect LF versus CRLF input content.
-- [ ] Convert text to a requested target line ending.
-- [ ] Support stdout and in-place rewrite modes.
-- [ ] Preserve files that already match the target.
-- [ ] Add tests for mixed-ending fixtures.
+- [x] Detect LF versus CRLF input content.
+- [x] Convert text to a requested target line ending.
+- [x] Support stdout and in-place rewrite modes.
+- [x] Preserve files that already match the target.
+- [x] Add tests for mixed-ending fixtures.
 
 ## Extra
 
-- [ ] Add directory mode with extension filtering.
+- [x] Add directory mode with extension filtering.
 
 ## Tips
 
