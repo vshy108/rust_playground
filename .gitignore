@@ -2,3 +2,7 @@
 
 # macOS cache 
 .DS_Store
+
+#SigMap files
+.context/
+.github/copilot-instructions.md
