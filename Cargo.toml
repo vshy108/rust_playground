@@ -1015,3 +1015,36 @@ path = "projects/planned/rating_6/incident_comms_broker.rs"
 [[bin]]
 name = "rust_engine_game"
 path = "projects/wip/rust_engine_game.rs"
+
+[[bin]]
+name = "sorter"
+path = "projects/wip/line_sorter.rs"
+
+[[bin]]
+name = "concat"
+path = "projects/wip/file_concatenator.rs"
+
+[[bin]]
+name = "case_convert"
+path = "projects/wip/string_case_converter.rs"
+
+[[bin]]
+name = "wordfreq"
+path = "projects/wip/word_frequency_counter.rs"
+
+[[bin]]
+name = "txtstat"
+path = "projects/wip/text_statistics.rs"
+
+[[bin]]
+name = "grepish"
+path = "projects/wip/simple_grep.rs"
+
+[[bin]]
+name = "number_guess"
+path = "projects/wip/number_guessing_game.rs"
+
+[[bin]]
+name = "todocli"
+path = "projects/wip/simple_todo_app.rs"
+

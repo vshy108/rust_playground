@@ -323,6 +323,14 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 223 | ⭐ 10/10 | Planned | `raft_consensus` | [raft_consensus.rs](projects/planned/rating_10/raft_consensus.rs) | Consensus algorithm implementation |
 | 224 | ⭐ 10/10 | Planned | `os_kernel` | [os_kernel.rs](projects/planned/rating_10/os_kernel.rs) | Bare-metal systems programming |
 | 225 | ⭐ 10/10 | Planned | `hdfs_clone` | [hdfs_clone.rs](projects/planned/rating_10/hdfs_clone.rs) | Namenode metadata + replicated blocks |
+| 226 | ⭐ 1/10 | WIP | `sorter` | [line_sorter.rs](projects/wip/line_sorter.rs) | Sort and filter file lines |
+| 227 | ⭐ 1/10 | WIP | `concat` | [file_concatenator.rs](projects/wip/file_concatenator.rs) | Combine multiple files |
+| 228 | ⭐ 2/10 | WIP | `case_convert` | [string_case_converter.rs](projects/wip/string_case_converter.rs) | Convert between naming conventions |
+| 229 | ⭐ 2/10 | WIP | `wordfreq` | [word_frequency_counter.rs](projects/wip/word_frequency_counter.rs) | Count word occurrences in text |
+| 230 | ⭐ 2/10 | WIP | `txtstat` | [text_statistics.rs](projects/wip/text_statistics.rs) | Count lines, words, characters |
+| 231 | ⭐ 2/10 | WIP | `grepish` | [simple_grep.rs](projects/wip/simple_grep.rs) | Basic text search tool |
+| 232 | ⭐ 2/10 | WIP | `number_guess` | [number_guessing_game.rs](projects/wip/number_guessing_game.rs) | Interactive guessing game |
+| 233 | ⭐ 3/10 | WIP | `todocli` | [simple_todo_app.rs](projects/wip/simple_todo_app.rs) | CLI task manager with persistence |
 
 ---
 
@@ -5494,3 +5502,188 @@ Learn:
 Guide:
 
 - [incident_comms_broker_TODO.md](projects/planned/rating_6/incident_comms_broker_TODO.md)
+
+---
+
+## ⭐ 1/10 — Line Sorter
+
+Goal: Sort and filter file lines
+
+Build:
+
+```bash
+cargo run --bin sorter -- file.txt
+```
+
+Learn:
+
+- file I/O and line reading
+- vector sorting and filtering
+- CLI flag parsing
+- basic tests
+
+Guide:
+
+- [line_sorter_TODO.md](projects/wip/line_sorter_TODO.md)
+
+---
+
+## ⭐ 1/10 — File Concatenator
+
+Goal: Combine multiple files
+
+Build:
+
+```bash
+cargo run --bin concat -- file1.txt file2.txt
+```
+
+Learn:
+
+- multiple file handling
+- argument parsing
+- error handling for missing files
+- output redirection
+
+Guide:
+
+- [file_concatenator_TODO.md](projects/wip/file_concatenator_TODO.md)
+
+---
+
+## ⭐ 2/10 — String Case Converter
+
+Goal: Convert between naming conventions
+
+Build:
+
+```bash
+cargo run --bin case_convert -- "hello world" to-snake
+```
+
+Learn:
+
+- string manipulation and iteration
+- character classification
+- case conversion logic
+- edge case handling
+
+Guide:
+
+- [string_case_converter_TODO.md](projects/wip/string_case_converter_TODO.md)
+
+---
+
+## ⭐ 2/10 — Word Frequency Counter
+
+Goal: Count word occurrences in text
+
+Build:
+
+```bash
+cargo run --bin wordfreq -- file.txt
+```
+
+Learn:
+
+- HashMap usage for aggregation
+- file reading and parsing
+- sorting and display
+- text normalization
+
+Guide:
+
+- [word_frequency_counter_TODO.md](projects/wip/word_frequency_counter_TODO.md)
+
+---
+
+## ⭐ 2/10 — Text Statistics
+
+Goal: Count lines, words, characters
+
+Build:
+
+```bash
+cargo run --bin txtstat -- file.txt
+```
+
+Learn:
+
+- counting and aggregation
+- CLI flags and options
+- formatted output
+- edge cases (empty files, Unicode)
+
+Guide:
+
+- [text_statistics_TODO.md](projects/wip/text_statistics_TODO.md)
+
+---
+
+## ⭐ 2/10 — Simple Grep
+
+Goal: Basic text search tool
+
+Build:
+
+```bash
+cargo run --bin grepish -- "pattern" file.txt
+```
+
+Learn:
+
+- pattern matching and searching
+- line-by-line processing
+- case sensitivity options
+- output formatting
+
+Guide:
+
+- [simple_grep_TODO.md](projects/wip/simple_grep_TODO.md)
+
+---
+
+## ⭐ 2/10 — Number Guessing Game
+
+Goal: Interactive guessing game
+
+Build:
+
+```bash
+cargo run --bin number_guess
+```
+
+Learn:
+
+- random number generation
+- stdin reading and parsing
+- game loop implementation
+- feedback and scoring
+
+Guide:
+
+- [number_guessing_game_TODO.md](projects/wip/number_guessing_game_TODO.md)
+
+---
+
+## ⭐ 3/10 — Simple Todo App
+
+Goal: CLI task manager with persistence
+
+Build:
+
+```bash
+cargo run --bin todocli -- add "Task"
+```
+
+Learn:
+
+- struct definition and modeling
+- JSON serialization/deserialization
+- file I/O for persistence
+- CRUD operations
+- command parsing
+
+Guide:
+
+- [simple_todo_app_TODO.md](projects/wip/simple_todo_app_TODO.md)
