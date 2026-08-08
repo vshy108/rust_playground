@@ -1,6 +1,7 @@
 use std::{
     env, fs,
     io::{self, Read},
+    path::{Path, PathBuf},
 };
 
 fn main() {
@@ -21,6 +22,28 @@ fn run(arguments: &[String]) -> Result<String, String> {
         return verify_manifest(manifest);
     }
 
+    if arguments.first().map(String::as_str) == Some("--dir") {
+        let root = arguments
+            .get(1)
+            .ok_or_else(|| "usage: checksum_tool --dir PATH [--extension EXT]".to_string())?;
+        let extension = match arguments {
+            [_, _] => None,
+            [_, _, flag, value] if flag == "--extension" => Some(value.as_str()),
+            _ => return Err("usage: checksum_tool --dir PATH [--extension EXT]".to_string()),
+        };
+        let mut paths = Vec::new();
+        collect_files(Path::new(root), extension, &mut paths)?;
+        paths.sort();
+        return paths
+            .iter()
+            .map(|path| {
+                let path = path.to_string_lossy();
+                let bytes = read_input(&path)?;
+                Ok(format_output(&sha256_hex(&bytes), &path))
+            })
+            .collect();
+    }
+
     let paths = if arguments.is_empty() {
         vec!["-".to_string()]
     } else {
@@ -34,6 +57,28 @@ fn run(arguments: &[String]) -> Result<String, String> {
             Ok(format_output(&sha256_hex(&bytes), path))
         })
         .collect()
+}
+
+fn collect_files(
+    root: &Path,
+    extension: Option<&str>,
+    paths: &mut Vec<PathBuf>,
+) -> Result<(), String> {
+    for entry in fs::read_dir(root)
+        .map_err(|error| format!("failed to read directory '{}': {error}", root.display()))?
+    {
+        let path = entry
+            .map_err(|error| format!("failed to read directory entry: {error}"))?
+            .path();
+        if path.is_dir() {
+            collect_files(&path, extension, paths)?;
+        } else if extension.is_none_or(|extension| {
+            path.extension().and_then(|value| value.to_str()) == Some(extension)
+        }) {
+            paths.push(path);
+        }
+    }
+    Ok(())
 }
 
 fn verify_manifest(path: &str) -> Result<String, String> {
@@ -305,5 +350,27 @@ mod tests {
         assert!(verify_manifest(manifest.to_str().unwrap())
             .unwrap_err()
             .contains("checksum mismatch"));
+    }
+
+    #[test]
+    fn collects_files_in_sorted_extension_filtered_order() {
+        let directory = tempfile::tempdir().unwrap();
+        let nested = directory.path().join("nested");
+        std::fs::create_dir(&nested).unwrap();
+        std::fs::write(directory.path().join("z.txt"), b"z").unwrap();
+        std::fs::write(directory.path().join("skip.bin"), b"skip").unwrap();
+        std::fs::write(nested.join("a.txt"), b"a").unwrap();
+
+        let mut paths = Vec::new();
+        super::collect_files(directory.path(), Some("txt"), &mut paths).unwrap();
+        paths.sort();
+
+        assert_eq!(
+            paths,
+            vec![
+                directory.path().join("nested/a.txt"),
+                directory.path().join("z.txt")
+            ]
+        );
     }
 }

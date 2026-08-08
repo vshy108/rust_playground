@@ -634,7 +634,7 @@ path = "projects/completed/unit_converter.rs"
 
 [[bin]]
 name = "checksum_tool"
-path = "projects/planned/rating_3/checksum_tool.rs"
+path = "projects/completed/checksum_tool.rs"
 
 [[bin]]
 name = "qr_tool"
