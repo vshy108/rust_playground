@@ -11,7 +11,7 @@ cargo test --bin file_splitter
 
 - [x] Split a file by line count or byte size.
 - [x] Generate deterministic part names.
-- [ ] Add reassembly or manifest metadata mode.
+- [x] Add reassembly and manifest metadata mode.
 - [x] Handle tiny files and exact-boundary splits correctly.
 - [x] Add tests for split sizes and part naming.
 
@@ -29,3 +29,4 @@ cargo test --bin file_splitter
 - Implemented the line/byte splitting core and deterministic part naming.
 - Verification: focused tests and strict clippy are the next gate.
 - Remaining: reassembly/manifest metadata and optional compression.
+- Manifest generation and `--join` reassembly are now implemented.

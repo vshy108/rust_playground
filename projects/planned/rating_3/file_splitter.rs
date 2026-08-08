@@ -13,7 +13,19 @@ enum SplitMode {
 }
 
 fn run(arguments: &[String]) -> Result<String, String> {
-    let (mode, path) = parse_options(arguments)?;
+    if arguments.first().map(String::as_str) == Some("--join") {
+        let manifest = arguments
+            .get(1)
+            .ok_or_else(|| "usage: file_splitter --join MANIFEST OUTPUT".to_string())?;
+        let output = arguments
+            .get(2)
+            .ok_or_else(|| "usage: file_splitter --join MANIFEST OUTPUT".to_string())?;
+        if arguments.len() != 3 {
+            return Err("usage: file_splitter --join MANIFEST OUTPUT".to_string());
+        }
+        return join_manifest(manifest, output);
+    }
+    let (mode, path, write_manifest) = parse_options(arguments)?;
     let input = fs::read(path).map_err(|error| format!("failed to read '{path}': {error}"))?;
     let parts = match mode {
         SplitMode::Lines(limit) => split_lines(&input, limit),
@@ -26,13 +38,21 @@ fn run(arguments: &[String]) -> Result<String, String> {
             .map_err(|error| format!("failed to write '{destination}': {error}"))?;
         output.push_str(&format!("{destination}\n"));
     }
+    if write_manifest {
+        let manifest = format!("{path}.manifest");
+        fs::write(&manifest, &output)
+            .map_err(|error| format!("failed to write '{manifest}': {error}"))?;
+        output.push_str(&format!("{manifest}\n"));
+    }
     Ok(output)
 }
 
-fn parse_options(arguments: &[String]) -> Result<(SplitMode, &str), String> {
-    let usage = "usage: file_splitter (--lines N | --bytes N) FILE";
-    let [flag, value, path] = arguments else {
-        return Err(usage.to_string());
+fn parse_options(arguments: &[String]) -> Result<(SplitMode, &str, bool), String> {
+    let usage = "usage: file_splitter (--lines N | --bytes N) FILE [--manifest]";
+    let (flag, value, path, write_manifest) = match arguments {
+        [flag, value, path] => (flag, value, path, false),
+        [flag, value, path, manifest] if manifest == "--manifest" => (flag, value, path, true),
+        _ => return Err(usage.to_string()),
     };
     let limit = value
         .parse::<usize>()
@@ -45,7 +65,20 @@ fn parse_options(arguments: &[String]) -> Result<(SplitMode, &str), String> {
         "--bytes" => SplitMode::Bytes(limit),
         _ => return Err(usage.to_string()),
     };
-    Ok((mode, path))
+    Ok((mode, path, write_manifest))
+}
+
+fn join_manifest(manifest: &str, output: &str) -> Result<String, String> {
+    let entries = fs::read_to_string(manifest)
+        .map_err(|error| format!("failed to read manifest '{manifest}': {error}"))?;
+    let mut content = Vec::new();
+    for part in entries.lines().filter(|line| !line.is_empty()) {
+        content.extend(
+            fs::read(part).map_err(|error| format!("failed to read part '{part}': {error}"))?,
+        );
+    }
+    fs::write(output, content).map_err(|error| format!("failed to write '{output}': {error}"))?;
+    Ok(format!("reassembled {output}\n"))
 }
 
 fn split_bytes(input: &[u8], limit: usize) -> Vec<Vec<u8>> {
