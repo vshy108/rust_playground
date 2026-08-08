@@ -36,6 +36,38 @@ Create a short plan where each slice has:
 Prefer a complete small path through parsing, validation, execution, and output
 over a large incomplete subsystem.
 
+## 3.1 Dependency decision rule
+
+Before adding a crate, record why the project needs it and which project starts
+using it. The dependency note must include:
+
+- project name and rating
+- concrete capability that the standard library does not reasonably provide
+- selected crate and the feature flags used
+- why an existing dependency or local implementation is not preferable
+- license, maintenance, security, size, and offline/cache considerations
+- the verification command, such as `cargo check`, focused tests, and strict
+  Clippy
+
+Add dependencies at the smallest project slice that requires them, not in
+anticipation of future projects. Update `Cargo.toml`, `Cargo.lock`, the
+project TODO change record, and this rationale together. For security-sensitive
+work, use a vetted crate rather than implementing cryptography, QR encoding,
+or protocol primitives from scratch. If the registry is unavailable, leave the
+dependency change uncommitted and report the exact blocker.
+
+Current planned dependency starts:
+
+| Project | Dependency need | Start when |
+|---------|-----------------|------------|
+| `password_store_cli` | authenticated encryption, hashing, and encoding; proposed `aes-gcm`, `sha2`, and `base64` | password-store implementation begins |
+| `totp_manager` | HMAC-SHA1, Base32, and constant-time code generation; proposed `hmac`, `sha1`, and `base32` | TOTP implementation begins |
+| `qr_tool` | QR matrix encoding/decoding and optional image output; proposed `qrcode` plus an image crate only if export requires it | QR implementation begins |
+
+Existing dependency starts should remain documented in the relevant TODO
+guide; do not add a broad dependency bundle merely because several future
+projects may eventually need it.
+
 ## 4. Implement test-first where practical
 
 Write a failing test for the next behavior, implement the smallest fix, then

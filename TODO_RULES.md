@@ -87,6 +87,18 @@ is closed. Each entry should include:
 - the chosen fix
 - the reusable Rust lesson
 
+## Dependency Rationale
+
+Every dependency addition must be justified before it is installed. Record the
+first project that needs it, the capability it provides, selected features,
+why an existing dependency or standard-library solution is insufficient,
+security/license/maintenance considerations, and the verification command.
+Add the smallest dependency set at the start of that project, update the lock
+file, and include the rationale in its TODO change record. Never replace
+security-sensitive primitives with homemade cryptography or protocol code just
+to avoid a dependency. If crates cannot be fetched, keep the change
+uncommitted and report the registry blocker.
+
 ## File Naming
 
 Project TODO guides should use this file naming pattern:

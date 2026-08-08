@@ -93,6 +93,10 @@ rusty_audio = "1.4.1"
 rusty_time = "1.1.0"
 # gaming engine
 rusty_engine = "7.0.0"
+aes-gcm = "0.10"
+sha2 = "0.10"
+base64 = "0.22"
+qrcode = "0.14"
 
 # rusty_engine mimic release profile
 [profile.dev]
