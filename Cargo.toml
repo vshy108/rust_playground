@@ -650,7 +650,7 @@ path = "projects/completed/batch_renamer.rs"
 
 [[bin]]
 name = "markdown_reader"
-path = "projects/planned/rating_4/markdown_reader.rs"
+path = "projects/completed/markdown_reader.rs"
 
 [[bin]]
 name = "duplicate_line_filter"

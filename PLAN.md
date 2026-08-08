@@ -118,6 +118,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `batch_renamer` | [batch_renamer_TODO.md](projects/completed/batch_renamer_TODO.md) |
 | `date_calculator` | [date_calculator_TODO.md](projects/completed/date_calculator_TODO.md) |
 | `ini_inspector` | [ini_inspector_TODO.md](projects/completed/ini_inspector_TODO.md) |
+| `markdown_reader` | [markdown_reader_TODO.md](projects/completed/markdown_reader_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -154,7 +155,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 29 | ⭐ 4/10 | Completed | `logparse` | [log_parser_cli.rs](projects/completed/log_parser_cli.rs) | Iterators + parsing + aggregation |
 | 30 | ⭐ 4/10 | Planned | `qr_tool` | [qr_tool.rs](projects/planned/rating_4/qr_tool.rs) | QR encode/decode utility |
 | 31 | ⭐ 4/10 | Completed | `batch_renamer` | [batch_renamer.rs](projects/completed/batch_renamer.rs) | Safe bulk filename transformation |
-| 32 | ⭐ 4/10 | Planned | `markdown_reader` | [markdown_reader.rs](projects/planned/rating_4/markdown_reader.rs) | Terminal markdown viewing |
+| 32 | ⭐ 4/10 | Completed | `markdown_reader` | [markdown_reader.rs](projects/completed/markdown_reader.rs) | Terminal markdown viewing |
 | 33 | ⭐ 4/10 | Planned | `totp_manager` | [totp_manager.rs](projects/planned/rating_4/totp_manager.rs) | Local TOTP code generator |
 | 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/planned/rating_4/password_store_cli.rs) | Simple encrypted secret storage |
 | 35 | ⭐ 4/10 | Planned | `text_diff_cli` | [text_diff_cli.rs](projects/planned/rating_4/text_diff_cli.rs) | Line-by-line text comparison |
@@ -3456,7 +3457,7 @@ Learn:
 
 Guide:
 
-- [markdown_reader_TODO.md](projects/planned/rating_4/markdown_reader_TODO.md)
+- [markdown_reader_TODO.md](projects/completed/markdown_reader_TODO.md)
 
 ---
 
