@@ -702,7 +702,7 @@ path = "projects/planned/rating_3/hex_viewer.rs"
 
 [[bin]]
 name = "uuid_generator"
-path = "projects/planned/rating_2/uuid_generator.rs"
+path = "projects/completed/uuid_generator.rs"
 
 [[bin]]
 name = "gitignore_gen"
