@@ -11,7 +11,7 @@ cargo test --bin checksum_tool
 
 - [x] Read file paths or stdin data for hashing.
 - [x] Implement SHA-256 digest mode.
-- [ ] Add checksum verification mode against a manifest file.
+- [x] Add checksum verification mode against a manifest file.
 - [x] Format SHA-256 output as `<digest>  <path>` for scripts and humans.
 - [x] Add tests for SHA-256 digest stability.
 
@@ -32,3 +32,4 @@ cargo test --bin checksum_tool
 - Verification: `cargo test --bin checksum_tool`, strict clippy, and a stdin
   smoke test for `abc` all pass.
 - Next slice: add manifest verification with explicit mismatch reporting.
+- Manifest verification is now implemented with success and mismatch handling.

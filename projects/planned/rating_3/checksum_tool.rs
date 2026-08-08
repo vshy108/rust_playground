@@ -11,6 +11,16 @@ fn main() {
 }
 
 fn run(arguments: &[String]) -> Result<String, String> {
+    if arguments.first().map(String::as_str) == Some("--verify") {
+        let manifest = arguments
+            .get(1)
+            .ok_or_else(|| "usage: checksum_tool --verify MANIFEST".to_string())?;
+        if arguments.len() > 2 {
+            return Err("--verify accepts one manifest path".to_string());
+        }
+        return verify_manifest(manifest);
+    }
+
     let paths = if arguments.is_empty() {
         vec!["-".to_string()]
     } else {
@@ -24,6 +34,40 @@ fn run(arguments: &[String]) -> Result<String, String> {
             Ok(format_output(&sha256_hex(&bytes), path))
         })
         .collect()
+}
+
+fn verify_manifest(path: &str) -> Result<String, String> {
+    let manifest = fs::read_to_string(path)
+        .map_err(|error| format!("failed to read manifest '{path}': {error}"))?;
+    let mut verified = 0;
+
+    for (line_number, line) in manifest.lines().enumerate() {
+        if line.trim().is_empty() {
+            continue;
+        }
+        let (expected, file_path) = line.split_once("  ").ok_or_else(|| {
+            format!(
+                "manifest line {} must use '<digest>  <path>'",
+                line_number + 1
+            )
+        })?;
+        if expected.len() != 64 || !expected.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+            return Err(format!(
+                "manifest line {} has an invalid SHA-256 digest",
+                line_number + 1
+            ));
+        }
+
+        let actual = sha256_hex(&read_input(file_path)?);
+        if actual != expected.to_ascii_lowercase() {
+            return Err(format!(
+                "checksum mismatch for '{file_path}': expected {expected}, found {actual}"
+            ));
+        }
+        verified += 1;
+    }
+
+    Ok(format!("verified {verified} file(s)\n"))
 }
 
 fn format_output(digest: &str, path: &str) -> String {
@@ -198,7 +242,7 @@ fn sha256(input: &[u8]) -> [u8; 32] {
 
 #[cfg(test)]
 mod tests {
-    use super::{sha256, sha256_hex};
+    use super::{sha256, sha256_hex, verify_manifest};
 
     #[test]
     fn hashes_standard_vectors() {
@@ -226,5 +270,40 @@ mod tests {
             ),
             "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad  -\n"
         );
+    }
+
+    #[test]
+    fn verifies_matching_manifest_entries() {
+        let directory = tempfile::tempdir().unwrap();
+        let file = directory.path().join("sample.txt");
+        let manifest = directory.path().join("checksums.txt");
+        std::fs::write(&file, b"abc").unwrap();
+        std::fs::write(
+            &manifest,
+            format!("{}  {}\n", sha256_hex(b"abc"), file.display()),
+        )
+        .unwrap();
+
+        assert_eq!(
+            verify_manifest(manifest.to_str().unwrap()),
+            Ok("verified 1 file(s)\n".to_string())
+        );
+    }
+
+    #[test]
+    fn reports_manifest_mismatches() {
+        let directory = tempfile::tempdir().unwrap();
+        let file = directory.path().join("sample.txt");
+        let manifest = directory.path().join("checksums.txt");
+        std::fs::write(&file, b"abc").unwrap();
+        std::fs::write(
+            &manifest,
+            format!("{}  {}\n", "0".repeat(64), file.display()),
+        )
+        .unwrap();
+
+        assert!(verify_manifest(manifest.to_str().unwrap())
+            .unwrap_err()
+            .contains("checksum mismatch"));
     }
 }
