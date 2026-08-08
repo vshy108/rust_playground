@@ -110,6 +110,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `env_linter` | [env_linter_TODO.md](projects/completed/env_linter_TODO.md) |
 | `file_finder` | [file_finder_TODO.md](projects/completed/file_finder_TODO.md) |
 | `hex_viewer` | [hex_viewer_TODO.md](projects/completed/hex_viewer_TODO.md) |
+| `notes_cli` | [notes_cli_TODO.md](projects/completed/notes_cli_TODO.md) |
 | `duplicate_line_filter` | [duplicate_line_filter_TODO.md](projects/completed/duplicate_line_filter_TODO.md) |
 | `line_ending_converter` | [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md) |
 
@@ -143,7 +144,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 24 | ⭐ 3/10 | Completed | `hex_viewer` | [hex_viewer.rs](projects/completed/hex_viewer.rs) | Inspect binary files in hex |
 | 25 | ⭐ 3/10 | Completed | `file_finder` | [file_finder.rs](projects/completed/file_finder.rs) | Recursively search files by pattern |
 | 26 | ⭐ 3/10 | Completed | `line_ending_converter` | [line_ending_converter.rs](projects/completed/line_ending_converter.rs) | Convert text line endings |
-| 27 | ⭐ 3/10 | Planned | `notes_cli` | [notes_cli.rs](projects/planned/rating_3/notes_cli.rs) | Store and manage simple notes |
+| 27 | ⭐ 3/10 | Completed | `notes_cli` | [notes_cli.rs](projects/completed/notes_cli.rs) | Store and manage simple notes |
 | 28 | ⭐ 4/10 | Completed | `watchdir` | [file_watcher_cli.rs](projects/completed/file_watcher_cli.rs) | Filesystem events + channels + debounce |
 | 29 | ⭐ 4/10 | Completed | `logparse` | [log_parser_cli.rs](projects/completed/log_parser_cli.rs) | Iterators + parsing + aggregation |
 | 30 | ⭐ 4/10 | Planned | `qr_tool` | [qr_tool.rs](projects/planned/rating_4/qr_tool.rs) | QR encode/decode utility |
@@ -3956,7 +3957,7 @@ Learn:
 
 Guide:
 
-- [notes_cli_TODO.md](projects/planned/rating_3/notes_cli_TODO.md)
+- [notes_cli_TODO.md](projects/completed/notes_cli_TODO.md)
 
 ---
 

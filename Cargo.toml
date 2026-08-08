@@ -738,7 +738,7 @@ path = "projects/completed/slug_generator.rs"
 
 [[bin]]
 name = "notes_cli"
-path = "projects/planned/rating_3/notes_cli.rs"
+path = "projects/completed/notes_cli.rs"
 
 [[bin]]
 name = "ascii_table"
