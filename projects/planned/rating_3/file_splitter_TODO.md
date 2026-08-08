@@ -9,11 +9,11 @@ cargo test --bin file_splitter
 
 ## Milestones
 
-- [ ] Split a file by line count or byte size.
-- [ ] Generate deterministic part names.
+- [x] Split a file by line count or byte size.
+- [x] Generate deterministic part names.
 - [ ] Add reassembly or manifest metadata mode.
-- [ ] Handle tiny files and exact-boundary splits correctly.
-- [ ] Add tests for split sizes and part naming.
+- [x] Handle tiny files and exact-boundary splits correctly.
+- [x] Add tests for split sizes and part naming.
 
 ## Extra
 
@@ -23,3 +23,9 @@ cargo test --bin file_splitter
 
 - Naming rules should be stable and easy to test.
 - Byte-based and line-based split logic should stay separate.
+
+## Progress record
+
+- Implemented the line/byte splitting core and deterministic part naming.
+- Verification: focused tests and strict clippy are the next gate.
+- Remaining: reassembly/manifest metadata and optional compression.
