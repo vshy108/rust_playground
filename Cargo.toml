@@ -670,7 +670,7 @@ path = "projects/planned/rating_3/json_viewer.rs"
 
 [[bin]]
 name = "timer_cli"
-path = "projects/planned/rating_2/timer_cli.rs"
+path = "projects/completed/timer_cli.rs"
 
 [[bin]]
 name = "password_store_cli"
