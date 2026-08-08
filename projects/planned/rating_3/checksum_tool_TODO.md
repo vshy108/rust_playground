@@ -9,11 +9,11 @@ cargo test --bin checksum_tool
 
 ## Milestones
 
-- [ ] Read file paths or stdin data for hashing.
-- [ ] Implement one or two digest modes such as SHA-256 and MD5.
+- [x] Read file paths or stdin data for hashing.
+- [x] Implement SHA-256 digest mode.
 - [ ] Add checksum verification mode against a manifest file.
-- [ ] Format output for both human and script use.
-- [ ] Add tests for digest stability and verify-mode failures.
+- [x] Format SHA-256 output as `<digest>  <path>` for scripts and humans.
+- [x] Add tests for SHA-256 digest stability.
 
 ## Extra
 
@@ -24,3 +24,11 @@ cargo test --bin checksum_tool
 - Keep file reading and hash formatting as separate concerns.
 - Verification mode should explain mismatches clearly.
 - Stable path ordering matters if you add directory support.
+
+## Progress record
+
+- Completed the first slice: SHA-256 hashing from files or stdin with stable
+  `<digest>  <path>` output.
+- Verification: `cargo test --bin checksum_tool`, strict clippy, and a stdin
+  smoke test for `abc` all pass.
+- Next slice: add manifest verification with explicit mismatch reporting.
