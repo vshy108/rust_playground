@@ -754,7 +754,7 @@ path = "projects/planned/rating_4/ini_inspector.rs"
 
 [[bin]]
 name = "date_calculator"
-path = "projects/planned/rating_4/date_calculator.rs"
+path = "projects/completed/date_calculator.rs"
 
 [[bin]]
 name = "feature_flag_service"
