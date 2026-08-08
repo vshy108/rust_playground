@@ -1,5 +1,6 @@
 use std::{
     env, fs,
+    io::Read,
     path::{Component, Path, PathBuf},
 };
 
@@ -29,7 +30,8 @@ fn run(arguments: &[String]) -> Result<String, String> {
     };
     let bytes =
         fs::read(archive).map_err(|error| format!("failed to read '{archive}': {error}"))?;
-    let entries = parse_tar(&bytes)?;
+    let decoded = decode_archive(&bytes)?;
+    let entries = parse_tar(&decoded)?;
     match mode {
         "list" => Ok(entries
             .iter()
@@ -61,6 +63,19 @@ fn run(arguments: &[String]) -> Result<String, String> {
             ))
         }
         _ => unreachable!(),
+    }
+}
+
+fn decode_archive(bytes: &[u8]) -> Result<Vec<u8>, String> {
+    if bytes.starts_with(&[0x1f, 0x8b]) {
+        let mut decoder = flate2::read::GzDecoder::new(bytes);
+        let mut decoded = Vec::new();
+        decoder
+            .read_to_end(&mut decoded)
+            .map_err(|error| format!("failed to decode gzip archive: {error}"))?;
+        Ok(decoded)
+    } else {
+        Ok(bytes.to_vec())
     }
 }
 
@@ -130,7 +145,7 @@ fn safe_path(path: &str) -> Result<PathBuf, String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{parse_tar, safe_path};
+    use super::{decode_archive, parse_tar, safe_path};
 
     fn tar_entry(path: &str, data: &[u8]) -> Vec<u8> {
         let mut header = [0u8; 512];
@@ -158,5 +173,14 @@ mod tests {
         assert!(safe_path("../outside.txt").is_err());
         assert!(safe_path("/absolute.txt").is_err());
         assert!(safe_path("safe/file.txt").is_ok());
+    }
+
+    #[test]
+    fn accepts_uncompressed_input_through_decoder() {
+        let archive = tar_entry("hello.txt", b"hello");
+        assert_eq!(
+            parse_tar(&decode_archive(&archive).unwrap()).unwrap().len(),
+            1
+        );
     }
 }

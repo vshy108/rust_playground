@@ -4573,6 +4573,7 @@ dependencies = [
  "axum",
  "crossterm",
  "ctrlc",
+ "flate2",
  "http",
  "notify",
  "rand",
