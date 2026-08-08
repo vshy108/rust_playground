@@ -19,6 +19,16 @@ cargo test --bin password_store_cli
 
 - [ ] Add generated-password support.
 
+## Dependency plan
+
+- Start when this project implementation begins: `aes-gcm`, `sha2`, and
+  `base64`.
+- Reason: authenticated encryption, deterministic key derivation input hashing,
+  and safe text storage encoding are not responsibilities to implement locally.
+- Verification: run focused tests, strict Clippy, and `cargo audit` when the
+  registry is available.
+- Security rule: do not substitute homemade encryption or plaintext storage.
+
 ## Tips
 
 - Keep crypto boundaries narrow and explicit.

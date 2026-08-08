@@ -19,6 +19,17 @@ cargo test --bin qr_tool
 
 - [ ] Add error-correction level selection.
 
+## Dependency plan
+
+- Start when this project implementation begins: `qrcode` for QR matrix
+  generation and decoding support; add an image crate only if file export
+  cannot remain terminal/text based.
+- Reason: QR mode tables, error correction, masking, and decoding are protocol
+  work that should rely on a reviewed implementation.
+- Verification: run deterministic snapshot tests, round-trip fixtures, strict
+  Clippy, and `cargo audit` when the registry is available.
+- Status: `qrcode` is available in Cargo.toml; image export remains conditional.
+
 ## Tips
 
 - Treat encode and decode as separate code paths.
