@@ -72,6 +72,9 @@ Completed
 
 Before marking a project complete, record the verification commands and any
 known limitations. A successful compile alone is not sufficient evidence.
+After the project passes its acceptance checks and the documentation is updated,
+create a focused commit for the completed project and record its hash in the
+handoff or change record.
 
 ## File Naming
 

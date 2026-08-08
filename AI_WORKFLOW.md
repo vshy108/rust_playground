@@ -60,6 +60,20 @@ Run focused checks first, then broader checks when the change warrants them.
 Report the exact commands run, their results, known limitations, and any
 follow-up work. Never mark a TODO item complete based only on compilation.
 
+## 7. Commit each finished project
+
+When a project or clearly bounded milestone is complete:
+
+1. confirm its acceptance criteria are satisfied
+2. run the focused verification commands
+3. review the final diff and status
+4. update its TODO guide and `PLAN.md` if appropriate
+5. create one focused commit describing the completed work
+
+Do not combine unrelated projects or unfinished work in the completion commit.
+Record the commit hash in the handoff when reporting completion. Keep changes
+uncommitted only when the user explicitly asks for a draft or review first.
+
 ## Standard change record
 
 For a non-trivial project milestone, record this in the TODO guide or pull
