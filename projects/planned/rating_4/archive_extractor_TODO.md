@@ -9,15 +9,20 @@ cargo test --bin archive_extractor
 
 ## Milestones
 
-- [ ] Detect a simple archive type such as zip or tar.
-- [ ] Extract files into a target directory.
-- [ ] Add listing mode without extraction.
-- [ ] Prevent path traversal from malicious archive entries.
-- [ ] Add tests for extraction layout and invalid-entry handling.
+- [x] Detect and parse a simple tar archive.
+- [x] Extract files into a target directory.
+- [x] Add listing mode without extraction.
+- [x] Prevent path traversal from malicious archive entries.
+- [x] Add tests for extraction layout and invalid-entry handling.
 
 ## Extra
 
 - [ ] Add support for compressed tar variants.
+
+## Progress record
+
+- Implemented uncompressed tar parsing, listing, extraction, and safe-path validation.
+- Remaining: compressed tar variants.
 
 ## Tips
 
