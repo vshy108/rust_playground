@@ -103,6 +103,9 @@ The following projects currently have no unchecked items left in their TODO guid
 | `slug_generator` | [slug_generator_TODO.md](projects/completed/slug_generator_TODO.md) |
 | `ascii_table` | [ascii_table_TODO.md](projects/completed/ascii_table_TODO.md) |
 | `url_codec` | [url_codec_TODO.md](projects/completed/url_codec_TODO.md) |
+| `unit_converter` | [unit_converter_TODO.md](projects/completed/unit_converter_TODO.md) |
+| `duplicate_line_filter` | [duplicate_line_filter_TODO.md](projects/completed/duplicate_line_filter_TODO.md) |
+| `line_ending_converter` | [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -123,17 +126,17 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 13 | ⭐ 2/10 | Completed | `url_codec` | [url_codec.rs](projects/completed/url_codec.rs) | Encode and decode URL components |
 | 14 | ⭐ 3/10 | Completed | `url_shortener` | [url_shortener.rs](projects/completed/url_shortener.rs) | Data modeling |
 | 15 | ⭐ 3/10 | Completed | `lru_cache` | [lru_cache.rs](projects/completed/lru_cache.rs) | Ownership thinking |
-| 16 | ⭐ 3/10 | Planned | `unit_converter` | [unit_converter.rs](projects/planned/rating_3/unit_converter.rs) | Simple unit conversions from CLI input |
+| 16 | ⭐ 3/10 | Completed | `unit_converter` | [unit_converter.rs](projects/completed/unit_converter.rs) | Simple unit conversions from CLI input |
 | 17 | ⭐ 3/10 | Planned | `checksum_tool` | [checksum_tool.rs](projects/planned/rating_3/checksum_tool.rs) | File hashing + checksum verification |
 | 18 | ⭐ 3/10 | Planned | `weather_cli` | [weather_cli.rs](projects/planned/rating_3/weather_cli.rs) | Current weather + short forecast output |
-| 19 | ⭐ 3/10 | Planned | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/planned/rating_3/duplicate_line_filter.rs) | Remove or count repeated lines |
+| 19 | ⭐ 3/10 | Completed | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/completed/duplicate_line_filter.rs) | Remove or count repeated lines |
 | 20 | ⭐ 3/10 | Planned | `json_viewer` | [json_viewer.rs](projects/planned/rating_3/json_viewer.rs) | Pretty-print JSON data |
 | 21 | ⭐ 3/10 | Planned | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/planned/rating_3/csv_pretty_printer.rs) | Render CSV as aligned tables |
 | 22 | ⭐ 3/10 | Planned | `file_splitter` | [file_splitter.rs](projects/planned/rating_3/file_splitter.rs) | Split files by size or lines |
 | 23 | ⭐ 3/10 | Planned | `env_linter` | [env_linter.rs](projects/planned/rating_3/env_linter.rs) | Detect common `.env` file issues |
 | 24 | ⭐ 3/10 | Planned | `hex_viewer` | [hex_viewer.rs](projects/planned/rating_3/hex_viewer.rs) | Inspect binary files in hex |
 | 25 | ⭐ 3/10 | Planned | `file_finder` | [file_finder.rs](projects/planned/rating_3/file_finder.rs) | Recursively search files by pattern |
-| 26 | ⭐ 3/10 | Planned | `line_ending_converter` | [line_ending_converter.rs](projects/planned/rating_3/line_ending_converter.rs) | Convert text line endings |
+| 26 | ⭐ 3/10 | Completed | `line_ending_converter` | [line_ending_converter.rs](projects/completed/line_ending_converter.rs) | Convert text line endings |
 | 27 | ⭐ 3/10 | Planned | `notes_cli` | [notes_cli.rs](projects/planned/rating_3/notes_cli.rs) | Store and manage simple notes |
 | 28 | ⭐ 4/10 | Completed | `watchdir` | [file_watcher_cli.rs](projects/completed/file_watcher_cli.rs) | Filesystem events + channels + debounce |
 | 29 | ⭐ 4/10 | Completed | `logparse` | [log_parser_cli.rs](projects/completed/log_parser_cli.rs) | Iterators + parsing + aggregation |
@@ -3326,7 +3329,7 @@ Learn:
 
 Guide:
 
-- [unit_converter_TODO.md](projects/planned/rating_3/unit_converter_TODO.md)
+- [unit_converter_TODO.md](projects/completed/unit_converter_TODO.md)
 
 ---
 
@@ -3464,7 +3467,7 @@ Learn:
 
 Guide:
 
-- [duplicate_line_filter_TODO.md](projects/planned/rating_3/duplicate_line_filter_TODO.md)
+- [duplicate_line_filter_TODO.md](projects/completed/duplicate_line_filter_TODO.md)
 
 ---
 
@@ -3901,7 +3904,7 @@ Learn:
 
 Guide:
 
-- [line_ending_converter_TODO.md](projects/planned/rating_3/line_ending_converter_TODO.md)
+- [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md)
 
 ---
 

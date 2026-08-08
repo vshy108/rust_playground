@@ -630,7 +630,7 @@ path = "projects/planned/rating_8/dns_authority.rs"
 
 [[bin]]
 name = "unit_converter"
-path = "projects/planned/rating_3/unit_converter.rs"
+path = "projects/completed/unit_converter.rs"
 
 [[bin]]
 name = "checksum_tool"
@@ -654,7 +654,7 @@ path = "projects/planned/rating_4/markdown_reader.rs"
 
 [[bin]]
 name = "duplicate_line_filter"
-path = "projects/planned/rating_3/duplicate_line_filter.rs"
+path = "projects/completed/duplicate_line_filter.rs"
 
 [[bin]]
 name = "totp_manager"
@@ -730,7 +730,7 @@ path = "projects/completed/wc_clone.rs"
 
 [[bin]]
 name = "line_ending_converter"
-path = "projects/planned/rating_3/line_ending_converter.rs"
+path = "projects/completed/line_ending_converter.rs"
 
 [[bin]]
 name = "slug_generator"

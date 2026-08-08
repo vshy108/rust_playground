@@ -134,6 +134,12 @@ fn convert_line_endings(input: &str, target: LineEnding) -> String {
 fn convert_file(path: &str, target: LineEnding) -> Result<bool, String> {
     let input =
         fs::read_to_string(path).map_err(|error| format!("failed to read '{path}': {error}"))?;
+    if matches!(
+        (detect_line_endings(&input), target),
+        (DetectedEnding::Lf, LineEnding::Lf) | (DetectedEnding::Crlf, LineEnding::Crlf)
+    ) {
+        return Ok(false);
+    }
     let converted = convert_line_endings(&input, target);
     if input == converted {
         return Ok(false);

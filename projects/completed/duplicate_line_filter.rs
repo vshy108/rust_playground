@@ -23,7 +23,7 @@ fn main() {
 
 fn run(arguments: &[String]) -> Result<(String, Option<String>), String> {
     let options = parse_options(arguments)?;
-    let input = read_input(options.path.as_deref())?;
+    let input = read_input(options.path)?;
     let result = filter_lines(&input, options);
     let output = render_lines(&result.lines, &result.counts, options.show_counts);
     let statistics = options.show_statistics.then(|| {
