@@ -678,7 +678,7 @@ path = "projects/planned/rating_4/password_store_cli.rs"
 
 [[bin]]
 name = "csv_pretty_printer"
-path = "projects/planned/rating_3/csv_pretty_printer.rs"
+path = "projects/completed/csv_pretty_printer.rs"
 
 [[bin]]
 name = "text_diff_cli"
