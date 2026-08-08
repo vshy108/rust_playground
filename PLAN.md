@@ -117,6 +117,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `line_ending_converter` | [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md) |
 | `batch_renamer` | [batch_renamer_TODO.md](projects/completed/batch_renamer_TODO.md) |
 | `date_calculator` | [date_calculator_TODO.md](projects/completed/date_calculator_TODO.md) |
+| `ini_inspector` | [ini_inspector_TODO.md](projects/completed/ini_inspector_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -159,7 +160,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 35 | ⭐ 4/10 | Planned | `text_diff_cli` | [text_diff_cli.rs](projects/planned/rating_4/text_diff_cli.rs) | Line-by-line text comparison |
 | 36 | ⭐ 4/10 | Planned | `http_client_cli` | [http_client_cli.rs](projects/planned/rating_4/http_client_cli.rs) | Send simple HTTP requests |
 | 37 | ⭐ 4/10 | Planned | `archive_extractor` | [archive_extractor.rs](projects/planned/rating_4/archive_extractor.rs) | List and extract simple archives |
-| 38 | ⭐ 4/10 | Planned | `ini_inspector` | [ini_inspector.rs](projects/planned/rating_4/ini_inspector.rs) | Inspect and query INI files |
+| 38 | ⭐ 4/10 | Completed | `ini_inspector` | [ini_inspector.rs](projects/completed/ini_inspector.rs) | Inspect and query INI files |
 | 39 | ⭐ 4/10 | Completed | `date_calculator` | [date_calculator.rs](projects/completed/date_calculator.rs) | Perform simple date arithmetic |
 | 40 | ⭐ 5/10 | Planned | `rest_api` | [rest_api.rs](projects/planned/rating_5/rest_api.rs) | Production backend |
 | 41 | ⭐ 5/10 | Planned | `crawler` | [web_crawler.rs](projects/planned/rating_5/web_crawler.rs) | Async mindset |
@@ -4030,7 +4031,7 @@ Learn:
 
 Guide:
 
-- [ini_inspector_TODO.md](projects/planned/rating_4/ini_inspector_TODO.md)
+- [ini_inspector_TODO.md](projects/completed/ini_inspector_TODO.md)
 
 ---
 

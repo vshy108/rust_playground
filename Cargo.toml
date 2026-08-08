@@ -750,7 +750,7 @@ path = "projects/completed/url_codec.rs"
 
 [[bin]]
 name = "ini_inspector"
-path = "projects/planned/rating_4/ini_inspector.rs"
+path = "projects/completed/ini_inspector.rs"
 
 [[bin]]
 name = "date_calculator"
