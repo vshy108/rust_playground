@@ -682,7 +682,7 @@ path = "projects/completed/csv_pretty_printer.rs"
 
 [[bin]]
 name = "text_diff_cli"
-path = "projects/planned/rating_4/text_diff_cli.rs"
+path = "projects/completed/text_diff_cli.rs"
 
 [[bin]]
 name = "file_splitter"
