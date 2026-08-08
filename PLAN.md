@@ -121,6 +121,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `markdown_reader` | [markdown_reader_TODO.md](projects/completed/markdown_reader_TODO.md) |
 | `text_diff_cli` | [text_diff_cli_TODO.md](projects/completed/text_diff_cli_TODO.md) |
 | `archive_extractor` | [archive_extractor_TODO.md](projects/completed/archive_extractor_TODO.md) |
+| `http_client_cli` | [http_client_cli_TODO.md](projects/completed/http_client_cli_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -161,7 +162,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 33 | ⭐ 4/10 | Planned | `totp_manager` | [totp_manager.rs](projects/planned/rating_4/totp_manager.rs) | Local TOTP code generator |
 | 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/planned/rating_4/password_store_cli.rs) | Simple encrypted secret storage |
 | 35 | ⭐ 4/10 | Completed | `text_diff_cli` | [text_diff_cli.rs](projects/completed/text_diff_cli.rs) | Line-by-line text comparison |
-| 36 | ⭐ 4/10 | Planned | `http_client_cli` | [http_client_cli.rs](projects/planned/rating_4/http_client_cli.rs) | Send simple HTTP requests |
+| 36 | ⭐ 4/10 | Completed | `http_client_cli` | [http_client_cli.rs](projects/completed/http_client_cli.rs) | Send simple HTTP requests |
 | 37 | ⭐ 4/10 | Completed | `archive_extractor` | [archive_extractor.rs](projects/completed/archive_extractor.rs) | List and extract simple archives |
 | 38 | ⭐ 4/10 | Completed | `ini_inspector` | [ini_inspector.rs](projects/completed/ini_inspector.rs) | Inspect and query INI files |
 | 39 | ⭐ 4/10 | Completed | `date_calculator` | [date_calculator.rs](projects/completed/date_calculator.rs) | Perform simple date arithmetic |
@@ -3804,7 +3805,7 @@ Learn:
 
 Guide:
 
-- [http_client_cli_TODO.md](projects/planned/rating_4/http_client_cli_TODO.md)
+- [http_client_cli_TODO.md](projects/completed/http_client_cli_TODO.md)
 
 ---
 

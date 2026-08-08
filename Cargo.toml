@@ -713,7 +713,7 @@ path = "projects/completed/gitignore_gen.rs"
 
 [[bin]]
 name = "http_client_cli"
-path = "projects/planned/rating_4/http_client_cli.rs"
+path = "projects/completed/http_client_cli.rs"
 
 [[bin]]
 name = "archive_extractor"
