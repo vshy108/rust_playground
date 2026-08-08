@@ -690,7 +690,7 @@ path = "projects/planned/rating_3/file_splitter.rs"
 
 [[bin]]
 name = "env_linter"
-path = "projects/planned/rating_3/env_linter.rs"
+path = "projects/completed/env_linter.rs"
 
 [[bin]]
 name = "base64_cli"
