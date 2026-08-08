@@ -98,6 +98,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `base64_cli` | [base64_cli_TODO.md](projects/completed/base64_cli_TODO.md) |
 | `uuid_generator` | [uuid_generator_TODO.md](projects/completed/uuid_generator_TODO.md) |
 | `gitignore_gen` | [gitignore_gen_TODO.md](projects/completed/gitignore_gen_TODO.md) |
+| `color_preview` | [color_preview_TODO.md](projects/completed/color_preview_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -111,7 +112,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 6 | ⭐ 2/10 | Completed | `base64_cli` | [base64_cli.rs](projects/completed/base64_cli.rs) | Encode and decode Base64 data |
 | 7 | ⭐ 2/10 | Completed | `uuid_generator` | [uuid_generator.rs](projects/completed/uuid_generator.rs) | Generate UUIDs from CLI |
 | 8 | ⭐ 2/10 | Completed | `gitignore_gen` | [gitignore_gen.rs](projects/completed/gitignore_gen.rs) | Generate `.gitignore` presets |
-| 9 | ⭐ 2/10 | Planned | `color_preview` | [color_preview.rs](projects/planned/rating_2/color_preview.rs) | Preview colors in the terminal |
+| 9 | ⭐ 2/10 | Completed | `color_preview` | [color_preview.rs](projects/completed/color_preview.rs) | Preview colors in the terminal |
 | 10 | ⭐ 2/10 | Planned | `wc_clone` | [wc_clone.rs](projects/planned/rating_2/wc_clone.rs) | Count lines, words, and bytes |
 | 11 | ⭐ 2/10 | Planned | `slug_generator` | [slug_generator.rs](projects/planned/rating_2/slug_generator.rs) | Generate URL-friendly slugs |
 | 12 | ⭐ 2/10 | Planned | `ascii_table` | [ascii_table.rs](projects/planned/rating_2/ascii_table.rs) | Print an ASCII reference table |
@@ -3850,7 +3851,7 @@ Learn:
 
 Guide:
 
-- [color_preview_TODO.md](projects/planned/rating_2/color_preview_TODO.md)
+- [color_preview_TODO.md](projects/completed/color_preview_TODO.md)
 
 ---
 

@@ -722,7 +722,7 @@ path = "projects/planned/rating_3/file_finder.rs"
 
 [[bin]]
 name = "color_preview"
-path = "projects/planned/rating_2/color_preview.rs"
+path = "projects/completed/color_preview.rs"
 
 [[bin]]
 name = "wc_clone"
