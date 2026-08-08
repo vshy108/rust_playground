@@ -718,7 +718,7 @@ path = "projects/planned/rating_4/archive_extractor.rs"
 
 [[bin]]
 name = "file_finder"
-path = "projects/planned/rating_3/file_finder.rs"
+path = "projects/completed/file_finder.rs"
 
 [[bin]]
 name = "color_preview"
