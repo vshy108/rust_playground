@@ -115,6 +115,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `notes_cli` | [notes_cli_TODO.md](projects/completed/notes_cli_TODO.md) |
 | `duplicate_line_filter` | [duplicate_line_filter_TODO.md](projects/completed/duplicate_line_filter_TODO.md) |
 | `line_ending_converter` | [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md) |
+| `batch_renamer` | [batch_renamer_TODO.md](projects/completed/batch_renamer_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -150,7 +151,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 28 | ⭐ 4/10 | Completed | `watchdir` | [file_watcher_cli.rs](projects/completed/file_watcher_cli.rs) | Filesystem events + channels + debounce |
 | 29 | ⭐ 4/10 | Completed | `logparse` | [log_parser_cli.rs](projects/completed/log_parser_cli.rs) | Iterators + parsing + aggregation |
 | 30 | ⭐ 4/10 | Planned | `qr_tool` | [qr_tool.rs](projects/planned/rating_4/qr_tool.rs) | QR encode/decode utility |
-| 31 | ⭐ 4/10 | Planned | `batch_renamer` | [batch_renamer.rs](projects/planned/rating_4/batch_renamer.rs) | Safe bulk filename transformation |
+| 31 | ⭐ 4/10 | Completed | `batch_renamer` | [batch_renamer.rs](projects/completed/batch_renamer.rs) | Safe bulk filename transformation |
 | 32 | ⭐ 4/10 | Planned | `markdown_reader` | [markdown_reader.rs](projects/planned/rating_4/markdown_reader.rs) | Terminal markdown viewing |
 | 33 | ⭐ 4/10 | Planned | `totp_manager` | [totp_manager.rs](projects/planned/rating_4/totp_manager.rs) | Local TOTP code generator |
 | 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/planned/rating_4/password_store_cli.rs) | Simple encrypted secret storage |
@@ -3430,7 +3431,7 @@ Learn:
 
 Guide:
 
-- [batch_renamer_TODO.md](projects/planned/rating_4/batch_renamer_TODO.md)
+- [batch_renamer_TODO.md](projects/completed/batch_renamer_TODO.md)
 
 ---
 

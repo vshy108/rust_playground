@@ -646,7 +646,7 @@ path = "projects/completed/weather_cli.rs"
 
 [[bin]]
 name = "batch_renamer"
-path = "projects/planned/rating_4/batch_renamer.rs"
+path = "projects/completed/batch_renamer.rs"
 
 [[bin]]
 name = "markdown_reader"
