@@ -99,6 +99,10 @@ The following projects currently have no unchecked items left in their TODO guid
 | `uuid_generator` | [uuid_generator_TODO.md](projects/completed/uuid_generator_TODO.md) |
 | `gitignore_gen` | [gitignore_gen_TODO.md](projects/completed/gitignore_gen_TODO.md) |
 | `color_preview` | [color_preview_TODO.md](projects/completed/color_preview_TODO.md) |
+| `wc_clone` | [wc_clone_TODO.md](projects/completed/wc_clone_TODO.md) |
+| `slug_generator` | [slug_generator_TODO.md](projects/completed/slug_generator_TODO.md) |
+| `ascii_table` | [ascii_table_TODO.md](projects/completed/ascii_table_TODO.md) |
+| `url_codec` | [url_codec_TODO.md](projects/completed/url_codec_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -113,10 +117,10 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 7 | ⭐ 2/10 | Completed | `uuid_generator` | [uuid_generator.rs](projects/completed/uuid_generator.rs) | Generate UUIDs from CLI |
 | 8 | ⭐ 2/10 | Completed | `gitignore_gen` | [gitignore_gen.rs](projects/completed/gitignore_gen.rs) | Generate `.gitignore` presets |
 | 9 | ⭐ 2/10 | Completed | `color_preview` | [color_preview.rs](projects/completed/color_preview.rs) | Preview colors in the terminal |
-| 10 | ⭐ 2/10 | Planned | `wc_clone` | [wc_clone.rs](projects/planned/rating_2/wc_clone.rs) | Count lines, words, and bytes |
-| 11 | ⭐ 2/10 | Planned | `slug_generator` | [slug_generator.rs](projects/planned/rating_2/slug_generator.rs) | Generate URL-friendly slugs |
-| 12 | ⭐ 2/10 | Planned | `ascii_table` | [ascii_table.rs](projects/planned/rating_2/ascii_table.rs) | Print an ASCII reference table |
-| 13 | ⭐ 2/10 | Planned | `url_codec` | [url_codec.rs](projects/planned/rating_2/url_codec.rs) | Encode and decode URL components |
+| 10 | ⭐ 2/10 | Completed | `wc_clone` | [wc_clone.rs](projects/completed/wc_clone.rs) | Count lines, words, and bytes |
+| 11 | ⭐ 2/10 | Completed | `slug_generator` | [slug_generator.rs](projects/completed/slug_generator.rs) | Generate URL-friendly slugs |
+| 12 | ⭐ 2/10 | Completed | `ascii_table` | [ascii_table.rs](projects/completed/ascii_table.rs) | Print an ASCII reference table |
+| 13 | ⭐ 2/10 | Completed | `url_codec` | [url_codec.rs](projects/completed/url_codec.rs) | Encode and decode URL components |
 | 14 | ⭐ 3/10 | Completed | `url_shortener` | [url_shortener.rs](projects/completed/url_shortener.rs) | Data modeling |
 | 15 | ⭐ 3/10 | Completed | `lru_cache` | [lru_cache.rs](projects/completed/lru_cache.rs) | Ownership thinking |
 | 16 | ⭐ 3/10 | Planned | `unit_converter` | [unit_converter.rs](projects/planned/rating_3/unit_converter.rs) | Simple unit conversions from CLI input |
@@ -3874,7 +3878,7 @@ Learn:
 
 Guide:
 
-- [wc_clone_TODO.md](projects/planned/rating_2/wc_clone_TODO.md)
+- [wc_clone_TODO.md](projects/completed/wc_clone_TODO.md)
 
 ---
 
@@ -3920,7 +3924,7 @@ Learn:
 
 Guide:
 
-- [slug_generator_TODO.md](projects/planned/rating_2/slug_generator_TODO.md)
+- [slug_generator_TODO.md](projects/completed/slug_generator_TODO.md)
 
 ---
 
@@ -3966,7 +3970,7 @@ Learn:
 
 Guide:
 
-- [ascii_table_TODO.md](projects/planned/rating_2/ascii_table_TODO.md)
+- [ascii_table_TODO.md](projects/completed/ascii_table_TODO.md)
 
 ---
 
@@ -3989,7 +3993,7 @@ Learn:
 
 Guide:
 
-- [url_codec_TODO.md](projects/planned/rating_2/url_codec_TODO.md)
+- [url_codec_TODO.md](projects/completed/url_codec_TODO.md)
 
 ---
 

@@ -726,7 +726,7 @@ path = "projects/completed/color_preview.rs"
 
 [[bin]]
 name = "wc_clone"
-path = "projects/planned/rating_2/wc_clone.rs"
+path = "projects/completed/wc_clone.rs"
 
 [[bin]]
 name = "line_ending_converter"
@@ -734,7 +734,7 @@ path = "projects/planned/rating_3/line_ending_converter.rs"
 
 [[bin]]
 name = "slug_generator"
-path = "projects/planned/rating_2/slug_generator.rs"
+path = "projects/completed/slug_generator.rs"
 
 [[bin]]
 name = "notes_cli"
@@ -742,11 +742,11 @@ path = "projects/planned/rating_3/notes_cli.rs"
 
 [[bin]]
 name = "ascii_table"
-path = "projects/planned/rating_2/ascii_table.rs"
+path = "projects/completed/ascii_table.rs"
 
 [[bin]]
 name = "url_codec"
-path = "projects/planned/rating_2/url_codec.rs"
+path = "projects/completed/url_codec.rs"
 
 [[bin]]
 name = "ini_inspector"
