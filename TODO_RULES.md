@@ -24,6 +24,34 @@ The difficulty rating in the TODO title must match the project rating in [PLAN.m
 
 If a project's difficulty changes in [PLAN.md](PLAN.md), update the matching TODO title as part of the same change.
 
+## Specification Contract
+
+Every new or substantially revised TODO guide should define the behavior before
+implementation. Include these sections after the title:
+
+```md
+## Specification
+
+### Goal
+<one observable outcome>
+
+### Non-goals
+- <behavior intentionally excluded>
+
+### Inputs and outputs
+- Input: <CLI/API/file input>
+- Output: <format and exit behavior>
+
+### Errors and limits
+- <invalid input, failure behavior, and resource limits>
+
+### Acceptance criteria
+- [ ] <specific behavior or verification>
+```
+
+Acceptance criteria must be observable and testable. Do not add a checkbox for
+an internal implementation detail unless it protects a documented contract.
+
 ## Completion Tracking
 
 A project is considered completed when its TODO guide has no remaining unchecked
@@ -41,6 +69,9 @@ Preferred completion marker format:
 
 Completed
 ```
+
+Before marking a project complete, record the verification commands and any
+known limitations. A successful compile alone is not sufficient evidence.
 
 ## File Naming
 

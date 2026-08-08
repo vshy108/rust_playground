@@ -93,6 +93,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `watchdir` | [file_watcher_TODO.md](projects/completed/file_watcher_TODO.md) |
 | `logparse` | [log_parser_TODO.md](projects/completed/log_parser_TODO.md) |
 | `api_gateway` | [api_gateway_TODO.md](projects/completed/api_gateway_TODO.md) |
+| `calculator_cli` | [calculator_cli_TODO.md](projects/completed/calculator_cli_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -101,7 +102,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 1 | ⭐ 1/10 | Completed | `genpass` | [random_password_cli.rs](projects/completed/random_password_cli.rs) | Rust basics |
 | 2 | ⭐ 2/10 | Completed | `jsonfmt` | [json_formatter_cli.rs](projects/completed/json_formatter_cli.rs) | Serialization with serde |
 | 3 | ⭐ 2/10 | Completed | `rgrep` | [mini_grep_cli.rs](projects/completed/mini_grep_cli.rs) | Ownership + iterators |
-| 4 | ⭐ 2/10 | Planned | `calculator_cli` | [calculator_cli.rs](projects/planned/rating_2/calculator_cli.rs) | Evaluate basic arithmetic expressions |
+| 4 | ⭐ 2/10 | Completed | `calculator_cli` | [calculator_cli.rs](projects/completed/calculator_cli.rs) | Evaluate basic arithmetic expressions |
 | 5 | ⭐ 2/10 | Planned | `timer_cli` | [timer_cli.rs](projects/planned/rating_2/timer_cli.rs) | Countdown and stopwatch utility |
 | 6 | ⭐ 2/10 | Planned | `base64_cli` | [base64_cli.rs](projects/planned/rating_2/base64_cli.rs) | Encode and decode Base64 data |
 | 7 | ⭐ 2/10 | Planned | `uuid_generator` | [uuid_generator.rs](projects/planned/rating_2/uuid_generator.rs) | Generate UUIDs from CLI |
@@ -3500,7 +3501,7 @@ Learn:
 
 Guide:
 
-- [calculator_cli_TODO.md](projects/planned/rating_2/calculator_cli_TODO.md)
+- [calculator_cli_TODO.md](projects/completed/calculator_cli_TODO.md)
 
 ---
 

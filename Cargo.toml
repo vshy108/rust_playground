@@ -662,7 +662,7 @@ path = "projects/planned/rating_4/totp_manager.rs"
 
 [[bin]]
 name = "calculator_cli"
-path = "projects/planned/rating_2/calculator_cli.rs"
+path = "projects/completed/calculator_cli.rs"
 
 [[bin]]
 name = "json_viewer"
@@ -1047,4 +1047,3 @@ path = "projects/wip/number_guessing_game.rs"
 [[bin]]
 name = "todocli"
 path = "projects/wip/simple_todo_app.rs"
-
