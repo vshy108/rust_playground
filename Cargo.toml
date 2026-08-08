@@ -706,7 +706,7 @@ path = "projects/completed/uuid_generator.rs"
 
 [[bin]]
 name = "gitignore_gen"
-path = "projects/planned/rating_2/gitignore_gen.rs"
+path = "projects/completed/gitignore_gen.rs"
 
 [[bin]]
 name = "http_client_cli"
