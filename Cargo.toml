@@ -666,7 +666,7 @@ path = "projects/completed/calculator_cli.rs"
 
 [[bin]]
 name = "json_viewer"
-path = "projects/planned/rating_3/json_viewer.rs"
+path = "projects/completed/json_viewer.rs"
 
 [[bin]]
 name = "timer_cli"

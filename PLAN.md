@@ -105,6 +105,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `url_codec` | [url_codec_TODO.md](projects/completed/url_codec_TODO.md) |
 | `unit_converter` | [unit_converter_TODO.md](projects/completed/unit_converter_TODO.md) |
 | `checksum_tool` | [checksum_tool_TODO.md](projects/completed/checksum_tool_TODO.md) |
+| `json_viewer` | [json_viewer_TODO.md](projects/completed/json_viewer_TODO.md) |
 | `duplicate_line_filter` | [duplicate_line_filter_TODO.md](projects/completed/duplicate_line_filter_TODO.md) |
 | `line_ending_converter` | [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md) |
 
@@ -131,7 +132,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 17 | ⭐ 3/10 | Completed | `checksum_tool` | [checksum_tool.rs](projects/completed/checksum_tool.rs) | File hashing + checksum verification |
 | 18 | ⭐ 3/10 | Planned | `weather_cli` | [weather_cli.rs](projects/planned/rating_3/weather_cli.rs) | Current weather + short forecast output |
 | 19 | ⭐ 3/10 | Completed | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/completed/duplicate_line_filter.rs) | Remove or count repeated lines |
-| 20 | ⭐ 3/10 | Planned | `json_viewer` | [json_viewer.rs](projects/planned/rating_3/json_viewer.rs) | Pretty-print JSON data |
+| 20 | ⭐ 3/10 | Completed | `json_viewer` | [json_viewer.rs](projects/completed/json_viewer.rs) | Pretty-print JSON data |
 | 21 | ⭐ 3/10 | Planned | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/planned/rating_3/csv_pretty_printer.rs) | Render CSV as aligned tables |
 | 22 | ⭐ 3/10 | Planned | `file_splitter` | [file_splitter.rs](projects/planned/rating_3/file_splitter.rs) | Split files by size or lines |
 | 23 | ⭐ 3/10 | Planned | `env_linter` | [env_linter.rs](projects/planned/rating_3/env_linter.rs) | Detect common `.env` file issues |
@@ -3537,7 +3538,7 @@ Learn:
 
 Guide:
 
-- [json_viewer_TODO.md](projects/planned/rating_3/json_viewer_TODO.md)
+- [json_viewer_TODO.md](projects/completed/json_viewer_TODO.md)
 
 ---
 
