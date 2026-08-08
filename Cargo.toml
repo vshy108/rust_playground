@@ -642,7 +642,7 @@ path = "projects/planned/rating_4/qr_tool.rs"
 
 [[bin]]
 name = "weather_cli"
-path = "projects/planned/rating_3/weather_cli.rs"
+path = "projects/completed/weather_cli.rs"
 
 [[bin]]
 name = "batch_renamer"

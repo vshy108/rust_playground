@@ -108,6 +108,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `json_viewer` | [json_viewer_TODO.md](projects/completed/json_viewer_TODO.md) |
 | `csv_pretty_printer` | [csv_pretty_printer_TODO.md](projects/completed/csv_pretty_printer_TODO.md) |
 | `file_splitter` | [file_splitter_TODO.md](projects/completed/file_splitter_TODO.md) |
+| `weather_cli` | [weather_cli_TODO.md](projects/completed/weather_cli_TODO.md) |
 | `env_linter` | [env_linter_TODO.md](projects/completed/env_linter_TODO.md) |
 | `file_finder` | [file_finder_TODO.md](projects/completed/file_finder_TODO.md) |
 | `hex_viewer` | [hex_viewer_TODO.md](projects/completed/hex_viewer_TODO.md) |
@@ -136,7 +137,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 15 | ⭐ 3/10 | Completed | `lru_cache` | [lru_cache.rs](projects/completed/lru_cache.rs) | Ownership thinking |
 | 16 | ⭐ 3/10 | Completed | `unit_converter` | [unit_converter.rs](projects/completed/unit_converter.rs) | Simple unit conversions from CLI input |
 | 17 | ⭐ 3/10 | Completed | `checksum_tool` | [checksum_tool.rs](projects/completed/checksum_tool.rs) | File hashing + checksum verification |
-| 18 | ⭐ 3/10 | Planned | `weather_cli` | [weather_cli.rs](projects/planned/rating_3/weather_cli.rs) | Current weather + short forecast output |
+| 18 | ⭐ 3/10 | Completed | `weather_cli` | [weather_cli.rs](projects/completed/weather_cli.rs) | Current weather + short forecast output |
 | 19 | ⭐ 3/10 | Completed | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/completed/duplicate_line_filter.rs) | Remove or count repeated lines |
 | 20 | ⭐ 3/10 | Completed | `json_viewer` | [json_viewer.rs](projects/completed/json_viewer.rs) | Pretty-print JSON data |
 | 21 | ⭐ 3/10 | Completed | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/completed/csv_pretty_printer.rs) | Render CSV as aligned tables |
@@ -3406,7 +3407,7 @@ Learn:
 
 Guide:
 
-- [weather_cli_TODO.md](projects/planned/rating_3/weather_cli_TODO.md)
+- [weather_cli_TODO.md](projects/completed/weather_cli_TODO.md)
 
 ---
 
