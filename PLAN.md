@@ -109,6 +109,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `csv_pretty_printer` | [csv_pretty_printer_TODO.md](projects/completed/csv_pretty_printer_TODO.md) |
 | `env_linter` | [env_linter_TODO.md](projects/completed/env_linter_TODO.md) |
 | `file_finder` | [file_finder_TODO.md](projects/completed/file_finder_TODO.md) |
+| `hex_viewer` | [hex_viewer_TODO.md](projects/completed/hex_viewer_TODO.md) |
 | `duplicate_line_filter` | [duplicate_line_filter_TODO.md](projects/completed/duplicate_line_filter_TODO.md) |
 | `line_ending_converter` | [line_ending_converter_TODO.md](projects/completed/line_ending_converter_TODO.md) |
 
@@ -139,7 +140,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 21 | ⭐ 3/10 | Completed | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/completed/csv_pretty_printer.rs) | Render CSV as aligned tables |
 | 22 | ⭐ 3/10 | Planned | `file_splitter` | [file_splitter.rs](projects/planned/rating_3/file_splitter.rs) | Split files by size or lines |
 | 23 | ⭐ 3/10 | Completed | `env_linter` | [env_linter.rs](projects/completed/env_linter.rs) | Detect common `.env` file issues |
-| 24 | ⭐ 3/10 | Planned | `hex_viewer` | [hex_viewer.rs](projects/planned/rating_3/hex_viewer.rs) | Inspect binary files in hex |
+| 24 | ⭐ 3/10 | Completed | `hex_viewer` | [hex_viewer.rs](projects/completed/hex_viewer.rs) | Inspect binary files in hex |
 | 25 | ⭐ 3/10 | Completed | `file_finder` | [file_finder.rs](projects/completed/file_finder.rs) | Recursively search files by pattern |
 | 26 | ⭐ 3/10 | Completed | `line_ending_converter` | [line_ending_converter.rs](projects/completed/line_ending_converter.rs) | Convert text line endings |
 | 27 | ⭐ 3/10 | Planned | `notes_cli` | [notes_cli.rs](projects/planned/rating_3/notes_cli.rs) | Store and manage simple notes |
@@ -3725,7 +3726,7 @@ Learn:
 
 Guide:
 
-- [hex_viewer_TODO.md](projects/planned/rating_3/hex_viewer_TODO.md)
+- [hex_viewer_TODO.md](projects/completed/hex_viewer_TODO.md)
 
 ---
 

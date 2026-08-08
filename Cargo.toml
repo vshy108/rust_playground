@@ -698,7 +698,7 @@ path = "projects/completed/base64_cli.rs"
 
 [[bin]]
 name = "hex_viewer"
-path = "projects/planned/rating_3/hex_viewer.rs"
+path = "projects/completed/hex_viewer.rs"
 
 [[bin]]
 name = "uuid_generator"
