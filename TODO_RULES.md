@@ -76,6 +76,17 @@ After the project passes its acceptance checks and the documentation is updated,
 create a focused commit for the completed project and record its hash in the
 handoff or change record.
 
+## Clippy Learning Record
+
+Every strict-Clippy failure must be documented in
+[CLIPPY_LEARNING_LOG.md](CLIPPY_LEARNING_LOG.md) before the affected milestone
+is closed. Each entry should include:
+
+- the diagnostic and affected project
+- the underlying cause
+- the chosen fix
+- the reusable Rust lesson
+
 ## File Naming
 
 Project TODO guides should use this file naming pattern:

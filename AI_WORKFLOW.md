@@ -60,6 +60,10 @@ Run focused checks first, then broader checks when the change warrants them.
 Report the exact commands run, their results, known limitations, and any
 follow-up work. Never mark a TODO item complete based only on compilation.
 
+Every strict-Clippy failure must be recorded in
+[CLIPPY_LEARNING_LOG.md](CLIPPY_LEARNING_LOG.md) with the diagnostic, root
+cause, fix, and reusable lesson. Do this before closing the related milestone.
+
 ## 7. Commit each finished project
 
 When a project or clearly bounded milestone is complete:

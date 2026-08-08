@@ -29,6 +29,9 @@ user explicitly requests a different project.
 - Inspect the final diff for scope creep, unsafe defaults, flaky tests, and
   missing failure-path coverage before reporting completion.
 - Report exact verification commands, results, and limitations.
+- Record every `cargo clippy ... -- -D warnings` failure in
+  [CLIPPY_LEARNING_LOG.md](../CLIPPY_LEARNING_LOG.md), including the diagnostic,
+  root cause, fix, and lesson before completing that milestone.
 - When a project or bounded milestone is complete, update its documentation and
   create one focused commit. Include the commit hash in the completion report.
 - Do not commit unfinished work, unrelated projects, build artifacts, or a
