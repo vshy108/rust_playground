@@ -107,6 +107,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `checksum_tool` | [checksum_tool_TODO.md](projects/completed/checksum_tool_TODO.md) |
 | `json_viewer` | [json_viewer_TODO.md](projects/completed/json_viewer_TODO.md) |
 | `csv_pretty_printer` | [csv_pretty_printer_TODO.md](projects/completed/csv_pretty_printer_TODO.md) |
+| `file_splitter` | [file_splitter_TODO.md](projects/completed/file_splitter_TODO.md) |
 | `env_linter` | [env_linter_TODO.md](projects/completed/env_linter_TODO.md) |
 | `file_finder` | [file_finder_TODO.md](projects/completed/file_finder_TODO.md) |
 | `hex_viewer` | [hex_viewer_TODO.md](projects/completed/hex_viewer_TODO.md) |
@@ -139,7 +140,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 19 | ⭐ 3/10 | Completed | `duplicate_line_filter` | [duplicate_line_filter.rs](projects/completed/duplicate_line_filter.rs) | Remove or count repeated lines |
 | 20 | ⭐ 3/10 | Completed | `json_viewer` | [json_viewer.rs](projects/completed/json_viewer.rs) | Pretty-print JSON data |
 | 21 | ⭐ 3/10 | Completed | `csv_pretty_printer` | [csv_pretty_printer.rs](projects/completed/csv_pretty_printer.rs) | Render CSV as aligned tables |
-| 22 | ⭐ 3/10 | Planned | `file_splitter` | [file_splitter.rs](projects/planned/rating_3/file_splitter.rs) | Split files by size or lines |
+| 22 | ⭐ 3/10 | Completed | `file_splitter` | [file_splitter.rs](projects/completed/file_splitter.rs) | Split files by size or lines |
 | 23 | ⭐ 3/10 | Completed | `env_linter` | [env_linter.rs](projects/completed/env_linter.rs) | Detect common `.env` file issues |
 | 24 | ⭐ 3/10 | Completed | `hex_viewer` | [hex_viewer.rs](projects/completed/hex_viewer.rs) | Inspect binary files in hex |
 | 25 | ⭐ 3/10 | Completed | `file_finder` | [file_finder.rs](projects/completed/file_finder.rs) | Recursively search files by pattern |
@@ -3658,7 +3659,7 @@ Learn:
 
 Guide:
 
-- [file_splitter_TODO.md](projects/planned/rating_3/file_splitter_TODO.md)
+- [file_splitter_TODO.md](projects/completed/file_splitter_TODO.md)
 
 ---
 

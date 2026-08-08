@@ -686,7 +686,7 @@ path = "projects/planned/rating_4/text_diff_cli.rs"
 
 [[bin]]
 name = "file_splitter"
-path = "projects/planned/rating_3/file_splitter.rs"
+path = "projects/completed/file_splitter.rs"
 
 [[bin]]
 name = "env_linter"
