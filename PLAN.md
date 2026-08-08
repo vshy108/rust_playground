@@ -95,6 +95,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `api_gateway` | [api_gateway_TODO.md](projects/completed/api_gateway_TODO.md) |
 | `calculator_cli` | [calculator_cli_TODO.md](projects/completed/calculator_cli_TODO.md) |
 | `timer_cli` | [timer_cli_TODO.md](projects/completed/timer_cli_TODO.md) |
+| `base64_cli` | [base64_cli_TODO.md](projects/completed/base64_cli_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -105,7 +106,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 3 | ⭐ 2/10 | Completed | `rgrep` | [mini_grep_cli.rs](projects/completed/mini_grep_cli.rs) | Ownership + iterators |
 | 4 | ⭐ 2/10 | Completed | `calculator_cli` | [calculator_cli.rs](projects/completed/calculator_cli.rs) | Evaluate basic arithmetic expressions |
 | 5 | ⭐ 2/10 | Completed | `timer_cli` | [timer_cli.rs](projects/completed/timer_cli.rs) | Countdown and stopwatch utility |
-| 6 | ⭐ 2/10 | Planned | `base64_cli` | [base64_cli.rs](projects/planned/rating_2/base64_cli.rs) | Encode and decode Base64 data |
+| 6 | ⭐ 2/10 | Completed | `base64_cli` | [base64_cli.rs](projects/completed/base64_cli.rs) | Encode and decode Base64 data |
 | 7 | ⭐ 2/10 | Planned | `uuid_generator` | [uuid_generator.rs](projects/planned/rating_2/uuid_generator.rs) | Generate UUIDs from CLI |
 | 8 | ⭐ 2/10 | Planned | `gitignore_gen` | [gitignore_gen.rs](projects/planned/rating_2/gitignore_gen.rs) | Generate `.gitignore` presets |
 | 9 | ⭐ 2/10 | Planned | `color_preview` | [color_preview.rs](projects/planned/rating_2/color_preview.rs) | Preview colors in the terminal |
@@ -3686,7 +3687,7 @@ Learn:
 
 Guide:
 
-- [base64_cli_TODO.md](projects/planned/rating_2/base64_cli_TODO.md)
+- [base64_cli_TODO.md](projects/completed/base64_cli_TODO.md)
 
 ---
 

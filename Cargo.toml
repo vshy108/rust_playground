@@ -694,7 +694,7 @@ path = "projects/planned/rating_3/env_linter.rs"
 
 [[bin]]
 name = "base64_cli"
-path = "projects/planned/rating_2/base64_cli.rs"
+path = "projects/completed/base64_cli.rs"
 
 [[bin]]
 name = "hex_viewer"
