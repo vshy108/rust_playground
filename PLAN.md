@@ -126,6 +126,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `qr_tool` | [qr_tool_TODO.md](projects/completed/qr_tool_TODO.md) |
 | `password_store_cli` | [password_store_cli_TODO.md](projects/completed/password_store_cli_TODO.md) |
 | `rest_api` | [rest_api_TODO.md](projects/completed/rest_api_TODO.md) |
+| `crawler` | [web_crawler_TODO.md](projects/completed/web_crawler_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -171,7 +172,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 38 | ⭐ 4/10 | Completed | `ini_inspector` | [ini_inspector.rs](projects/completed/ini_inspector.rs) | Inspect and query INI files |
 | 39 | ⭐ 4/10 | Completed | `date_calculator` | [date_calculator.rs](projects/completed/date_calculator.rs) | Perform simple date arithmetic |
 | 40 | ⭐ 5/10 | Completed | `rest_api` | [rest_api.rs](projects/completed/rest_api.rs) | Production backend |
-| 41 | ⭐ 5/10 | Planned | `crawler` | [web_crawler.rs](projects/planned/rating_5/web_crawler.rs) | Async mindset |
+| 41 | ⭐ 5/10 | Completed | `crawler` | [web_crawler.rs](projects/completed/web_crawler.rs) | Async mindset |
 | 42 | ⭐ 5/10 | Planned | `dns_toolkit` | [dns_toolkit.rs](projects/planned/rating_5/dns_toolkit.rs) | Binary protocol + UDP networking |
 | 43 | ⭐ 5/10 | Planned | `mini_git` | [mini_git.rs](projects/planned/rating_5/mini_git.rs) | Content-addressed storage |
 | 44 | ⭐ 5/10 | Planned | `loadtest` | [http_load_tester.rs](projects/planned/rating_5/http_load_tester.rs) | Performance testing + latency stats |

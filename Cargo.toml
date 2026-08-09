@@ -103,6 +103,7 @@ data-encoding = "2.9"
 rqrr = "0.8"
 image = { version = "0.25", default-features = false, features = ["png"] }
 jsonwebtoken = "9"
+url = "2"
 
 # rusty_engine mimic release profile
 [profile.dev]
@@ -163,7 +164,7 @@ path = "projects/completed/rest_api.rs"
 
 [[bin]]
 name = "crawler"
-path = "projects/planned/rating_5/web_crawler.rs"
+path = "projects/completed/web_crawler.rs"
 
 [[bin]]
 name = "redis_clone"
