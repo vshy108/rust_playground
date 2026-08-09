@@ -122,6 +122,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `text_diff_cli` | [text_diff_cli_TODO.md](projects/completed/text_diff_cli_TODO.md) |
 | `archive_extractor` | [archive_extractor_TODO.md](projects/completed/archive_extractor_TODO.md) |
 | `http_client_cli` | [http_client_cli_TODO.md](projects/completed/http_client_cli_TODO.md) |
+| `totp_manager` | [totp_manager_TODO.md](projects/completed/totp_manager_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -159,7 +160,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 30 | ⭐ 4/10 | Planned | `qr_tool` | [qr_tool.rs](projects/planned/rating_4/qr_tool.rs) | QR encode/decode utility |
 | 31 | ⭐ 4/10 | Completed | `batch_renamer` | [batch_renamer.rs](projects/completed/batch_renamer.rs) | Safe bulk filename transformation |
 | 32 | ⭐ 4/10 | Completed | `markdown_reader` | [markdown_reader.rs](projects/completed/markdown_reader.rs) | Terminal markdown viewing |
-| 33 | ⭐ 4/10 | Planned | `totp_manager` | [totp_manager.rs](projects/planned/rating_4/totp_manager.rs) | Local TOTP code generator |
+| 33 | ⭐ 4/10 | Completed | `totp_manager` | [totp_manager.rs](projects/completed/totp_manager.rs) | Local TOTP code generator |
 | 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/planned/rating_4/password_store_cli.rs) | Simple encrypted secret storage |
 | 35 | ⭐ 4/10 | Completed | `text_diff_cli` | [text_diff_cli.rs](projects/completed/text_diff_cli.rs) | Line-by-line text comparison |
 | 36 | ⭐ 4/10 | Completed | `http_client_cli` | [http_client_cli.rs](projects/completed/http_client_cli.rs) | Send simple HTTP requests |
@@ -3506,7 +3507,7 @@ Learn:
 
 Guide:
 
-- [totp_manager_TODO.md](projects/planned/rating_4/totp_manager_TODO.md)
+- [totp_manager_TODO.md](projects/completed/totp_manager_TODO.md)
 
 ---
 

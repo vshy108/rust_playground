@@ -97,6 +97,10 @@ aes-gcm = "0.10"
 sha2 = "0.10"
 base64 = "0.22"
 qrcode = "0.14"
+hmac = "0.12"
+sha1 = "0.10"
+data-encoding = "2.9"
+rqrr = "0.8"
 
 # rusty_engine mimic release profile
 [profile.dev]
@@ -665,7 +669,7 @@ path = "projects/completed/duplicate_line_filter.rs"
 
 [[bin]]
 name = "totp_manager"
-path = "projects/planned/rating_4/totp_manager.rs"
+path = "projects/completed/totp_manager.rs"
 
 [[bin]]
 name = "calculator_cli"
