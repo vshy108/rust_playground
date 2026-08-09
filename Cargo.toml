@@ -101,6 +101,7 @@ hmac = "0.12"
 sha1 = "0.10"
 data-encoding = "2.9"
 rqrr = "0.8"
+image = { version = "0.25", default-features = false, features = ["png"] }
 
 # rusty_engine mimic release profile
 [profile.dev]
@@ -649,7 +650,7 @@ path = "projects/completed/checksum_tool.rs"
 
 [[bin]]
 name = "qr_tool"
-path = "projects/planned/rating_4/qr_tool.rs"
+path = "projects/completed/qr_tool.rs"
 
 [[bin]]
 name = "weather_cli"
