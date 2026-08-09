@@ -127,6 +127,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `password_store_cli` | [password_store_cli_TODO.md](projects/completed/password_store_cli_TODO.md) |
 | `rest_api` | [rest_api_TODO.md](projects/completed/rest_api_TODO.md) |
 | `crawler` | [web_crawler_TODO.md](projects/completed/web_crawler_TODO.md) |
+| `spell_checker` | [spell_checker_TODO.md](projects/completed/spell_checker_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -177,7 +178,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 43 | ⭐ 5/10 | Planned | `mini_git` | [mini_git.rs](projects/planned/rating_5/mini_git.rs) | Content-addressed storage |
 | 44 | ⭐ 5/10 | Planned | `loadtest` | [http_load_tester.rs](projects/planned/rating_5/http_load_tester.rs) | Performance testing + latency stats |
 | 45 | ⭐ 5/10 | Planned | `markdown_parser` | [markdown_parser.rs](projects/planned/rating_5/markdown_parser.rs) | Text format parsing |
-| 46 | ⭐ 5/10 | Planned | `spell_checker` | [spell_checker.rs](projects/planned/rating_5/spell_checker.rs) | String processing + suggestion ranking |
+| 46 | ⭐ 5/10 | Completed | `spell_checker` | [spell_checker.rs](projects/completed/spell_checker.rs) | String processing + suggestion ranking |
 | 47 | ⭐ 5/10 | Planned | `cron_scheduler` | [cron_scheduler.rs](projects/planned/rating_5/cron_scheduler.rs) | Run jobs on cron-like schedules |
 | 48 | ⭐ 5/10 | Planned | `api_mock_server` | [api_mock_server.rs](projects/planned/rating_5/api_mock_server.rs) | Serve configurable mock API responses |
 | 49 | ⭐ 5/10 | Planned | `notification_hub` | [notification_hub.rs](projects/planned/rating_5/notification_hub.rs) | Route notifications to multiple sinks |
@@ -1648,7 +1649,7 @@ Learn:
 
 Guide:
 
-- [spell_checker_TODO.md](projects/planned/rating_5/spell_checker_TODO.md)
+- [spell_checker_TODO.md](projects/completed/spell_checker_TODO.md)
 
 ---
 

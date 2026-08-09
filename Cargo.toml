@@ -336,7 +336,7 @@ path = "projects/planned/rating_6/wasm_game_of_life.rs"
 
 [[bin]]
 name = "spell_checker"
-path = "projects/planned/rating_5/spell_checker.rs"
+path = "projects/completed/spell_checker.rs"
 
 [[bin]]
 name = "terminal_emulator"
