@@ -686,7 +686,7 @@ path = "projects/completed/timer_cli.rs"
 
 [[bin]]
 name = "password_store_cli"
-path = "projects/planned/rating_4/password_store_cli.rs"
+path = "projects/completed/password_store_cli.rs"
 
 [[bin]]
 name = "csv_pretty_printer"

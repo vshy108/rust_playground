@@ -124,6 +124,7 @@ The following projects currently have no unchecked items left in their TODO guid
 | `http_client_cli` | [http_client_cli_TODO.md](projects/completed/http_client_cli_TODO.md) |
 | `totp_manager` | [totp_manager_TODO.md](projects/completed/totp_manager_TODO.md) |
 | `qr_tool` | [qr_tool_TODO.md](projects/completed/qr_tool_TODO.md) |
+| `password_store_cli` | [password_store_cli_TODO.md](projects/completed/password_store_cli_TODO.md) |
 
 Note: Projects below are sorted by rating in ascending order to match the learning workflow.
 
@@ -162,7 +163,7 @@ Note: Projects below are sorted by rating in ascending order to match the learni
 | 31 | ⭐ 4/10 | Completed | `batch_renamer` | [batch_renamer.rs](projects/completed/batch_renamer.rs) | Safe bulk filename transformation |
 | 32 | ⭐ 4/10 | Completed | `markdown_reader` | [markdown_reader.rs](projects/completed/markdown_reader.rs) | Terminal markdown viewing |
 | 33 | ⭐ 4/10 | Completed | `totp_manager` | [totp_manager.rs](projects/completed/totp_manager.rs) | Local TOTP code generator |
-| 34 | ⭐ 4/10 | Planned | `password_store_cli` | [password_store_cli.rs](projects/planned/rating_4/password_store_cli.rs) | Simple encrypted secret storage |
+| 34 | ⭐ 4/10 | Completed | `password_store_cli` | [password_store_cli.rs](projects/completed/password_store_cli.rs) | Simple encrypted secret storage |
 | 35 | ⭐ 4/10 | Completed | `text_diff_cli` | [text_diff_cli.rs](projects/completed/text_diff_cli.rs) | Line-by-line text comparison |
 | 36 | ⭐ 4/10 | Completed | `http_client_cli` | [http_client_cli.rs](projects/completed/http_client_cli.rs) | Send simple HTTP requests |
 | 37 | ⭐ 4/10 | Completed | `archive_extractor` | [archive_extractor.rs](projects/completed/archive_extractor.rs) | List and extract simple archives |
@@ -3600,7 +3601,7 @@ Learn:
 
 Guide:
 
-- [password_store_cli_TODO.md](projects/planned/rating_4/password_store_cli_TODO.md)
+- [password_store_cli_TODO.md](projects/completed/password_store_cli_TODO.md)
 
 ---
 
