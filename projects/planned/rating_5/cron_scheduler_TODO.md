@@ -23,3 +23,9 @@ cargo test --bin cron_scheduler
 
 - Start with minute-level scheduling before widening the cron grammar.
 - Keep the next-run calculation pure and heavily tested.
+
+## Progress record
+
+- Implemented minimal five-field parsing, wildcard/step fields, calendar-aware
+  next-run calculation, shell command execution, and focused boundary tests.
+- Remaining: graceful shutdown/missed-run policy and persistent job definitions.

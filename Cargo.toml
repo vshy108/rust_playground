@@ -104,6 +104,7 @@ rqrr = "0.8"
 image = { version = "0.25", default-features = false, features = ["png"] }
 jsonwebtoken = "9"
 url = "2"
+time = "0.3"
 
 # rusty_engine mimic release profile
 [profile.dev]

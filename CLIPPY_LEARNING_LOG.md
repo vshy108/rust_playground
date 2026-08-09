@@ -108,6 +108,17 @@ if !options.name.as_ref().is_none_or(|pattern| matches(name, pattern)) {
 When a condition means “missing filter or predicate matches,” an `Option`
 predicate helper is clearer and satisfies Clippy without suppressing the lint.
 
+### Failure 3
+
+`cron_scheduler` triggered `clippy::manual_is_multiple_of` for using a modulo
+comparison to test step schedules. The fix was to use the standard
+`is_multiple_of` method, which expresses the intent directly.
+
+### Lesson
+
+Prefer standard numeric intent methods when Clippy identifies an equivalent
+clearer operation; do not suppress the lint.
+
 ## General rules learned
 
 - Run strict Clippy on the focused binary before marking a milestone complete.
