@@ -1,4 +1,4 @@
-use std::{env, process::Command};
+use std::{env, fs, process::Command};
 use time::{OffsetDateTime, Weekday};
 
 #[derive(Debug, PartialEq, Eq)]
@@ -25,6 +25,9 @@ fn main() {
 }
 
 fn run(args: &[String]) -> Result<String, String> {
+    if args.first().map(String::as_str) == Some("--config") {
+        return run_config(args);
+    }
     let schedule = Schedule::parse(args.first().ok_or_else(|| {
         "usage: cron_scheduler \"MIN HOUR DOM MON DOW\" BASE_UNIX [--run COMMAND]".to_string()
     })?)?;
@@ -45,6 +48,30 @@ fn run(args: &[String]) -> Result<String, String> {
             .map_err(|error| error.to_string())?;
     }
     Ok(next.to_string())
+}
+
+fn run_config(args: &[String]) -> Result<String, String> {
+    let path = args
+        .get(1)
+        .ok_or_else(|| "CONFIG_FILE is required".to_string())?;
+    let base = args
+        .get(2)
+        .ok_or_else(|| "BASE_UNIX is required".to_string())?
+        .parse()
+        .map_err(|_| "BASE_UNIX must be an integer".to_string())?;
+    let mut output = String::new();
+    for line in fs::read_to_string(path)
+        .map_err(|error| error.to_string())?
+        .lines()
+        .filter(|line| !line.trim().is_empty() && !line.trim_start().starts_with('#'))
+    {
+        let (expression, command) = line
+            .split_once('\t')
+            .ok_or_else(|| "config lines must be SCHEDULE<TAB>COMMAND".to_string())?;
+        let schedule = Schedule::parse(expression)?;
+        output.push_str(&format!("{}\t{}\n", schedule.next_after(base)?, command));
+    }
+    Ok(output)
 }
 
 impl Schedule {
@@ -74,7 +101,7 @@ impl Schedule {
                 return Ok(candidate.unix_timestamp());
             }
         }
-        Err("no matching execution time within ten years".to_string())
+        Err("no matching execution time within ten years; missed runs are skipped".to_string())
     }
 
     fn matches(&self, value: OffsetDateTime) -> bool {
@@ -148,5 +175,16 @@ mod tests {
         assert!(Schedule::parse("*/15 * * * *").is_ok());
         assert!(Schedule::parse("* * *").is_err());
         assert!(Schedule::parse("*/0 * * * *").is_err());
+    }
+
+    #[test]
+    fn reads_persistent_job_definitions() {
+        let directory = tempfile::tempdir().unwrap();
+        let path = directory.path().join("jobs");
+        std::fs::write(&path, "*/15 * * * *\techo tick\n").unwrap();
+        let output =
+            super::run_config(&["--config".into(), path.to_str().unwrap().into(), "0".into()])
+                .unwrap();
+        assert!(output.ends_with("\techo tick\n"));
     }
 }

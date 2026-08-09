@@ -777,7 +777,7 @@ path = "projects/planned/rating_6/feature_flag_service.rs"
 
 [[bin]]
 name = "cron_scheduler"
-path = "projects/planned/rating_5/cron_scheduler.rs"
+path = "projects/completed/cron_scheduler.rs"
 
 [[bin]]
 name = "api_mock_server"
